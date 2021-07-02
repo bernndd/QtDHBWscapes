@@ -6,24 +6,41 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>955</width>
-    <height>612</height>
+    <width>1113</width>
+    <height>639</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>QtDHBWscapes</string>
   </property>
   <widget class="QWidget" name="centralWidget">
+   <property name="cursor">
+    <cursorShape>OpenHandCursor</cursorShape>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton{
+border:  5px outset black;
+background-color:red;
+height:30px;
+widht:30px;
+}</string>
+   </property>
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>10</y>
-      <width>968</width>
-      <height>518</height>
+      <x>0</x>
+      <y>0</y>
+      <width>551</width>
+      <height>567</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
+     <property name="leftMargin">
+      <number>20</number>
+     </property>
+     <property name="topMargin">
+      <number>20</number>
+     </property>
      <item row="10" column="4">
       <widget class="QPushButton" name="pushButton_126">
        <property name="text">
@@ -369,6 +386,9 @@
      </item>
      <item row="0" column="0">
       <widget class="QPushButton" name="pushButton">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -1040,7 +1060,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>955</width>
+     <width>1113</width>
      <height>21</height>
     </rect>
    </property>
