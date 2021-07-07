@@ -11,7 +11,7 @@
 #define pink "border-image:url(://QtDHBWscapes//Ohne Hintergrund//pink_rm.png);"
 #define gelb "border-image:url(://QtDHBWscapes//Ohne Hintergrund//gelb_rm.png);"
 #define disco "border-image:url(://QtDHBWscapes//Ohne Hintergrund//disco_rm.png);"
-#define bombe "border-image:url(D://QtDHBWscapes//Ohne Hintergrund//bombe_rm.png);"
+#define bombe "border-image:url(://QtDHBWscapes//Ohne Hintergrund//bombe_rm.png);"
 #define horizontal "border-image:url(://QtDHBWscapes//Ohne Hintergrund//horizontal_rm.png);"
 #define vertikal "border-image:url(://QtDHBWscapes//Ohne Hintergrund//vertikal_rm.png);"
 
