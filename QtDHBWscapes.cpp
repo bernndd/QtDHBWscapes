@@ -22,7 +22,7 @@ QtDHBWscapes::QtDHBWscapes(QWidget *parent)
     {
         for (int y = 1; y < 13; y++)
         {
-            int color = rand() % 6 + 1;
+            int color = rand() % 10 + 1;
             ColorButton(color, y, x);
             
         }

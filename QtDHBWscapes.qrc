@@ -1,5 +1,16 @@
 <RCC>
     <qresource prefix="/QtDHBWscapes">
         <file>gehirn.png</file>
+        <file>Ohne Hintergrund/blau_rm.png</file>
+        <file>Ohne Hintergrund/bombe_rm.png</file>
+        <file>Ohne Hintergrund/davis_rm.png</file>
+        <file>Ohne Hintergrund/disco_rm.png</file>
+        <file>Ohne Hintergrund/gelb_rm.png</file>
+        <file>Ohne Hintergrund/gruen_rm.png</file>
+        <file>Ohne Hintergrund/hellblau_rm.png</file>
+        <file>Ohne Hintergrund/horizontal_rm.png</file>
+        <file>Ohne Hintergrund/pink_rm.png</file>
+        <file>Ohne Hintergrund/rot_rm.png</file>
+        <file>Ohne Hintergrund/vertikal_rm.png</file>
     </qresource>
 </RCC>
