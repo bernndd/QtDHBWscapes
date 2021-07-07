@@ -1,4 +1,7 @@
 #include "Stein.h"
+#include "Rakete.h"
+#include "Discokugel.h"
+#include "Bombe.h"
 
 Stein::Stein() {}
 

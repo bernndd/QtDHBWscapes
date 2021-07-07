@@ -1,4 +1,5 @@
 #include "QtDHBWscapes.h"
+#include "Spielfeld.h"
 #include <time.h>
 
 QtDHBWscapes::QtDHBWscapes(QWidget *parent)
@@ -17,6 +18,25 @@ QtDHBWscapes::QtDHBWscapes(QWidget *parent)
     ui.Button_1_9->setStyleSheet(rot);
     ui.Button_1_10->setStyleSheet(vertikal);
     
+    Spielfeld game(true);
+
+    //for (int i = 0; i < Spielfeld::fieldSize; i++)
+    //{
+    //    for (int j = 0; j < Spielfeld::fieldSize; j++)
+    //    {
+    //        ColorButton(Spielfeld::belegung.at(i).at(j), i, j);
+    //    }
+    //}
+
+    for (int x = 1; x < 13; x++)
+    {
+        for (int y = 1; y < 13; y++)
+        {
+            int color = rand() % 10 + 1;
+            ColorButton(color, y, x);
+
+        }
+    }
 
     for (int x = 1; x < 13; x++)
     {
