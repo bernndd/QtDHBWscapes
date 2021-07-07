@@ -22,6 +22,11 @@ class QtDHBWscapes : public QMainWindow
 public:
     QtDHBWscapes(QWidget *parent = Q_NULLPTR);
     void ColorButton(int color, int y, int x);
+    void setConnectionFromButtons();
+    QPushButton* GetButtonByCoords(int y, int x);
+
+private slots:
+    void ButtonClicked();
 
 private: 
     Ui::QtDHBWscapesClass ui;

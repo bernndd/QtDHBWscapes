@@ -29,7 +29,13 @@ QtDHBWscapes::QtDHBWscapes(QWidget *parent)
     }
 }
 
-void  QtDHBWscapes::ColorButton(int color, int y, int x)
+
+void QtDHBWscapes::ButtonClicked()
+{
+    
+}
+
+QPushButton* QtDHBWscapes::GetButtonByCoords(int y, int x)
 {
     QString Button = "Button_";
     if (x < 10)
@@ -49,10 +55,30 @@ void  QtDHBWscapes::ColorButton(int color, int y, int x)
     else
     {
         Button.append("1");
-        Button.append((y-10) + 48);
+        Button.append((y - 10) + 48);
     }
-    
-    QPushButton* bt = ui.gridLayoutWidget->findChild<QPushButton*>(Button);
+    return ui.gridLayoutWidget->findChild<QPushButton*>(Button);
+}
+
+void QtDHBWscapes::setConnectionFromButtons()
+{
+    for (int x = 1; x < 13; x++)
+    {
+        for (int y = 1; y < 13; y++)
+        {
+            QObject::connect(GetButtonByCoords(y, x), SIGNAL(clicked()), this, SLOT(ButtonClicked()));
+        }
+    }
+}
+
+
+
+/*
+* Set Color to Button on y,x
+*/
+void  QtDHBWscapes::ColorButton(int color, int y, int x)
+{
+    QPushButton* bt = GetButtonByCoords(y,x);
     if (bt != NULL)
     {
         switch (color)
