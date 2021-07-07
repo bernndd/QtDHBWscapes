@@ -1078,6 +1078,16 @@ widht:30px;
      <bool>false</bool>
     </property>
    </widget>
+   <widget class="QPlainTextEdit" name="plainTextEdit">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>190</y>
+      <width>271</width>
+      <height>71</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -1085,7 +1095,7 @@ widht:30px;
      <x>0</x>
      <y>0</y>
      <width>1113</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

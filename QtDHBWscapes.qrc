@@ -1,4 +1,5 @@
 <RCC>
-    <qresource prefix="QtDHBWscapes">
+    <qresource prefix="/QtDHBWscapes">
+        <file>gehirn.png</file>
     </qresource>
 </RCC>
