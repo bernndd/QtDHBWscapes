@@ -69,7 +69,7 @@ void Stein::Move(Spielfeld spielfeld, int fromX, int fromY, int toX, int toY)
 				//Füge an Schnittstelle gleichen Stein wieder ein damit Spaltenstrike auch entfernt wird
 				spielfeld.belegung[toX][toY] = temp;
 				spielfeld.checkColStrike(true);
-				spielfeld.belegung[toX][toY] = Bombe(toX, toY);
+				//spielfeld.belegung[toX][toY] = Bombe::Bombe(toX, toY);
 			}
 
 			else if (row == 3)

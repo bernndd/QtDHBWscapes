@@ -24,10 +24,11 @@ public:
     void ColorButton(int color, int y, int x);
     void setConnectionFromButtons();
     QPushButton* GetButtonByCoords(int y, int x);
+    ~QtDHBWscapes();
 
 private slots:
     void ButtonClicked();
-    ~QtDHBWscapes();
+    
 
 private: 
     Ui::QtDHBWscapesClass ui;
