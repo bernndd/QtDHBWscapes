@@ -27,8 +27,12 @@ public:
 
 private slots:
     void ButtonClicked();
+    ~QtDHBWscapes();
 
 private: 
     Ui::QtDHBWscapesClass ui;
+    int timerId;
 
+protected:
+    void timerEvent(QTimerEvent* event);
 };
