@@ -13,7 +13,7 @@ enum StrikeType {
 class Spielfeld
 {
 public:
-	vector<vector<Stein>> belegung;
+	vector<vector<int>> belegung;
 	int punkte;
 
 	Spielfeld(bool val);

@@ -7,16 +7,16 @@ QtDHBWscapes::QtDHBWscapes(QWidget *parent)
 {
     srand(time(NULL));
     ui.setupUi(this);
-    ui.Button_1_1->setStyleSheet(blau);
-    ui.Button_1_2->setStyleSheet(bombe);
-    ui.Button_1_3->setStyleSheet(disco);
-    ui.Button_1_4->setStyleSheet(gelb);
-    ui.Button_1_5->setStyleSheet(gruen);
-    ui.Button_1_6->setStyleSheet(hellblau);
-    ui.Button_1_7->setStyleSheet(horizontal);
-    ui.Button_1_8->setStyleSheet(pink);
-    ui.Button_1_9->setStyleSheet(rot);
-    ui.Button_1_10->setStyleSheet(vertikal);
+    ui.Button_1_1->setStyleSheet(blau_h);
+    ui.Button_1_2->setStyleSheet(bombe_h);
+    ui.Button_1_3->setStyleSheet(disco_h);
+    ui.Button_1_4->setStyleSheet(gelb_h);
+    ui.Button_1_5->setStyleSheet(gruen_h);
+    ui.Button_1_6->setStyleSheet(hellblau_h);
+    ui.Button_1_7->setStyleSheet(horizontal_h);
+    ui.Button_1_8->setStyleSheet(pink_h);
+    ui.Button_1_9->setStyleSheet(rot_h);
+    ui.Button_1_10->setStyleSheet(vertikal_h);
     
     Spielfeld game(true);
 
@@ -104,34 +104,34 @@ void  QtDHBWscapes::ColorButton(int color, int y, int x)
         switch (color)
         {
         case 1:
-            bt->setStyleSheet(rot);
+            bt->setStyleSheet(rot_h);
             break;
         case 2:
-            bt->setStyleSheet(blau);
+            bt->setStyleSheet(blau_h);
             break;
         case 3:
-            bt->setStyleSheet(hellblau);
+            bt->setStyleSheet(hellblau_h);
             break;
         case 4:
-            bt->setStyleSheet(gruen);
+            bt->setStyleSheet(gruen_h);
             break;
         case 5:
-            bt->setStyleSheet(pink);
+            bt->setStyleSheet(pink_h);
             break;
         case 6:
-            bt->setStyleSheet(gelb);
+            bt->setStyleSheet(gelb_h);
             break;
         case 7:
-            bt->setStyleSheet(disco);
+            bt->setStyleSheet(disco_h);
             break;
         case 8:
-            bt->setStyleSheet(bombe);
+            bt->setStyleSheet(bombe_h);
             break;
         case 9:
-            bt->setStyleSheet(horizontal);
+            bt->setStyleSheet(horizontal_h);
             break;
         case 10:
-            bt->setStyleSheet(vertikal);
+            bt->setStyleSheet(vertikal_h);
             break;
         default:
             break;
