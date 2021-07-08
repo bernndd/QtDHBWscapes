@@ -84,6 +84,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bombe.cpp" />
+    <ClCompile Include="Discokugel.cpp" />
+    <ClCompile Include="Rakete.cpp" />
+    <ClCompile Include="Spielfeld.cpp" />
+    <ClCompile Include="Stein.cpp" />
     <QtRcc Include="QtDHBWscapes.qrc" />
     <QtUic Include="QtDHBWscapes.ui" />
     <QtMoc Include="QtDHBWscapes.h" />
@@ -92,6 +97,13 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="C:\Users\bdr\Pictures\unknown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Bombe.h" />
+    <ClInclude Include="Discokugel.h" />
+    <ClInclude Include="Rakete.h" />
+    <ClInclude Include="Spielfeld.h" />
+    <ClInclude Include="Stein.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
