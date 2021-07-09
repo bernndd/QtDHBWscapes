@@ -21,7 +21,7 @@ public:
 	Stein();
 	Stein(int color);
 	operator int();
-	virtual void Move(Spielfeld spielfeld, int fromX, int fromY, int toX, int toY);
+	virtual void Move(class Spielfeld spielfeld, int fromX, int fromY, int toX, int toY);
 
 
 private:
