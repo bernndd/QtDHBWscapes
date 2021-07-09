@@ -5,6 +5,8 @@
 #include <time.h>
 using namespace std;
 
+#define SIZEFIELD 12
+
 enum StrikeType {
 	horizontal = 0,
 	vertikal = 1,
@@ -13,7 +15,7 @@ enum StrikeType {
 class Spielfeld
 {
 public:
-	vector<vector<int>> belegung;
+	vector<vector<Stein>> belegung;
 	int punkte;
 
 	Spielfeld(bool val);

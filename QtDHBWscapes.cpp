@@ -13,7 +13,7 @@ QtDHBWscapes::QtDHBWscapes(QWidget* parent)
     srand(time(NULL));
     ui.setupUi(this);
     
-    //Spielfeld game(true);
+    Spielfeld game(true);
 
 
     for (int x = 1; x < 13; x++)
