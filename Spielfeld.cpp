@@ -3,7 +3,7 @@
 
 Spielfeld::Spielfeld(bool val)
 {
-	//belegung.resize(fieldSize, vector<Stein>(fieldSize));
+	belegung.resize(fieldSize, vector<Stein>(fieldSize));
 	srand(time(0));
 	//initialisierung der Belegung zu Beginn NEU
 	for (int i = 0; i < fieldSize; i++)
