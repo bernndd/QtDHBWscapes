@@ -1,5 +1,13 @@
 #include "Bombe.h"
 
+void Bombe::Move(class Spielfeld spielfeld, int fromX, int fromY, int toX, int toY)
+{
+	if (fromX != toX || fromY != toY)
+	{
+		throw ("Bewegen einer Bombe nicht möglich!\nAktivieren mit Doppelklick!");
+	}
+}
+
 void Bombe::activateBomb(Spielfeld game)
 {
 	int x = this->xKoordinate;

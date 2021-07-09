@@ -15,16 +15,14 @@ QtDHBWscapes::QtDHBWscapes(QWidget* parent)
     
     Spielfeld game(true);
 
-
-    for (int x = 1; x < 13; x++)
+    for (int i = 0; i < Spielfeld::fieldSize; i++)
     {
-        for (int y = 1; y < 13; y++)
+        for (int j = 0; j < Spielfeld::fieldSize; j++)
         {
-            int color = rand() % 10 + 1;
-            ColorButton(color, y, x);
-            
+            ColorButton((int)game.belegung[i][j], (int)i+1, (int)j+1);
         }
     }
+
 	timerId = startTimer(1000);
 }
 
