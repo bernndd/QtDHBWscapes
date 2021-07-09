@@ -13,7 +13,7 @@ QtDHBWscapes::QtDHBWscapes(QWidget* parent)
     srand(time(NULL));
     ui.setupUi(this);
     
-    Spielfeld game(true);
+    //Spielfeld game(true);
 
 
     for (int x = 1; x < 13; x++)
@@ -25,7 +25,7 @@ QtDHBWscapes::QtDHBWscapes(QWidget* parent)
             
         }
     }
-	timerId = startTimer(1000);
+	timerId = startTimer(1000); //starts Timer with 1 sec duration
 }
 
 
