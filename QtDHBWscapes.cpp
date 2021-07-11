@@ -20,7 +20,7 @@ QtDHBWscapes::QtDHBWscapes(QWidget* parent)
     {
         for (int j = 0; j < Spielfeld::fieldSize; j++)
         {
-            ColorButton((int)game.belegung[i][j], (int)i + 1, (int)j + 1);
+            ColorButton((int)game.belegung[i][j], (int)i+1, (int)j+1);
         }
     }
 
