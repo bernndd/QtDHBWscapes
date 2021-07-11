@@ -6,6 +6,7 @@ class Bombe :
 {
 public:
     Bombe(int x, int y);
+    void Move(class Spielfeld spielfeld, int fromX, int fromY, int toX, int toY) override;
     void activateBomb(Spielfeld spielfeld);
 
 private:
