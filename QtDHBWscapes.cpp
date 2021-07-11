@@ -5,7 +5,7 @@
 #include <QDebug>
 #include <string>
 
-int Sec = 30, dur = 30; // Spielzeit ( beite die gleichen Werte
+int Sec = 30, dur = 30; // Spielzeit (beide die gleichen Werte)
 
 QtDHBWscapes::QtDHBWscapes(QWidget* parent)
 	: QMainWindow(parent)
@@ -14,7 +14,7 @@ QtDHBWscapes::QtDHBWscapes(QWidget* parent)
     ui.setupUi(this);
     
     //Spielfeld game(true);
-
+    ui.PopUp->setVisible(false);
 
     for (int x = 1; x < 13; x++)
     {
@@ -22,7 +22,7 @@ QtDHBWscapes::QtDHBWscapes(QWidget* parent)
         {
             int color = rand() % 10 + 1;
             ColorButton(color, y, x);
-            
+       
         }
     }
 	timerId = startTimer(1000); //starts Timer with 1 sec duration
@@ -135,9 +135,10 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the tim
 
 	else if (Sec == 0) // Time is up
 	{
+        ui.PopUp->setVisible(true);
 		ui.PopUp->setStyleSheet("border-image:url(://QtDHBWscapes//Ohne Hintergrund//TimesUp.png);"); // loads a picture
 		str = "<html><head/><body><p><span style =\"font-size:18pt;\">Time is up !</span></p></body></html>"; //Displays that the time is up
-		killTimer(timerId); // kill Timer
+		killTimer(timerId); // kills Timer
 	}
 	else //creating an array which is also the stylesheet for the Label
 	{
