@@ -14,12 +14,13 @@ QtDHBWscapes::QtDHBWscapes(QWidget* parent)
     ui.setupUi(this);
     
     Spielfeld game(true);
+    ui.PopUp->setVisible(false);
 
     for (int i = 0; i < Spielfeld::fieldSize; i++)
     {
         for (int j = 0; j < Spielfeld::fieldSize; j++)
         {
-            ColorButton((int)game.belegung[i][j], (int)i+1, (int)j+1);
+            ColorButton((int)game.belegung[i][j], (int)i + 1, (int)j + 1);
         }
     }
 
