@@ -5,6 +5,14 @@ Discokugel::Discokugel()
 	this->color = Farbe::disco;
 }
 
+void Discokugel::Move(class Spielfeld spielfeld, int fromX, int fromY, int toX, int toY)
+{
+	if (fromX != toX || fromY != toY)
+	{
+		throw ("Bewegen einer Bombe nicht möglich!\nAktivieren mit Doppelklick!");
+	}
+}
+
 void Discokugel::activateDisco(Spielfeld spielfeld)
 {
 	//TODO Testen und Punkte berechnen

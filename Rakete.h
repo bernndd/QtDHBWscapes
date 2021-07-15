@@ -7,7 +7,7 @@ class Rakete :
     //eine Reihe/Spalte wird entfernt
 public:
     Rakete(StrikeType st);
-    void Move(Spielfeld spielfeld, int fromX, int fromY, int toX, int toY);
+    void Move(Spielfeld spielfeld, int fromX, int fromY, int toX, int toY) override;
 
 
 private:
