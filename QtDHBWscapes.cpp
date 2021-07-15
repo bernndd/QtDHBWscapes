@@ -14,13 +14,14 @@ QtDHBWscapes::QtDHBWscapes(QWidget* parent)
     ui.setupUi(this);
     
     //Spielfeld game(true);
+    setConnectionFromButtons();
 
 
     for (int x = 1; x < 13; x++)
     {
         for (int y = 1; y < 13; y++)
         {
-            int color = rand() % 10 + 1;
+            int color = rand() % 6 + 1;
             ColorButton(color, y, x);
             
         }
@@ -31,7 +32,11 @@ QtDHBWscapes::QtDHBWscapes(QWidget* parent)
 
 void QtDHBWscapes::ButtonClicked()
 {
-    
+    QObject* bt = sender();
+    QString Name = bt->objectName();
+    QStringList Splited = Name.split("_");
+    int y = Splited[2].toInt();
+    int x = Splited[1].toInt();
 }
 
 QPushButton* QtDHBWscapes::GetButtonByCoords(int y, int x)
