@@ -25,11 +25,13 @@ void QtDHBWscapes::InitMenu()
 
 void QtDHBWscapes::MenuStartPressed()
 {
+	
 	game = new Spielfeld(true);
-	game->level = Schwierigkeit(ui.schwierigkeit->value());
+	game->level = Schwierigkeit(ui.schwierigkeit->value() + 1);
 	initComponents();
 	initField();
 	ui.centralWidget->setLayout(field);
+	game->timerId = startTimer(1000);
 }
 void QtDHBWscapes::MenuStoppPressed()
 {
@@ -38,7 +40,7 @@ void QtDHBWscapes::MenuStoppPressed()
 void QtDHBWscapes::MenuHelpPressed()
 {
 
-	/*game->timerId = startTimer(1000)*/;
+	
 }
 
 void QtDHBWscapes::exitGame()
@@ -230,4 +232,18 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the tim
 	}
 
 	//TODO Anzeige in Menüleiste aktualisieren
+	if (ui.lcdNumber->checkOverflow(game->punkte))
+	{
+		int digit = ui.lcdNumber->digitCount();
+		ui.lcdNumber->setDigitCount(digit + 2);
+		ui.lcdNumber->display(game->punkte);
+		ui.lcdNumber->setSegmentStyle(QLCDNumber::Filled);
+	}
+	else
+	{
+		
+		ui.lcdNumber->display(game->punkte);
+	}
+	
+	
 }

@@ -205,6 +205,6 @@ void Spielfeld::fillFieldAfterStrike()
 
 void Spielfeld::calcPointsAndTime(int farbe, int anz)
 {
-	punkte += farbe * anz * 10;
+	punkte += anz;
 	timeLeft += anz / level;
 }
