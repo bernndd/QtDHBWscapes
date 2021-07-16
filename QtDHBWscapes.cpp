@@ -13,15 +13,46 @@ QtDHBWscapes::QtDHBWscapes(QWidget* parent)
     initComponents();
     initField();
     ui.centralWidget->setLayout(field);
+
+	//Connection Menubar
+	InitMenu();
+	
+	//timerId = startTimer(1000);
+}
+
+void QtDHBWscapes::InitMenu()
+{
+	connect(ui.startButton, SIGNAL(clicked()), this, SLOT(MenuStartPressed()));
+	connect(ui.stoppButton, SIGNAL(clicked()), this, SLOT(MenuStoppPressed()));
+	connect(ui.beendenButton, SIGNAL(clicked()), this, SLOT(exitGame()));
+	connect(ui.hilfeButton, SIGNAL(clicked()), this, SLOT(MenuHelpPressed()));
+}
+
+void QtDHBWscapes::MenuStartPressed()
+{
+	int difficulty = ui.schwierigkeit->value();
+
+}
+void QtDHBWscapes::MenuStoppPressed()
+{
+
+}
+void QtDHBWscapes::MenuHelpPressed()
+{
+
 	game->timerId = startTimer(1000);
 }
 
+void QtDHBWscapes::exitGame()
+{
+	exit(0);
+}
 
 void QtDHBWscapes::initComponents()
 {
     //Spielfläche
     field = new QGridLayout;
-    QMargins margin(20, 20, 20, 20);
+    QMargins margin(20, 100, 20, 20);
     field->setContentsMargins(margin);
     field->setHorizontalSpacing(6);
     field->setVerticalSpacing(6);
