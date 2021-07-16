@@ -1,158 +1,185 @@
 #include "QtDHBWscapes.h"
-#include "Spielfeld.h"
-#include <time.h>
-#include <QTimer>
-#include <QDebug>
-#include <string>
+
+//#include <time.h>
+
 
 int Sec = 30, dur = 30; // Spielzeit (beide die gleichen Werte)
 
 QtDHBWscapes::QtDHBWscapes(QWidget* parent)
 	: QMainWindow(parent)
 {
-    srand(time(NULL));
+    //srand(time(NULL));
     ui.setupUi(this);
+    //ui.PopUp->setVisible(false);
     
-    Spielfeld game(true);
-    ui.PopUp->setVisible(false);
-    //Spielfeld game(true);
-    setConnectionFromButtons();
+
+    initField();
+
+    updateField();
+    ui.centralWidget->setLayout(field);
+
+
+
+	//timerId = startTimer(1000);
+}
+
+
+void QtDHBWscapes::initField()
+{
+    //Spielfläche
+    field = new QGridLayout;
+    QMargins margin(20, 20, 20, 20);
+    field->setContentsMargins(margin);
+    field->setHorizontalSpacing(6);
+    field->setVerticalSpacing(6);
+    field->setSizeConstraint(QLayout::SizeConstraint::SetFixedSize);
+
+    game = new Spielfeld(true);
+}
+
+void QtDHBWscapes::updateField()
+{
 
     for (int i = 0; i < Spielfeld::fieldSize; i++)
     {
         for (int j = 0; j < Spielfeld::fieldSize; j++)
         {
-            ColorButton((int)game.belegung[i][j], (int)i+1, (int)j+1);
+            btnArray[i][j] = initButton(game->belegung[i][j], i, j);
+            field->addWidget(btnArray[i][j], i, j);
         }
     }
 
-	timerId = startTimer(1000);
+    ui.centralWidget->setLayout(field);
+
 }
 
-
-void QtDHBWscapes::ButtonClicked()
+void QtDHBWscapes::cleanGrid()
 {
-    QObject* bt = sender();
-    QString Name = bt->objectName();
-    QStringList Splited = Name.split("_");
-    int y = Splited[2].toInt();
-    int x = Splited[1].toInt();
-}
-
-QPushButton* QtDHBWscapes::GetButtonByCoords(int y, int x)
-{
-    QString Button = "Button_";
-    if (x < 10)
+    for (int i = 0; i < Spielfeld::fieldSize; i++)
     {
-        Button.append(x + 48); //append(std::to_string(x));
-    }
-    else
-    {
-        Button.append("1");
-        Button.append((x - 10) + 48);
-    }
-    Button.append("_");
-    if (y < 10)
-    {
-        Button.append(y + 48);
-    }
-    else
-    {
-        Button.append("1");
-        Button.append((y - 10) + 48);
-    }
-    return ui.gridLayoutWidget->findChild<QPushButton*>(Button);
-}
-
-void QtDHBWscapes::setConnectionFromButtons()
-{
-    for (int x = 1; x < 13; x++)
-    {
-        for (int y = 1; y < 13; y++)
+        for (int j = 0; j < Spielfeld::fieldSize; j++)
         {
-            QObject::connect(GetButtonByCoords(y, x), SIGNAL(clicked()), this, SLOT(ButtonClicked()));
+            btnArray[i][j]->setStyleSheet("border-image:url(grey.png);");
         }
     }
 }
 
-
-
-/*
-* Set Color to Button on y,x
-*/
-void  QtDHBWscapes::ColorButton(int color, int y, int x)
+QPushButton* QtDHBWscapes::initButton(int color, int x, int y)
 {
-    QPushButton* bt = GetButtonByCoords(y,x);
-    if (bt != NULL)
-    {
-        switch (color)
-        {
-        case 1:
-            bt->setStyleSheet(rot_h);
-            break;
-        case 2:
-            bt->setStyleSheet(blau_h);
-            break;
-        case 3:
-            bt->setStyleSheet(hellblau_h);
-            break;
-        case 4:
-            bt->setStyleSheet(gruen_h);
-            break;
-        case 5:
-            bt->setStyleSheet(pink_h);
-            break;
-        case 6:
-            bt->setStyleSheet(gelb_h);
-            break;
-        case 7:
-            bt->setStyleSheet(disco_h);
-            break;
-        case 8:
-            bt->setStyleSheet(bombe_h);
-            break;
-        case 9:
-            bt->setStyleSheet(horizontal_h);
-            break;
-        case 10:
-            bt->setStyleSheet(vertikal_h);
-            break;
-        default:
-            break;
-        }
-        
-    }
-}
+	QPushButton* temp = new QPushButton();
+	temp->setFixedSize(QSize(35, 35));
 
-QtDHBWscapes::~QtDHBWscapes()
-{
-	killTimer(timerId);
-}
-
-void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the timer triggers
-{
-	std::string str;
-	qDebug();
-	if (((Sec % 60) < 10) && (Sec > 0)) // For adding an additional zero when its smaller than 10, just visual purpose
+	switch (color)
 	{
-		str = ("<html><head/><body><p><span style =\"font-size:18pt;\">" + std::to_string(Sec / 60) + ":0" + std::to_string(Sec % 60) + "</span></p></body></html>");
+	case 1: temp->setStyleSheet(gruen_h); break;
+	case 2: temp->setStyleSheet(gelb_h); break;
+	case 3: temp->setStyleSheet(pink_h); break;
+	case 4: temp->setStyleSheet(blau_h); break;
+	case 5: temp->setStyleSheet(rot_h); break;
+	case 6: temp->setStyleSheet(disco_h); break;
+	case 7: temp->setStyleSheet(horizontal_h); break;
+	case 8: temp->setStyleSheet(vertikal_h); break;
+	case 9: temp->setStyleSheet(bombe_h); break;
+		//case 3: temp->setIcon(QIcon(QPixmap(hellblau_h))); break;
+	default: break;
 	}
 
-	else if (Sec == 0) // Time is up
-	{
-        ui.PopUp->setVisible(true);
-		ui.PopUp->setStyleSheet("border-image:url(://QtDHBWscapes//Ohne Hintergrund//TimesUp.png);"); // loads a picture
-		str = "<html><head/><body><p><span style =\"font-size:18pt;\">Time is up !</span></p></body></html>"; //Displays that the time is up
-		killTimer(timerId); // kills Timer
-	}
-	else //creating an array which is also the stylesheet for the Label
-	{
-		str =("<html><head/><body><p><span style =\"font-size:18pt;\">" +  std::to_string(Sec / 60) + ":" + std::to_string(Sec % 60) + "</span></p></body></html>");
-	}
-    //Setting the Label, so that it Displays the Time and also adjusts the Progress bar so that it shows the right percentage
-	QString qstr = QString::fromStdString(str);
-	ui.displayTime->setText(qstr);
-	ui.timeBar->setValue((double)Sec / (double)dur * 100);
-	Sec--;
-	
+
+	int position = x * Spielfeld::fieldSize + y;
+
+	QSignalMapper* signalMapper = new QSignalMapper(this);
+	connect(temp, SIGNAL(clicked()), signalMapper, SLOT(map()));
+	signalMapper->setMapping(temp, position);
+	connect(signalMapper, SIGNAL(mapped(int)), this, SLOT(btnAction(int)));
+
+	return temp;
 }
+
+void QtDHBWscapes::btnAction(int position)
+{
+	int x = position / Spielfeld::fieldSize;
+	int y = position % Spielfeld::fieldSize;
+
+	if (game->fromX == -1)
+	{
+		game->fromX = x;
+		game->fromY = y;
+
+		if (game->belegung[x][y] > Farbe::rot)
+		{
+			switch (Farbe(game->belegung[x][y]))
+			{
+			case Farbe::disco:
+			{
+				Stein(game->belegung[x][y]).activateDisco(game, x, y);
+			}break;
+			case Farbe::bombe:
+			{
+				Stein(game->belegung[x][y]).activateBomb(game, x, y);
+			}break;
+			case Farbe::raketeHorizontal:
+			{
+				Stein(game->belegung[x][y]).activateHorizontalRocket(game, x);
+			}break;
+			case Farbe::raketeVertikal:
+			{
+				Stein(game->belegung[x][y]).activateVerticalRocket(game, y);
+			}break;
+			default:break;
+			}
+			game->fromX = -1;
+			game->fromY = -1;
+
+			cleanGrid();
+			updateField();
+		}
+	}
+	else
+	{
+
+		game->toX = x;
+		game->toY = y;
+		Stein(game->belegung[game->fromX][game->fromY]).Move(game);
+
+		game->fromX = -1;
+		game->fromY = -1;
+		game->toX = -1;
+		game->toY = -1;
+		cleanGrid();
+		updateField();
+	}
+
+}
+
+//QtDHBWscapes::~QtDHBWscapes()
+//{
+//	killTimer(timerId);
+//}
+//
+//void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the timer triggers
+//{
+//	std::string str;
+//	qDebug();
+//	if (((Sec % 60) < 10) && (Sec > 0)) // For adding an additional zero when its smaller than 10, just visual purpose
+//	{
+//		str = ("<html><head/><body><p><span style =\"font-size:18pt;\">" + std::to_string(Sec / 60) + ":0" + std::to_string(Sec % 60) + "</span></p></body></html>");
+//	}
+//
+//	else if (Sec == 0) // Time is up
+//	{
+//        ui.PopUp->setVisible(true);
+//		ui.PopUp->setStyleSheet("border-image:url(://QtDHBWscapes//Ohne Hintergrund//TimesUp.png);"); // loads a picture
+//		str = "<html><head/><body><p><span style =\"font-size:18pt;\">Time is up !</span></p></body></html>"; //Displays that the time is up
+//		killTimer(timerId); // kills Timer
+//	}
+//	else //creating an array which is also the stylesheet for the Label
+//	{
+//		str =("<html><head/><body><p><span style =\"font-size:18pt;\">" +  std::to_string(Sec / 60) + ":" + std::to_string(Sec % 60) + "</span></p></body></html>");
+//	}
+//    //Setting the Label, so that it Displays the Time and also adjusts the Progress bar so that it shows the right percentage
+//	QString qstr = QString::fromStdString(str);
+//	ui.displayTime->setText(qstr);
+//	ui.timeBar->setValue((double)Sec / (double)dur * 100);
+//	Sec--;
+//	
+//}

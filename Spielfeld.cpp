@@ -1,6 +1,5 @@
 #include "Spielfeld.h"
 
-
 Spielfeld::Spielfeld(bool val)
 {
 	//belegung.resize(fieldSize, vector<Stein>(fieldSize));
@@ -10,11 +9,17 @@ Spielfeld::Spielfeld(bool val)
 	{
 		for (int j = 0; j < fieldSize; j++)
 		{
-			belegung[i][j] = Stein(rand() % 5);
+			belegung[i][j] = Stein(rand() % 5 + 1);
 		}
 	}
 
 	initFieldCheck();
+
+	fromX = -1;
+	fromY = -1;
+	toX = -1;
+	toY = -1;
+
 	punkte = 0;
 }
 
@@ -148,7 +153,7 @@ void Spielfeld::updateField(int x, int y, int anz, StrikeType type)
 		//Elemente der Zeile werden aktualisiert
 		for (int i = 0; i < anz; i++)
 		{
-			belegung[x][y - i] = Stein(-1);
+			belegung[x][y - i] = Stein(0);
 		}
 
 	}
@@ -158,7 +163,7 @@ void Spielfeld::updateField(int x, int y, int anz, StrikeType type)
 		//Elemente der Spalte y werden aktualisiert
 		for (int i = 0; i < anz; i++)
 		{
-			belegung[x + i][y] = Stein(-1);
+			belegung[x + i][y] = Stein(0);
 		}
 	}
 
@@ -173,21 +178,21 @@ void Spielfeld::updateField(int x, int y, int anz, StrikeType type)
 void Spielfeld::fillFieldAfterStrike()
 {
 	//Neuen Stein nachschieben
-	srand(time(0));
+	//srand(time(0));
 	for (int i = 0; i < fieldSize; i++) //Spalte 0 = links
 	{
 		for (int j = fieldSize - 1; j >= 0; j--) //Zeile 0 = oben
 		{
 			if (j == 0 && belegung[j][i] == kein) //In der obersten Zeile werden neue Steine erzeugt falls Platz ist
 			{
-				belegung[j][i] = Stein(rand() % 5);
+				belegung[j][i] = Stein(rand() % 5 + 1);
 				j = fieldSize - 1;
 			}
 
 			else if (belegung[j][i] == kein) //ansonsten wird der Position der übergeordnete zugeordnet und dieser Platz frei gemacht
 			{
 				belegung[j][i] = belegung[j - 1][i];
-				belegung[j - 1][i] = Stein(-1);
+				belegung[j - 1][i] = Stein(0);
 			}
 		}
 

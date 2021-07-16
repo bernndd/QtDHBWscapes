@@ -46,15 +46,6 @@
     <ClCompile Include="Stein.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Bombe.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Discokugel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Rakete.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="C:\Users\bdr\Pictures\unknown.png">
@@ -66,15 +57,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Stein.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Bombe.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Discokugel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Rakete.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

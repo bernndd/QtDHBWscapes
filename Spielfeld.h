@@ -19,6 +19,12 @@ public:
 	//vector<vector<Stein>> belegung;
 	int punkte;
 
+	int fromX;
+	int fromY;
+	int toX;
+	int toY;
+
+
 	Spielfeld(bool val);
 	static const int fieldSize = 12;
 

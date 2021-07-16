@@ -2,18 +2,22 @@
 
 #include <QtWidgets/QMainWindow>
 #include "ui_QtDHBWscapes.h"
+#include "Spielfeld.h"
+#include <QPushButton>
+#include <QGridLayout>
+#include <QSignalMapper>
 
 // Spielsteine definieren
-#define rot_h "border-image:url(://QtDHBWscapes//Ohne Hintergrund//davis_rm.png);"
-#define blau_h "border-image:url(://QtDHBWscapes//Ohne Hintergrund//blau_rm.png);"
-#define hellblau_h "border-image:url(://QtDHBWscapes//Ohne Hintergrund//hellblau_rm.png);"
-#define gruen_h "border-image:url(://QtDHBWscapes//Ohne Hintergrund//gruen_rm.png);"
-#define pink_h "border-image:url(://QtDHBWscapes//Ohne Hintergrund//pink_rm.png);"
-#define gelb_h "border-image:url(://QtDHBWscapes//Ohne Hintergrund//gelb_rm.png);"
-#define disco_h "border-image:url(://QtDHBWscapes//Ohne Hintergrund//disco_rm.png);"
-#define bombe_h "border-image:url(://QtDHBWscapes//Ohne Hintergrund//bombe_rm.png);"
-#define horizontal_h "border-image:url(://QtDHBWscapes//Ohne Hintergrund//horizontal_rm.png);"
-#define vertikal_h "border-image:url(://QtDHBWscapes//Ohne Hintergrund//vertikal_rm.png);"
+#define rot_h "border-image:url(rot_rm.png);"
+#define blau_h "border-image:url(blau_rm.png);"
+#define hellblau_h "border-image:url(hellblau_rm.png);"
+#define gruen_h "border-image:url(gruen_rm.png);"
+#define pink_h "border-image:url(pink_rm.png);"
+#define gelb_h "border-image:url(gelb_rm.png);"
+#define disco_h "border-image:url(disco_rm.png);"
+#define bombe_h "border-image:url(bombe_rm.png);"
+#define horizontal_h "border-image:url(horizontal_rm.png);"
+#define vertikal_h "border-image:url(vertikal_rm.png);"
 
 class QtDHBWscapes : public QMainWindow
 {
@@ -21,19 +25,23 @@ class QtDHBWscapes : public QMainWindow
 
 public:
     QtDHBWscapes(QWidget *parent = Q_NULLPTR);
-    void ColorButton(int color, int y, int x);
-    void setConnectionFromButtons();
-    QPushButton* GetButtonByCoords(int y, int x);
-    ~QtDHBWscapes();
-
-private slots:
-    void ButtonClicked();
     
 
 private: 
     Ui::QtDHBWscapesClass ui;
-    int timerId;
+    Spielfeld* game;
+    QPushButton* btnArray[12][12];
+    QGridLayout* field;
+
+    QPushButton* initButton(int color, int x, int y);
+    void updateField();
+    void cleanGrid();
+    void initField();
+    //int timerId;
 
 protected:
-    void timerEvent(QTimerEvent* event);
+    //void timerEvent(QTimerEvent* event);
+
+private slots:
+    void btnAction(int position);
 };
