@@ -20,6 +20,18 @@
 #define horizontal_h "border-image:url(horizontal_rm.png);"
 #define vertikal_h "border-image:url(vertikal_rm.png);"
 
+//Spielsteine mit Border
+#define rot_border "border-image:url(rot_border.png);"
+#define blau_border "border-image:url(blau_border.png);"
+#define hellblau_border "border-image:url(hellblau_border.png);"
+#define gruen_border "border-image:url(gruen_border.png);"
+#define pink_border "border-image:url(pink_border.png);"
+#define gelb_border "border-image:url(gelb_border.png);"
+#define disco_border "border-image:url(disco_border.png);"
+#define bombe_border "border-image:url(bombe_border.png);"
+#define horizontal_border "border-image:url(horizontal_border.png);"
+#define vertikal_border "border-image:url(vertikal_border.png);"
+
 class QtDHBWscapes : public QMainWindow
 {
     Q_OBJECT
