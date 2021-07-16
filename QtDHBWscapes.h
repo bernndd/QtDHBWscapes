@@ -54,13 +54,11 @@ private:
     void setButtonLayout(int x, int y);
     void initComponents();
 
+
     void cleanGrid();
     void InitMenu();
-    //int timerId;
+    int timerId;
     
-
-protected:
-    //void timerEvent(QTimerEvent* event);
 
 private slots:
     void btnAction(int position);

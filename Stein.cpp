@@ -136,8 +136,8 @@ void Stein::activateDisco(Spielfeld* game, int x, int y)
 {
 	//Entfernt random eine Farbe komplett vom Spielfeld
 	int color = rand() % 5 + 1;
-	spielfeld->punkte += 20000;
-	spielfeld->timeLeft += (12/spielfeld->level);
+	game->punkte += 20;
+	game->timeLeft += (12/game->level);
 
 	for (int i = 0; i < Spielfeld::fieldSize; i++)
 	{

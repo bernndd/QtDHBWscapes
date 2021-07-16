@@ -4,7 +4,7 @@
 //#include <time.h>
 
 
-int Sec = 30, dur = 30; // Spielzeit (beide die gleichen Werte)
+float dur = 20; // Spielzeit 
 
 QtDHBWscapes::QtDHBWscapes(QWidget* parent)
 	: QMainWindow(parent)
@@ -30,6 +30,7 @@ void QtDHBWscapes::MenuStartPressed()
 	initComponents();
 	initField();
 	ui.centralWidget->setLayout(field);
+	timerId = startTimer(1000);
 }
 void QtDHBWscapes::MenuStoppPressed()
 {
@@ -180,7 +181,7 @@ void QtDHBWscapes::btnAction(int position)
 
 //QtDHBWscapes::~QtDHBWscapes()
 //{
-//	killTimer(game->timerId);
+//killTimer(game->timerId);
 //}
 
 void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the timer triggers
@@ -208,5 +209,5 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the tim
 	}
 
 	//TODO Anzeige in Menüleiste aktualisieren
-
+	//ui.progressBar->setValue(int(float(game->timeLeft)/dur)*100);
 }
