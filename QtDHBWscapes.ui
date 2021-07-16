@@ -127,7 +127,7 @@ widht:30px;
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label_3">
+      <widget class="QLabel" name="zeit">
        <property name="text">
         <string>20s</string>
        </property>

@@ -56,6 +56,7 @@ private:
 
     void cleanGrid();
     void InitMenu();
+    void BorderButton(int x, int y);
     //int timerId;
     
 
