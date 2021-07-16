@@ -75,6 +75,7 @@ void Stein::Move(Spielfeld* spielfeld)
 				spielfeld->belegung[toX][toY] = temp;
 				spielfeld->checkColStrike(true);
 				//spielfeld.belegung[toX][toY] = Bombe::Bombe(toX, toY);
+				spielfeld->belegung[toX][toY] = Stein(Farbe::bombe);
 			}
 
 			else if (row == 3)
