@@ -33,17 +33,15 @@ private:
     Spielfeld* game;
     QPushButton* btnArray[12][12];
     QGridLayout* field;
-    QMessageBox* timesUpBox;
+    QMessageBox* endBox;
 
     QPushButton* initButton(int color, int x, int y);
+    void timerEvent(QTimerEvent* event);
     void initField();
     void updateField();
     void setButtonLayout(int x, int y);
     void initComponents();
-    //int timerId;
 
-protected:
-    //void timerEvent(QTimerEvent* event);
 
 private slots:
     void btnAction(int position);
