@@ -100,18 +100,22 @@ void Stein::Move(Spielfeld* spielfeld)
 
 void Stein::activateVerticalRocket(class Spielfeld* game, int y)
 {
+	game->timeLeft += (9 / game->level);
 	//initialisiert direkt die Reihe neu
 	for (int i = 0; i < Spielfeld::fieldSize; i++)
 	{
+		game->punkte += game->belegung[i][y] * 20;
 		game->belegung[i][y] = Stein(rand() % 5 + 1);
 	}
 }
 
 void Stein::activateHorizontalRocket(class Spielfeld* game, int x)
 {
+	game->timeLeft += (9 / game->level);
 	//Entfernt Reihe und lässt übergeordnete nachfallen
 	for (int i = 0; i < Spielfeld::fieldSize; i++)
 	{
+		game->punkte += game->belegung[x][i]*20;
 		game->belegung[x][i] = Stein(0);
 	}
 	game->fillFieldAfterStrike();
@@ -121,7 +125,8 @@ void Stein::activateDisco(Spielfeld* spielfeld, int x, int y)
 {
 	//Entfernt random eine Farbe komplett vom Spielfeld
 	int color = rand() % 5 + 1;
-
+	spielfeld->punkte += 20000;
+	spielfeld->timeLeft += (12/spielfeld->level);
 
 	for (int i = 0; i < Spielfeld::fieldSize; i++)
 	{
@@ -144,6 +149,8 @@ void Stein::activateBomb(Spielfeld* game, int x, int y)
 {
 	//Entfernt Stein am Ursprung
 	game->belegung[x][y] = Stein(0);
+	game->punkte += 10000;
+	game->timeLeft += (9 / game->level);
 
 	//Entfernt alle Steine links vom Ursprung
 	if (x > 0)

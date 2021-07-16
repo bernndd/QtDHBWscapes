@@ -10,16 +10,9 @@ QtDHBWscapes::QtDHBWscapes(QWidget* parent)
 	: QMainWindow(parent)
 {
     ui.setupUi(this);
-    //ui.PopUp->setVisible(false);
-    
-
-
     initComponents();
     initField();
     ui.centralWidget->setLayout(field);
-
-
-
 	game->timerId = startTimer(1000);
 }
 
@@ -35,8 +28,6 @@ void QtDHBWscapes::initComponents()
     field->setSizeConstraint(QLayout::SizeConstraint::SetFixedSize);
 
     game = new Spielfeld(true);
-
-
 }
 
 void QtDHBWscapes::initField()

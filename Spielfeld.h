@@ -11,9 +11,9 @@ using namespace std;
 
 enum Schwierigkeit
 {
-	hard = 1,
+	easy = 1,
 	medium = 2,
-	easy = 3,
+	hard = 3,
 };
 
 enum StrikeType {
