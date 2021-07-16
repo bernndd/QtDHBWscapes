@@ -25,12 +25,13 @@ void QtDHBWscapes::InitMenu()
 
 void QtDHBWscapes::MenuStartPressed()
 {
+	
 	game = new Spielfeld(true);
-	game->level = Schwierigkeit(ui.schwierigkeit->value());
+	game->level = Schwierigkeit(ui.schwierigkeit->value() + 1);
 	initComponents();
 	initField();
 	ui.centralWidget->setLayout(field);
-	timerId = startTimer(1000);
+	game->timerId = startTimer(1000);
 }
 void QtDHBWscapes::MenuStoppPressed()
 {
@@ -39,7 +40,7 @@ void QtDHBWscapes::MenuStoppPressed()
 void QtDHBWscapes::MenuHelpPressed()
 {
 
-	/*game->timerId = startTimer(1000)*/;
+	
 }
 
 void QtDHBWscapes::exitGame()
@@ -134,6 +135,8 @@ void QtDHBWscapes::btnAction(int position)
 	{
 		game->fromX = x;
 		game->fromY = y;
+		BorderButton(x, y);
+		
 
 		if (game->belegung[x][y] > Farbe::rot)
 		{
@@ -179,6 +182,26 @@ void QtDHBWscapes::btnAction(int position)
 
 }
 
+void QtDHBWscapes::BorderButton(int x, int y)
+{
+	int color = game->belegung[x][y];
+
+	switch (color)
+	{
+	case 1:  btnArray[x][y]->setStyleSheet(gruen_border); break;
+	case 2: btnArray[x][y]->setStyleSheet(gelb_border); break;
+	case 3: btnArray[x][y]->setStyleSheet(pink_border); break;
+	case 4: btnArray[x][y]->setStyleSheet(blau_border); break;
+	case 5: btnArray[x][y]->setStyleSheet(rot_border); break;
+	case 6: btnArray[x][y]->setStyleSheet(disco_border); break;
+	case 7: btnArray[x][y]->setStyleSheet(horizontal_border); break;
+	case 8: btnArray[x][y]->setStyleSheet(vertikal_border); break;
+	case 9: btnArray[x][y]->setStyleSheet(bombe_border); break;
+		//case 3: temp->setIcon(QIcon(QPixmap(hellblau_h))); break;
+	default: break;
+	}
+}
+
 //QtDHBWscapes::~QtDHBWscapes()
 //{
 //killTimer(game->timerId);
@@ -209,5 +232,19 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the tim
 	}
 
 	//TODO Anzeige in Menüleiste aktualisieren
+	if (ui.lcdNumber->checkOverflow(game->punkte))
+	{
+		int digit = ui.lcdNumber->digitCount();
+		ui.lcdNumber->setDigitCount(digit + 2);
+		ui.lcdNumber->display(game->punkte);
+		ui.lcdNumber->setSegmentStyle(QLCDNumber::Filled);
+	}
+	else
+	{
+		
+		ui.lcdNumber->display(game->punkte);
+	}
+	
+	
 	//ui.progressBar->setValue(int(float(game->timeLeft)/dur)*100);
 }

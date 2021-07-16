@@ -66,7 +66,10 @@ int Spielfeld::checkRowStrike(bool update)
 				if (count > 2)
 				{
 					if (update)
+					{
+						calcPointsAndTime(belegung[i][j], count);
 						updateField(i, j - 1, count, horizontal);
+					}
 					return count;
 				}
 				count = 1;
@@ -75,7 +78,10 @@ int Spielfeld::checkRowStrike(bool update)
 			if (count == 5) //max. 5 Steine in einer Reihe möglich
 			{
 				if (update)
+				{
+					calcPointsAndTime(belegung[i][j], count);
 					updateField(i, j - 1, count, horizontal);
+				}
 				return count;
 			}
 		}
@@ -83,7 +89,10 @@ int Spielfeld::checkRowStrike(bool update)
 		if (count > 2) //Zeile zu Ende aber mind. 3 Identische
 		{
 			if (update)
+			{
+				calcPointsAndTime(belegung[i][fieldSize - 1], count);
 				updateField(i, fieldSize - 1, count, horizontal);
+			}
 			return count;
 		}
 	}
@@ -114,7 +123,10 @@ int Spielfeld::checkColStrike(bool update)
 				if (count > 2)
 				{
 					if (update)
+					{
+						calcPointsAndTime(belegung[j][i], count);
 						updateField(j, i, count, vertikal);
+					}
 					return count;
 				}
 				count = 1;
@@ -123,14 +135,20 @@ int Spielfeld::checkColStrike(bool update)
 			if (count == 5) //max. 5 Steine in einer Reihe möglich
 			{
 				if (update)
+				{
+					calcPointsAndTime(belegung[j][i], count);
 					updateField(j, i, count, vertikal);
+				}
 				return count;
 			}
 		}
 		if (count > 2) //Spalte zu Ende aber mind. 3 Identische
 		{
 			if (update)
+			{
+				calcPointsAndTime(belegung[0][i], count);
 				updateField(count - 1, i, count, vertikal);
+			}
 			return count;
 		}
 	}
@@ -205,6 +223,6 @@ void Spielfeld::fillFieldAfterStrike()
 
 void Spielfeld::calcPointsAndTime(int farbe, int anz)
 {
-	punkte += farbe * anz * 10;
+	punkte += anz;
 	timeLeft += anz / level;
 }
