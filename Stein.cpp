@@ -58,9 +58,9 @@ void Stein::Move(Spielfeld* spielfeld)
 				spielfeld->checkRowStrike(true);
 				spielfeld->checkColStrike(true);
 				if (row == 4)
-					spielfeld->belegung[toX - 1][toY] = Stein(Farbe::raketeHorizontal);
-				else
 					spielfeld->belegung[toX][toY] = Stein(Farbe::raketeVertikal);
+				else
+					spielfeld->belegung[toX][toY] = Stein(Farbe::raketeHorizontal);
 			}
 
 			else if (row == 3 && col == 3)
