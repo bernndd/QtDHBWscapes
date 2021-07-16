@@ -43,7 +43,6 @@ private:
     void initComponents();
 
     void cleanGrid();
-    void initField();
     void InitMenu();
     //int timerId;
     
