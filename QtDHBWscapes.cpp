@@ -1,4 +1,5 @@
 #include "QtDHBWscapes.h"
+#include <QPixmap>
 
 //#include <time.h>
 
@@ -13,9 +14,9 @@ QtDHBWscapes::QtDHBWscapes(QWidget* parent)
     //ui.PopUp->setVisible(false);
     
 
-    initField();
 
-    updateField();
+    initComponents();
+    initField();
     ui.centralWidget->setLayout(field);
 
 
@@ -24,7 +25,7 @@ QtDHBWscapes::QtDHBWscapes(QWidget* parent)
 }
 
 
-void QtDHBWscapes::initField()
+void QtDHBWscapes::initComponents()
 {
     //Spielfläche
     field = new QGridLayout;
@@ -35,9 +36,15 @@ void QtDHBWscapes::initField()
     field->setSizeConstraint(QLayout::SizeConstraint::SetFixedSize);
 
     game = new Spielfeld(true);
+
+
+	//Fenster Spielende
+	timesUpBox = new QMessageBox(this);
+	//timesUpBox->setText("Zeit ist um!");
+	timesUpBox->setIconPixmap(QPixmap("TimesUp.png"));
 }
 
-void QtDHBWscapes::updateField()
+void QtDHBWscapes::initField()
 {
 
     for (int i = 0; i < Spielfeld::fieldSize; i++)
@@ -45,6 +52,7 @@ void QtDHBWscapes::updateField()
         for (int j = 0; j < Spielfeld::fieldSize; j++)
         {
             btnArray[i][j] = initButton(game->belegung[i][j], i, j);
+			setButtonLayout(i, j);
             field->addWidget(btnArray[i][j], i, j);
         }
     }
@@ -53,38 +61,44 @@ void QtDHBWscapes::updateField()
 
 }
 
-void QtDHBWscapes::cleanGrid()
+void QtDHBWscapes::updateField()
 {
-    for (int i = 0; i < Spielfeld::fieldSize; i++)
-    {
-        for (int j = 0; j < Spielfeld::fieldSize; j++)
-        {
-            btnArray[i][j]->setStyleSheet("border-image:url(grey.png);");
-        }
-    }
+
+	for (int i = 0; i < Spielfeld::fieldSize; i++)
+	{
+		for (int j = 0; j < Spielfeld::fieldSize; j++)
+		{
+			setButtonLayout(i, j);
+		}
+	}
+
+}
+
+
+void QtDHBWscapes::setButtonLayout(int x, int y)
+{
+	int color = game->belegung[x][y];
+
+	switch (color)
+	{
+	case 1:  btnArray[x][y]->setStyleSheet(gruen_h); break;
+	case 2: btnArray[x][y]->setStyleSheet(gelb_h); break;
+	case 3: btnArray[x][y]->setStyleSheet(pink_h); break;
+	case 4: btnArray[x][y]->setStyleSheet(blau_h); break;
+	case 5: btnArray[x][y]->setStyleSheet(rot_h); break;
+	case 6: btnArray[x][y]->setStyleSheet(disco_h); break;
+	case 7: btnArray[x][y]->setStyleSheet(horizontal_h); break;
+	case 8: btnArray[x][y]->setStyleSheet(vertikal_h); break;
+	case 9: btnArray[x][y]->setStyleSheet(bombe_h); break;
+		//case 3: temp->setIcon(QIcon(QPixmap(hellblau_h))); break;
+	default: break;
+	}
 }
 
 QPushButton* QtDHBWscapes::initButton(int color, int x, int y)
 {
 	QPushButton* temp = new QPushButton();
 	temp->setFixedSize(QSize(35, 35));
-
-	switch (color)
-	{
-	case 1: temp->setStyleSheet(gruen_h); break;
-	case 2: temp->setStyleSheet(gelb_h); break;
-	case 3: temp->setStyleSheet(pink_h); break;
-	case 4: temp->setStyleSheet(blau_h); break;
-	case 5: temp->setStyleSheet(rot_h); break;
-	case 6: temp->setStyleSheet(disco_h); break;
-	case 7: temp->setStyleSheet(horizontal_h); break;
-	case 8: temp->setStyleSheet(vertikal_h); break;
-	case 9: temp->setStyleSheet(bombe_h); break;
-		//case 3: temp->setIcon(QIcon(QPixmap(hellblau_h))); break;
-	default: break;
-	}
-
-
 	int position = x * Spielfeld::fieldSize + y;
 
 	QSignalMapper* signalMapper = new QSignalMapper(this);
@@ -130,7 +144,7 @@ void QtDHBWscapes::btnAction(int position)
 			game->fromX = -1;
 			game->fromY = -1;
 
-			cleanGrid();
+			//cleanGrid();
 			updateField();
 		}
 	}
@@ -145,7 +159,7 @@ void QtDHBWscapes::btnAction(int position)
 		game->fromY = -1;
 		game->toX = -1;
 		game->toY = -1;
-		cleanGrid();
+		//cleanGrid();
 		updateField();
 	}
 

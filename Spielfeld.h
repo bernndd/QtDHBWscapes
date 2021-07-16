@@ -16,8 +16,8 @@ class Spielfeld
 {
 public:
 	int belegung[12][12];
-	//vector<vector<Stein>> belegung;
 	int punkte;
+	int secondsLeft;
 
 	int fromX;
 	int fromY;
