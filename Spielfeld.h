@@ -3,9 +3,18 @@
 #include <vector>
 #include <stdlib.h>
 #include <time.h>
+#include <QPushButton>
+#include <string>
+#include <QTimer>
+
 using namespace std;
 
-#define SIZEFIELD 12
+enum Schwierigkeit
+{
+	hard = 1,
+	medium = 2,
+	easy = 3,
+};
 
 enum StrikeType {
 	horizontal = 0,
@@ -16,8 +25,12 @@ class Spielfeld
 {
 public:
 	int belegung[12][12];
-	//vector<vector<Stein>> belegung;
 	int punkte;
+	int secondsLeft;
+	int timerId;
+	int secondsSinceLastMove;
+	int timeLeft;
+	Schwierigkeit level;
 
 	int fromX;
 	int fromY;

@@ -1,6 +1,5 @@
 #pragma once
 #include "Spielfeld.h"
-#include <QPushButton>
 
 enum Farbe {
 	kein = 0,
@@ -22,7 +21,6 @@ public:
 	Stein();
 	Stein(int color);
 	operator int();
-	//QPushButton* Button;
 
 	void activateBomb(class Spielfeld* spielfeld, int x, int y);
 	void activateDisco(class Spielfeld* spielfeld, int x, int y);

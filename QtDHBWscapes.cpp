@@ -1,4 +1,5 @@
 #include "QtDHBWscapes.h"
+#include <QPixmap>
 
 //#include <time.h>
 
@@ -8,14 +9,13 @@ int Sec = 30, dur = 30; // Spielzeit (beide die gleichen Werte)
 QtDHBWscapes::QtDHBWscapes(QWidget* parent)
 	: QMainWindow(parent)
 {
-    //srand(time(NULL));
     ui.setupUi(this);
     //ui.PopUp->setVisible(false);
     
 
-    initField();
 
-    updateField();
+    initComponents();
+    initField();
     ui.centralWidget->setLayout(field);
 
 	//Connection Menubar
@@ -44,6 +44,7 @@ void QtDHBWscapes::MenuStoppPressed()
 void QtDHBWscapes::MenuHelpPressed()
 {
 
+	game->timerId = startTimer(1000);
 }
 
 void QtDHBWscapes::exitGame()
@@ -51,7 +52,7 @@ void QtDHBWscapes::exitGame()
 	exit(0);
 }
 
-void QtDHBWscapes::initField()
+void QtDHBWscapes::initComponents()
 {
     //Spielfläche
     field = new QGridLayout;
@@ -62,9 +63,11 @@ void QtDHBWscapes::initField()
     field->setSizeConstraint(QLayout::SizeConstraint::SetFixedSize);
 
     game = new Spielfeld(true);
+
+
 }
 
-void QtDHBWscapes::updateField()
+void QtDHBWscapes::initField()
 {
 
     for (int i = 0; i < Spielfeld::fieldSize; i++)
@@ -72,6 +75,7 @@ void QtDHBWscapes::updateField()
         for (int j = 0; j < Spielfeld::fieldSize; j++)
         {
             btnArray[i][j] = initButton(game->belegung[i][j], i, j);
+			setButtonLayout(i, j);
             field->addWidget(btnArray[i][j], i, j);
         }
     }
@@ -80,38 +84,44 @@ void QtDHBWscapes::updateField()
 
 }
 
-void QtDHBWscapes::cleanGrid()
+void QtDHBWscapes::updateField()
 {
-    for (int i = 0; i < Spielfeld::fieldSize; i++)
-    {
-        for (int j = 0; j < Spielfeld::fieldSize; j++)
-        {
-            btnArray[i][j]->setStyleSheet("border-image:url(grey.png);");
-        }
-    }
+
+	for (int i = 0; i < Spielfeld::fieldSize; i++)
+	{
+		for (int j = 0; j < Spielfeld::fieldSize; j++)
+		{
+			setButtonLayout(i, j);
+		}
+	}
+
+}
+
+
+void QtDHBWscapes::setButtonLayout(int x, int y)
+{
+	int color = game->belegung[x][y];
+
+	switch (color)
+	{
+	case 1:  btnArray[x][y]->setStyleSheet(gruen_h); break;
+	case 2: btnArray[x][y]->setStyleSheet(gelb_h); break;
+	case 3: btnArray[x][y]->setStyleSheet(pink_h); break;
+	case 4: btnArray[x][y]->setStyleSheet(blau_h); break;
+	case 5: btnArray[x][y]->setStyleSheet(rot_h); break;
+	case 6: btnArray[x][y]->setStyleSheet(disco_h); break;
+	case 7: btnArray[x][y]->setStyleSheet(horizontal_h); break;
+	case 8: btnArray[x][y]->setStyleSheet(vertikal_h); break;
+	case 9: btnArray[x][y]->setStyleSheet(bombe_h); break;
+		//case 3: temp->setIcon(QIcon(QPixmap(hellblau_h))); break;
+	default: break;
+	}
 }
 
 QPushButton* QtDHBWscapes::initButton(int color, int x, int y)
 {
 	QPushButton* temp = new QPushButton();
 	temp->setFixedSize(QSize(35, 35));
-
-	switch (color)
-	{
-	case 1: temp->setStyleSheet(gruen_h); break;
-	case 2: temp->setStyleSheet(gelb_h); break;
-	case 3: temp->setStyleSheet(pink_h); break;
-	case 4: temp->setStyleSheet(blau_h); break;
-	case 5: temp->setStyleSheet(rot_h); break;
-	case 6: temp->setStyleSheet(disco_h); break;
-	case 7: temp->setStyleSheet(horizontal_h); break;
-	case 8: temp->setStyleSheet(vertikal_h); break;
-	case 9: temp->setStyleSheet(bombe_h); break;
-		//case 3: temp->setIcon(QIcon(QPixmap(hellblau_h))); break;
-	default: break;
-	}
-
-
 	int position = x * Spielfeld::fieldSize + y;
 
 	QSignalMapper* signalMapper = new QSignalMapper(this);
@@ -157,7 +167,6 @@ void QtDHBWscapes::btnAction(int position)
 			game->fromX = -1;
 			game->fromY = -1;
 
-			cleanGrid();
 			updateField();
 		}
 	}
@@ -172,7 +181,6 @@ void QtDHBWscapes::btnAction(int position)
 		game->fromY = -1;
 		game->toX = -1;
 		game->toY = -1;
-		cleanGrid();
 		updateField();
 	}
 
@@ -180,33 +188,33 @@ void QtDHBWscapes::btnAction(int position)
 
 //QtDHBWscapes::~QtDHBWscapes()
 //{
-//	killTimer(timerId);
+//	killTimer(game->timerId);
 //}
-//
-//void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the timer triggers
-//{
-//	std::string str;
-//	qDebug();
-//	if (((Sec % 60) < 10) && (Sec > 0)) // For adding an additional zero when its smaller than 10, just visual purpose
-//	{
-//		str = ("<html><head/><body><p><span style =\"font-size:18pt;\">" + std::to_string(Sec / 60) + ":0" + std::to_string(Sec % 60) + "</span></p></body></html>");
-//	}
-//
-//	else if (Sec == 0) // Time is up
-//	{
-//        ui.PopUp->setVisible(true);
-//		ui.PopUp->setStyleSheet("border-image:url(://QtDHBWscapes//Ohne Hintergrund//TimesUp.png);"); // loads a picture
-//		str = "<html><head/><body><p><span style =\"font-size:18pt;\">Time is up !</span></p></body></html>"; //Displays that the time is up
-//		killTimer(timerId); // kills Timer
-//	}
-//	else //creating an array which is also the stylesheet for the Label
-//	{
-//		str =("<html><head/><body><p><span style =\"font-size:18pt;\">" +  std::to_string(Sec / 60) + ":" + std::to_string(Sec % 60) + "</span></p></body></html>");
-//	}
-//    //Setting the Label, so that it Displays the Time and also adjusts the Progress bar so that it shows the right percentage
-//	QString qstr = QString::fromStdString(str);
-//	ui.displayTime->setText(qstr);
-//	ui.timeBar->setValue((double)Sec / (double)dur * 100);
-//	Sec--;
-//	
-//}
+
+void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the timer triggers
+{
+	game->secondsSinceLastMove++;
+	if (game->secondsSinceLastMove == 5)
+	{
+		if (game->checkColStrike(false) == 0 && game->checkColStrike(false) == 0) //TODO Testen
+		{
+			//Fenster Spielende
+			endBox = new QMessageBox(this);
+			endBox->setText("Keine Spielzüge mehr möglich!");
+			//endBox->setIconPixmap(QPixmap("TimesUp.png"));
+			endBox->exec();
+		}
+	}
+
+	game->timeLeft--;
+	if (game->timeLeft == 0)
+	{
+		endBox = new QMessageBox(this);
+		endBox->setText("Zeit abgelaufen!");
+		//endBox->setIconPixmap(QPixmap("TimesUp.png"));
+		endBox->exec();
+	}
+
+	//TODO Anzeige in Menüleiste aktualisieren
+
+}

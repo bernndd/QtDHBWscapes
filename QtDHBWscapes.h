@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QGridLayout>
 #include <QSignalMapper>
+#include <QMessageBox>
 
 // Spielsteine definieren
 #define rot_h "border-image:url(rot_rm.png);"
@@ -32,9 +33,15 @@ private:
     Spielfeld* game;
     QPushButton* btnArray[12][12];
     QGridLayout* field;
+    QMessageBox* endBox;
 
     QPushButton* initButton(int color, int x, int y);
+    void timerEvent(QTimerEvent* event);
+    void initField();
     void updateField();
+    void setButtonLayout(int x, int y);
+    void initComponents();
+
     void cleanGrid();
     void initField();
     void InitMenu();

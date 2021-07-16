@@ -1,5 +1,5 @@
 #include "Stein.h"
-#include <string>
+
 
 Stein::Stein() {}
 
@@ -42,6 +42,8 @@ void Stein::Move(Spielfeld* spielfeld)
 
 		else
 		{
+			spielfeld->secondsSinceLastMove = 0;
+
 			if (row == 5 || col == 5)
 			{
 				//Entferne Strike und positioniere Discokugel
