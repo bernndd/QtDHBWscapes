@@ -58,9 +58,9 @@ void Stein::Move(Spielfeld* spielfeld)
 				spielfeld->checkRowStrike(true);
 				spielfeld->checkColStrike(true);
 				if (row == 4)
-					spielfeld->belegung[toX - 1][toY] = Stein(Farbe::raketeHorizontal);
-				else
 					spielfeld->belegung[toX][toY] = Stein(Farbe::raketeVertikal);
+				else
+					spielfeld->belegung[toX][toY] = Stein(Farbe::raketeHorizontal);
 			}
 
 			else if (row == 3 && col == 3)
@@ -75,6 +75,7 @@ void Stein::Move(Spielfeld* spielfeld)
 				spielfeld->belegung[toX][toY] = temp;
 				spielfeld->checkColStrike(true);
 				//spielfeld.belegung[toX][toY] = Bombe::Bombe(toX, toY);
+				spielfeld->belegung[toX][toY] = Stein(Farbe::bombe);
 			}
 
 			else if (row == 3)
@@ -107,6 +108,11 @@ void Stein::activateVerticalRocket(class Spielfeld* game, int y)
 		game->punkte += game->belegung[i][y] * 20;
 		game->belegung[i][y] = Stein(rand() % 5 + 1);
 	}
+	game->fromX = -1;
+	game->fromY = -1;
+	game->toX = -1;
+	game->toY = -1;
+	Move(game);
 }
 
 void Stein::activateHorizontalRocket(class Spielfeld* game, int x)
@@ -119,9 +125,14 @@ void Stein::activateHorizontalRocket(class Spielfeld* game, int x)
 		game->belegung[x][i] = Stein(0);
 	}
 	game->fillFieldAfterStrike();
+	game->fromX = -1;
+	game->fromY = -1;
+	game->toX = -1;
+	game->toY = -1;
+	Move(game);
 }
 
-void Stein::activateDisco(Spielfeld* spielfeld, int x, int y)
+void Stein::activateDisco(Spielfeld* game, int x, int y)
 {
 	//Entfernt random eine Farbe komplett vom Spielfeld
 	int color = rand() % 5 + 1;
@@ -132,17 +143,22 @@ void Stein::activateDisco(Spielfeld* spielfeld, int x, int y)
 	{
 		for (int j = 0; j < Spielfeld::fieldSize; j++)
 		{
-			if (spielfeld->belegung[i][j] == color)
+			if (game->belegung[i][j] == color)
 			{
-				spielfeld->belegung[i][j] = Stein(0);
+				game->belegung[i][j] = Stein(0);
 			}
 		}
 	}
 
 	//Discokugel entfernen
-	spielfeld->belegung[x][y] = Stein(0);
+	game->belegung[x][y] = Stein(0);
 
-	spielfeld->fillFieldAfterStrike();
+	game->fillFieldAfterStrike();
+	game->fromX = -1;
+	game->fromY = -1;
+	game->toX = -1;
+	game->toY = -1;
+	Move(game);
 }
 
 void Stein::activateBomb(Spielfeld* game, int x, int y)
@@ -186,4 +202,9 @@ void Stein::activateBomb(Spielfeld* game, int x, int y)
 
 
 	game->fillFieldAfterStrike();
+	game->fromX = -1;
+	game->fromY = -1;
+	game->toX = -1;
+	game->toY = -1;
+	Move(game);
 }
