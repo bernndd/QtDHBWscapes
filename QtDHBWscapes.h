@@ -37,11 +37,17 @@ private:
     void updateField();
     void cleanGrid();
     void initField();
+    void InitMenu();
     //int timerId;
+    
 
 protected:
     //void timerEvent(QTimerEvent* event);
 
 private slots:
     void btnAction(int position);
+    void exitGame();
+    void MenuStartPressed();
+    void MenuStoppPressed();
+    void MenuHelpPressed();
 };
