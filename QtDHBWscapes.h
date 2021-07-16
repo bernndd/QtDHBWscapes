@@ -57,6 +57,7 @@ private:
     void cleanGrid();
     void InitMenu();
     void BorderButton(int x, int y);
+    void UpdatePoints();
     //int timerId;
     
 

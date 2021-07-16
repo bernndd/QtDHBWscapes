@@ -128,6 +128,8 @@ QPushButton* QtDHBWscapes::initButton(int color, int x, int y)
 
 void QtDHBWscapes::btnAction(int position)
 {
+	
+
 	int x = position / Spielfeld::fieldSize;
 	int y = position % Spielfeld::fieldSize;
 
@@ -179,6 +181,9 @@ void QtDHBWscapes::btnAction(int position)
 		game->toY = -1;
 		updateField();
 	}
+
+	//Punkte aktualisieren
+	UpdatePoints();
 
 }
 
@@ -232,6 +237,15 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the tim
 	}
 
 	//TODO Anzeige in Menüleiste aktualisieren
+	
+	
+	
+}
+
+
+
+void QtDHBWscapes::UpdatePoints()
+{
 	if (ui.lcdNumber->checkOverflow(game->punkte))
 	{
 		int digit = ui.lcdNumber->digitCount();
@@ -241,9 +255,7 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the tim
 	}
 	else
 	{
-		
+
 		ui.lcdNumber->display(game->punkte);
 	}
-	
-	
 }
