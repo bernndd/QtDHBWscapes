@@ -4,7 +4,7 @@
 //#include <time.h>
 
 
-int Sec = 30, dur = 30; // Spielzeit (beide die gleichen Werte)
+float dur = 20; // Spielzeit 
 
 QtDHBWscapes::QtDHBWscapes(QWidget* parent)
 	: QMainWindow(parent)
@@ -209,7 +209,7 @@ void QtDHBWscapes::BorderButton(int x, int y)
 
 //QtDHBWscapes::~QtDHBWscapes()
 //{
-//	killTimer(game->timerId);
+//killTimer(game->timerId);
 //}
 
 void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the timer triggers
@@ -258,4 +258,7 @@ void QtDHBWscapes::UpdatePoints()
 
 		ui.lcdNumber->display(game->punkte);
 	}
+	
+	
+	//ui.progressBar->setValue(int(float(game->timeLeft)/dur)*100);
 }
