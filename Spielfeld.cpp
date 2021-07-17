@@ -21,7 +21,7 @@ Spielfeld::Spielfeld(bool val)
 	fromY = -1;
 	toX = -1;
 	toY = -1;
-	timeLeft = 10;
+	timeLeft = 15;
 	secondsSinceLastMove = 0;
 	punkte = 0;
 }
@@ -225,4 +225,6 @@ void Spielfeld::calcPointsAndTime(int farbe, int anz)
 {
 	punkte += anz;
 	timeLeft += anz / level;
+	if (timeLeft > 20)
+		timeLeft = 20;
 }

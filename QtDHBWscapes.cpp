@@ -9,7 +9,7 @@ float dur = 20; // Spielzeit
 QtDHBWscapes::QtDHBWscapes(QWidget* parent)
 	: QMainWindow(parent)
 {
-    ui.setupUi(this);
+	ui.setupUi(this);
 
 	//Connection Menubar
 	InitMenu();
@@ -25,7 +25,7 @@ void QtDHBWscapes::InitMenu()
 
 void QtDHBWscapes::MenuStartPressed()
 {
-	
+
 	game = new Spielfeld(true);
 	game->level = Schwierigkeit(ui.schwierigkeit->value() + 1);
 	initComponents();
@@ -40,7 +40,7 @@ void QtDHBWscapes::MenuStoppPressed()
 void QtDHBWscapes::MenuHelpPressed()
 {
 
-	
+
 }
 
 void QtDHBWscapes::exitGame()
@@ -51,30 +51,30 @@ void QtDHBWscapes::exitGame()
 void QtDHBWscapes::initComponents()
 {
 	//test
-    //Spielfläche
-    field = new QGridLayout;
-    QMargins margin(20, 100, 20, 20);
-    field->setContentsMargins(margin);
-    field->setHorizontalSpacing(6);
-    field->setVerticalSpacing(6);
-    field->setSizeConstraint(QLayout::SizeConstraint::SetFixedSize);
+	//Spielfläche
+	field = new QGridLayout;
+	QMargins margin(20, 100, 20, 20);
+	field->setContentsMargins(margin);
+	field->setHorizontalSpacing(6);
+	field->setVerticalSpacing(6);
+	field->setSizeConstraint(QLayout::SizeConstraint::SetFixedSize);
 
 }
 
 void QtDHBWscapes::initField()
 {
 
-    for (int i = 0; i < Spielfeld::fieldSize; i++)
-    {
-        for (int j = 0; j < Spielfeld::fieldSize; j++)
-        {
-            btnArray[i][j] = initButton(game->belegung[i][j], i, j);
+	for (int i = 0; i < Spielfeld::fieldSize; i++)
+	{
+		for (int j = 0; j < Spielfeld::fieldSize; j++)
+		{
+			btnArray[i][j] = initButton(game->belegung[i][j], i, j);
 			setButtonLayout(i, j);
-            field->addWidget(btnArray[i][j], i, j);
-        }
-    }
+			field->addWidget(btnArray[i][j], i, j);
+		}
+	}
 
-    ui.centralWidget->setLayout(field);
+	ui.centralWidget->setLayout(field);
 
 }
 
@@ -128,7 +128,7 @@ QPushButton* QtDHBWscapes::initButton(int color, int x, int y)
 
 void QtDHBWscapes::btnAction(int position)
 {
-	
+
 
 	int x = position / Spielfeld::fieldSize;
 	int y = position % Spielfeld::fieldSize;
@@ -138,7 +138,7 @@ void QtDHBWscapes::btnAction(int position)
 		game->fromX = x;
 		game->fromY = y;
 		BorderButton(x, y);
-		
+
 
 		if (game->belegung[x][y] > Farbe::rot)
 		{
@@ -217,7 +217,10 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the tim
 	game->secondsSinceLastMove++;
 	if (game->secondsSinceLastMove == 5)
 	{
-		if (game->checkColStrike(false) == 0 && game->checkColStrike(false) == 0) //TODO Testen
+		/*
+		*
+		* Problem ist, dass er nur checkt ob ein Strike vorliegt und nicht dass er guckt ob eine MÖGLICH WÄRE
+		if (game->checkColStrike(false) == 0 && game->checkRowStrike(false) == 0) //TODO Testen
 		{
 			//Fenster Spielende
 			endBox = new QMessageBox(this);
@@ -225,8 +228,9 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the tim
 			//endBox->setIconPixmap(QPixmap("TimesUp.png"));
 			endBox->exec();
 		}
+		#*/
 	}
-
+	ui.progressBar->setValue(int((float(game->timeLeft) / dur) * 100));
 	game->timeLeft--;
 	if (game->timeLeft == 0)
 	{
@@ -237,9 +241,9 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the tim
 	}
 
 	//TODO Anzeige in Menüleiste aktualisieren
-	
-	
-	
+
+
+
 }
 
 
@@ -258,7 +262,7 @@ void QtDHBWscapes::UpdatePoints()
 
 		ui.lcdNumber->display(game->punkte);
 	}
-	
-	
-	//ui.progressBar->setValue(int(float(game->timeLeft)/dur)*100);
+
+
+
 }
