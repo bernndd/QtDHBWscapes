@@ -4,8 +4,8 @@
 //#include <time.h>
 
 
-float dur = 20; // Spielzeit 
-
+float dur = 20;// Spielzeit 
+bool paused = 0;
 QtDHBWscapes::QtDHBWscapes(QWidget* parent)
 	: QMainWindow(parent)
 {
@@ -25,16 +25,28 @@ void QtDHBWscapes::InitMenu()
 
 void QtDHBWscapes::MenuStartPressed()
 {
-
 	game = new Spielfeld(true);
 	game->level = Schwierigkeit(ui.schwierigkeit->value() + 1);
 	initComponents();
 	initField();
 	ui.centralWidget->setLayout(field);
+	ui.startButton->setDisabled(true);
 	game->timerId = startTimer(1000);
 }
 void QtDHBWscapes::MenuStoppPressed()
 {
+	if (paused)
+	{
+		ui.stoppButton->setText("Pause");
+		paused = false;
+		game->timerId = startTimer(1000);
+	}
+	else
+	{
+		ui.stoppButton->setText("Resume");
+		paused = true;
+		killTimer(game->timerId);
+	}
 
 }
 void QtDHBWscapes::MenuHelpPressed()
