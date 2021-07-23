@@ -260,8 +260,17 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the tim
 	ui.zeit->setText(QString::number(game->timeLeft) + "s");
 
 	game->timeLeft--;
-	if (game->timeLeft == 0)
+	if (game->timeLeft == -1)
 	{
+		for (int i = 0; i < 12; i++)
+		{
+			for (int j = 0; j < 12; j++)
+			{
+				btnArray[i][j]->setDisabled(true);
+			}
+		}
+		ui.zeit->setText("YOU LOST");
+		killTimer(game->timerId);
 		endBox = new QMessageBox(this);
 		//endBox->setText("TIME´S UP");
 		endBox->setIconPixmap(QPixmap("TimesUp.png"));
