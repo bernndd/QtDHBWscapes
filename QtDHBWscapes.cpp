@@ -10,7 +10,6 @@ QtDHBWscapes::QtDHBWscapes(QWidget* parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
-
 	//Connection Menubar
 	InitMenu();
 }
@@ -25,6 +24,7 @@ void QtDHBWscapes::InitMenu()
 
 void QtDHBWscapes::MenuStartPressed()
 {
+	ui.graphicsView->setVisible(false);
 	game = new Spielfeld(true);
 	game->level = Schwierigkeit(ui.schwierigkeit->value() + 1);
 	initComponents();
@@ -37,12 +37,26 @@ void QtDHBWscapes::MenuStoppPressed()
 {
 	if (paused)
 	{
+		for (int i = 0; i < 12; i++)
+		{
+			for (int j = 0; j < 12; j++)
+			{
+				btnArray[i][j]->setDisabled(false);
+			}
+		}
 		ui.stoppButton->setText("Pause");
 		paused = false;
 		game->timerId = startTimer(1000);
 	}
 	else
 	{
+		for (int i = 0; i < 12; i++)
+		{
+			for (int j = 0; j < 12; j++)
+			{
+				btnArray[i][j]->setDisabled(true);
+			}
+		}
 		ui.stoppButton->setText("Resume");
 		paused = true;
 		killTimer(game->timerId);
@@ -249,8 +263,8 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the tim
 	if (game->timeLeft == 0)
 	{
 		endBox = new QMessageBox(this);
-		endBox->setText("TIME´S UP");
-		//endBox->setIconPixmap(QPixmap("TimesUp.png"));
+		//endBox->setText("TIME´S UP");
+		endBox->setIconPixmap(QPixmap("TimesUp.png"));
 		endBox->exec();
 	}
 

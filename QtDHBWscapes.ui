@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>506</width>
-    <height>512</height>
+    <width>518</width>
+    <height>529</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -139,6 +139,19 @@ widht:30px;
     </property>
     <property name="text">
      <string>20s</string>
+    </property>
+   </widget>
+   <widget class="QGraphicsView" name="graphicsView">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>160</y>
+      <width>461</width>
+      <height>241</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-image:url(dhbwscapes_title.png);</string>
     </property>
    </widget>
   </widget>
