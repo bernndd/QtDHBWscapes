@@ -231,11 +231,13 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the tim
 		#*/
 	}
 	ui.progressBar->setValue(int((float(game->timeLeft) / dur) * 100));
+	ui.zeit->setText(QString::number(game->timeLeft) + "s");
+
 	game->timeLeft--;
 	if (game->timeLeft == 0)
 	{
 		endBox = new QMessageBox(this);
-		endBox->setText("Zeit abgelaufen!");
+		endBox->setText("TIME´S UP");
 		//endBox->setIconPixmap(QPixmap("TimesUp.png"));
 		endBox->exec();
 	}
