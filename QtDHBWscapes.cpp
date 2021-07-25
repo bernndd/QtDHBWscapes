@@ -40,7 +40,6 @@ void QtDHBWscapes::MenuStoppPressed()
 void QtDHBWscapes::MenuHelpPressed()
 {
 
-
 }
 
 void QtDHBWscapes::exitGame()
