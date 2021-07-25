@@ -21,7 +21,7 @@ Spielfeld::Spielfeld(bool val)
 	fromY = -1;
 	toX = -1;
 	toY = -1;
-	timeLeft = 15;
+	timeLeft = 20;
 	secondsSinceLastMove = 0;
 	punkte = 0;
 }

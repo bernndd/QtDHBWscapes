@@ -4,13 +4,12 @@
 //#include <time.h>
 
 
-float dur = 20; // Spielzeit 
-
+float dur = 20;// Spielzeit 
+bool paused = 0;
 QtDHBWscapes::QtDHBWscapes(QWidget* parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
-
 	//Connection Menubar
 	InitMenu();
 }
@@ -25,16 +24,43 @@ void QtDHBWscapes::InitMenu()
 
 void QtDHBWscapes::MenuStartPressed()
 {
-
+	ui.graphicsView->setVisible(false);
 	game = new Spielfeld(true);
 	game->level = Schwierigkeit(ui.schwierigkeit->value() + 1);
 	initComponents();
 	initField();
 	ui.centralWidget->setLayout(field);
+	ui.startButton->setDisabled(true);
 	game->timerId = startTimer(1000);
 }
 void QtDHBWscapes::MenuStoppPressed()
 {
+	if (paused)
+	{
+		for (int i = 0; i < 12; i++)
+		{
+			for (int j = 0; j < 12; j++)
+			{
+				btnArray[i][j]->setDisabled(false);
+			}
+		}
+		ui.stoppButton->setText("Pause");
+		paused = false;
+		game->timerId = startTimer(1000);
+	}
+	else
+	{
+		for (int i = 0; i < 12; i++)
+		{
+			for (int j = 0; j < 12; j++)
+			{
+				btnArray[i][j]->setDisabled(true);
+			}
+		}
+		ui.stoppButton->setText("Resume");
+		paused = true;
+		killTimer(game->timerId);
+	}
 
 }
 void QtDHBWscapes::MenuHelpPressed()
@@ -230,12 +256,23 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the tim
 		#*/
 	}
 	ui.progressBar->setValue(int((float(game->timeLeft) / dur) * 100));
+	ui.zeit->setText(QString::number(game->timeLeft) + "s");
+
 	game->timeLeft--;
-	if (game->timeLeft == 0)
+	if (game->timeLeft == -1)
 	{
+		for (int i = 0; i < 12; i++)
+		{
+			for (int j = 0; j < 12; j++)
+			{
+				btnArray[i][j]->setDisabled(true);
+			}
+		}
+		ui.zeit->setText("YOU LOST");
+		killTimer(game->timerId);
 		endBox = new QMessageBox(this);
-		endBox->setText("Zeit abgelaufen!");
-		//endBox->setIconPixmap(QPixmap("TimesUp.png"));
+		//endBox->setText("TIME´S UP");
+		endBox->setIconPixmap(QPixmap("TimesUp.png"));
 		endBox->exec();
 	}
 
