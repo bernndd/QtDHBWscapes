@@ -49,6 +49,7 @@ private:
 
     QPushButton* initButton(int color, int x, int y);
     void timerEvent(QTimerEvent* event);
+    void showGameResult();
     void initField();
     void updateField();
     void setButtonLayout(int x, int y);

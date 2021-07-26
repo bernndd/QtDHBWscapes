@@ -31,7 +31,6 @@ public:
 	int punkte;
 	int secondsLeft;
 	int timerId;
-	int secondsSinceLastMove;
 	int timeLeft;
 	Schwierigkeit level;
 	string playerName;

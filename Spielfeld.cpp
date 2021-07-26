@@ -23,8 +23,6 @@ Spielfeld::Spielfeld(string playername, Schwierigkeit level)
 	fromY = -1;
 	toX = -1;
 	toY = -1;
-	timeLeft = 20;
-	secondsSinceLastMove = 0;
 	punkte = 0;
 	playerName = playername;
 	readHighscoreFile();
@@ -164,7 +162,7 @@ int Spielfeld::timeLimit()
 	{
 	case Schwierigkeit::medium: return 10; break;
 	case Schwierigkeit::hard: return 5; break;
-		default: return 20; break;
+	default: return 20; break;
 		break;
 	}
 }
@@ -249,44 +247,36 @@ void Spielfeld::readHighscoreFile()
 	try
 	{
 
-	ifstream input_file(FILE);
+		ifstream input_file(FILE);
 
-	string zeile, player, points;
+		string zeile, player, points;
 
 
-	while (input_file >> zeile)
-	{
-		player = zeile.substr(0, zeile.find("-"));
-		points = zeile.substr(zeile.find("-") + 1, zeile.length());
-		highscoreList.push_back(Player(player, stoi(points)));
+		while (input_file >> zeile)
+		{
+			player = zeile.substr(0, zeile.find("-"));
+			points = zeile.substr(zeile.find("-") + 1, zeile.length());
+			highscoreList.push_back(Player(player, stoi(points)));
 
+		}
+		input_file.close();
+		successRead = true;
+		sort(highscoreList.begin(), highscoreList.end(), greater<int>());
 	}
-	input_file.close();
-	successRead = true;
-	sort(highscoreList.begin(), highscoreList.end(), greater<int>());
-	}
 
-	catch (exception)
-	{
-		successRead = false;
-	}
+	catch (exception) {}
 
 }
 
 void Spielfeld::writeHighscoreFile()
 {
-	try
-	{
-		sort(highscoreList.begin(), highscoreList.end(), greater<int>());
-		ofstream output_file(FILE);
 
-		for (int i = 0; i < 10; i++)
-			output_file << highscoreList[i].Name << "-" << highscoreList[i].Punkte << endl;
+	sort(highscoreList.begin(), highscoreList.end(), greater<int>());
+	ofstream output_file(FILE);
 
-		output_file.close();
-	}
-	catch (exception ex)
-	{
-		throw("Fehler beim Speichern des neuen Punkterekords\nHave you tried turning it off and on again?");
-	}
+	for (int i = 0; i < 10; i++)
+		output_file << highscoreList[i].Name << "-" << highscoreList[i].Punkte << endl;
+
+	output_file.close();
+
 }
