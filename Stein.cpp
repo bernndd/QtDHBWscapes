@@ -42,7 +42,6 @@ void Stein::Move(Spielfeld* spielfeld)
 
 		else
 		{
-			spielfeld->secondsSinceLastMove = 0;
 
 			if (row == 5 || col == 5)
 			{

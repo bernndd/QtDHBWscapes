@@ -165,7 +165,6 @@ void QtDHBWscapes::setButtonLayout(int x, int y)
 	case 7: btnArray[x][y]->setStyleSheet(horizontal_h); break;
 	case 8: btnArray[x][y]->setStyleSheet(vertikal_h); break;
 	case 9: btnArray[x][y]->setStyleSheet(bombe_h); break;
-		//case 3: temp->setIcon(QIcon(QPixmap(hellblau_h))); break;
 	default: break;
 	}
 }
@@ -188,8 +187,6 @@ QPushButton* QtDHBWscapes::initButton(int color, int x, int y)
 
 void QtDHBWscapes::btnAction(int position)
 {
-
-
 	int x = position / Spielfeld::fieldSize;
 	int y = position % Spielfeld::fieldSize;
 
@@ -262,87 +259,73 @@ void QtDHBWscapes::BorderButton(int x, int y)
 	case 7: btnArray[x][y]->setStyleSheet(horizontal_border); break;
 	case 8: btnArray[x][y]->setStyleSheet(vertikal_border); break;
 	case 9: btnArray[x][y]->setStyleSheet(bombe_border); break;
-		//case 3: temp->setIcon(QIcon(QPixmap(hellblau_h))); break;
 	default: break;
 	}
 }
 
-//QtDHBWscapes::~QtDHBWscapes()
-//{
-//killTimer(game->timerId);
-//}
+
 
 void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the timer triggers
 {
-	game->secondsSinceLastMove++;
-	if (game->secondsSinceLastMove == 5)
-	{
-		/*
-		* DAS HIER RAUSMACHEN?
-		* Problem ist, dass er nur checkt ob ein Strike vorliegt und nicht dass er guckt ob eine MÖGLICH WÄRE
-		if (game->checkColStrike(false) == 0 && game->checkRowStrike(false) == 0) //TODO Testen
-		{
-			//Fenster Spielende
-			endBox = new QMessageBox(this);
-			endBox->setText("Keine Spielzüge mehr möglich!");
-			//endBox->setIconPixmap(QPixmap("TimesUp.png"));
-			endBox->exec();
-		}
-		#*/
-	}
-
-
 	ui.progressBar->setValue(int((float(game->timeLeft) / game->timeLimit()) * 100));
 	ui.zeit->setText(QString::number(game->timeLeft) + "s");
 	game->timeLeft--;
 
-	if (game->timeLeft == -1)
+	if (game->timeLeft < 0)
+		showGameResult();
+}
+
+void QtDHBWscapes::showGameResult()
+{
+	ui.zeit->setText("YOU LOST");
+
+	endBox = new QMessageBox(this);
+	string output = "Sie haben " + to_string(game->punkte) + " Punkte erreicht!\n\n";
+
+	string highscore;
+	for (int i = 0; i < 10; i++)
 	{
-		ui.zeit->setText("YOU LOST");
+		string temp = to_string(i + 1) + ". " + game->highscoreList[i].Name + " mit " + to_string(game->highscoreList[i].Punkte) + " erreichten Punkten!\n";
+		highscore.append(temp);
+	}
 
-		endBox = new QMessageBox(this);
-		string output = "Sie haben " + to_string(game->punkte) + " Punkte erreicht!\n\n";
+	if (game->punkte > game->highscoreList[9])
+	{
+		//Neuer Highscore erreicht
+		game->highscoreList.push_back(Player(game->playerName, game->punkte));
+		game->writeHighscoreFile();
 
-		string highscore;
+		output = "Neuer Highscore!\n\n" + output;
 		for (int i = 0; i < 10; i++)
 		{
-			string temp = to_string(i + 1) + ". " + game->highscoreList[i].Name + " mit " + to_string(game->highscoreList[i].Punkte) + " erreichten Punkten!\n";
-			highscore.append(temp);
+			output.append(to_string(i + 1) + ". " + game->highscoreList[i].Name + " mit " + to_string(game->highscoreList[i].Punkte) + " erreichten Punkten!\n");
 		}
 
-		if (game->punkte > game->highscoreList[9])
-		{
-			//Neuer Highscore erreicht
-			game->highscoreList.push_back(Player(game->playerName, game->punkte));
-			game->writeHighscoreFile();
-
-			output = "Neuer Highscore!\n\n" + output;
-			for (int i = 0; i < 10; i++)
-			{
-				output.append(to_string(i + 1) + ". " + game->highscoreList[i].Name + " mit " + to_string(game->highscoreList[i].Punkte) + " erreichten Punkten!\n");
-			}
-
-		}
-
-		else
-		{
-			output.append("Fuer einen Highscore benoetigen Sie mindestens " + to_string(game->highscoreList[9].Punkte) + " Punkte!");
-			endBox->setIconPixmap(QPixmap("TimesUp.png").scaled(400, 400));
-		}
-		endBox->setText(QString::fromStdString(output));
-
-		endBox->exec();
-		QMessageBox::StandardButton reply;
-		reply = QMessageBox::question(endBox, "Neustart?", "Moechten Sie noch eine Runde spielen?", QMessageBox::Yes | QMessageBox::No);
-		if (reply == QMessageBox::Yes)
-		{
-			game = new Spielfeld(game->playerName, game->level);
-			updateField();
-		}
-		else
-			exit(0);
 	}
+
+	else
+	{
+		output.append("Fuer einen Highscore benoetigen Sie mindestens " + to_string(game->highscoreList[9].Punkte) + " Punkte!");
+		endBox->setIconPixmap(QPixmap("TimesUp.png").scaled(400, 400));
+	}
+	endBox->setText(QString::fromStdString(output));
+
+	endBox->exec();
+
+
+	//Frägt nach Neustart
+	QMessageBox::StandardButton reply;
+	reply = QMessageBox::question(endBox, "Neustart?", "Moechten Sie noch eine Runde spielen?", QMessageBox::Yes | QMessageBox::No);
+	if (reply == QMessageBox::Yes)
+	{
+		game = new Spielfeld(game->playerName, game->level);
+		updateField();
+	}
+	else
+		exit(0);
 }
+
+
 
 
 
