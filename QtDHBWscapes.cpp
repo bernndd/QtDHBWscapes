@@ -26,9 +26,9 @@ void QtDHBWscapes::editTimeValues(int value)
 {
 	switch (value + 1)
 	{
-		case 2: ui.zeit->setText(QString::number(10) + "s"); break;
-		case 3: ui.zeit->setText(QString::number(5) + "s"); break;
-		default: ui.zeit->setText(QString::number(20) + "s"); break;
+	case 2: ui.zeit->setText(QString::number(10) + "s"); break;
+	case 3: ui.zeit->setText(QString::number(5) + "s"); break;
+	default: ui.zeit->setText(QString::number(20) + "s"); break;
 	}
 }
 
@@ -40,7 +40,7 @@ void QtDHBWscapes::MenuStartPressed()
 	//Read Player Name, convert it  and make the Textedit and the label invisible
 	QString QName = ui.lineEdit->text();
 	std::string name = QName.toLocal8Bit().constData();
-	
+
 	int level = ui.schwierigkeit->value() + 1;
 	game = new Spielfeld("Name", Schwierigkeit(level));
 
@@ -52,9 +52,9 @@ void QtDHBWscapes::MenuStartPressed()
 	initField();
 	ui.centralWidget->setLayout(field);
 	ui.startButton->setDisabled(true);
-	game->timerId = startTimer(1000);  
-	
- 
+	game->timerId = startTimer(1000);
+
+
 }
 
 
@@ -296,50 +296,50 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the tim
 	game->timeLeft--;
 	if (game->timeLeft == -1)
 	{
-		for (int i = 0; i < 12; i++)
-		{
-			for (int j = 0; j < 12; j++)
-			{
-				btnArray[i][j]->setDisabled(true);
-			}
-		}
 		ui.zeit->setText("YOU LOST");
-		killTimer(game->timerId);
+
 		endBox = new QMessageBox(this);
+		string output = "Sie haben " + to_string(game->punkte) + " Punkte erreicht!\n\n";
+
+		string highscore;
+		for (int i = 0; i < 10; i++)
+		{
+			string temp = to_string(i + 1) + ". " + game->highscoreList[i].Name + " mit " + to_string(game->highscoreList[i].Punkte) + " erreichten Punkten!\n";
+			highscore.append(temp);
+		}
 
 		if (game->punkte > game->highscoreList[9])
 		{
 			//Neuer Highscore erreicht
-
 			game->highscoreList.push_back(Player(game->playerName, game->punkte));
 			game->writeHighscoreFile();
 
-			endBox->setWindowTitle("Glueckwunsch!");
-
-			string output = "Neuer Highscore!\n\n";
+			output = "Neuer Highscore!\n\n" + output;
 			for (int i = 0; i < 10; i++)
 			{
-				string temp = to_string(i+1) + ". " + game->highscoreList[i].Name  + " mit " + to_string(game->highscoreList[i].Punkte) + " erreichten Punkten!\n";
-				output.append(temp);
-				//TODO geht noch nicht
+				output.append(to_string(i + 1) + ". " + game->highscoreList[i].Name + " mit " + to_string(game->highscoreList[i].Punkte) + " erreichten Punkten!\n");
 			}
-	
-			endBox->setText(QString::fromStdString(output));
+
 		}
 
 		else
 		{
-			endBox->setWindowTitle("Leider kein neuer Highscore!");
-			endBox->setIconPixmap(QPixmap("TimesUp.png").scaled(400,400));
+			output.append("Fuer einen Highscore benoetigen Sie mindestens " + to_string(game->highscoreList[9].Punkte) + " Punkte!");
+			endBox->setIconPixmap(QPixmap("TimesUp.png").scaled(400, 400));
 		}
-		//endBox->setText("TIME´S UP");
+		endBox->setText(QString::fromStdString(output));
+
 		endBox->exec();
+		QMessageBox::StandardButton reply;
+		reply = QMessageBox::question(endBox, "Neustart?", "Moechten Sie noch eine Runde spielen?", QMessageBox::Yes | QMessageBox::No);
+		if (reply == QMessageBox::Yes)
+		{
+			game = new Spielfeld(game->playerName, game->level);
+			updateField();
+		}
+		else
+			exit(0);
 	}
-
-	//TODO Anzeige in Menüleiste aktualisieren
-
-
-
 }
 
 
