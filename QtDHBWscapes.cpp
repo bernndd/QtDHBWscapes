@@ -46,6 +46,7 @@ void QtDHBWscapes::MenuStartPressed()
 
 	ui.lineEdit->setVisible(false);
 	ui.label_2->setVisible(false);
+	ui.stoppButton->setDisabled(false);
 
 
 	initComponents();
@@ -80,11 +81,10 @@ void QtDHBWscapes::MenuStoppPressed()
 		{
 			for (int j = 0; j < 12; j++)
 			{
-				//TODO Wenn Startbutton noch nicht gedrückt wurde und man dann Pause drückt -> Absturz -> evtl. Pause Button anfangs disablen?
 				btnArray[i][j]->setDisabled(true);
 			}
 		}
-		ui.stoppButton->setText("Resume");
+		ui.stoppButton->setText("Weiter");
 		paused = true;
 		killTimer(game->timerId);
 	}
@@ -278,7 +278,7 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the tim
 	if (game->secondsSinceLastMove == 5)
 	{
 		/*
-		*
+		* DAS HIER RAUSMACHEN?
 		* Problem ist, dass er nur checkt ob ein Strike vorliegt und nicht dass er guckt ob eine MÖGLICH WÄRE
 		if (game->checkColStrike(false) == 0 && game->checkRowStrike(false) == 0) //TODO Testen
 		{
@@ -290,10 +290,12 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the tim
 		}
 		#*/
 	}
+
+
 	ui.progressBar->setValue(int((float(game->timeLeft) / game->timeLimit()) * 100));
 	ui.zeit->setText(QString::number(game->timeLeft) + "s");
-
 	game->timeLeft--;
+
 	if (game->timeLeft == -1)
 	{
 		ui.zeit->setText("YOU LOST");
