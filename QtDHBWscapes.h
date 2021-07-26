@@ -68,4 +68,5 @@ private slots:
     void MenuStartPressed();
     void MenuStoppPressed();
     void MenuHelpPressed();
+    void editTimeValues(int value);
 };

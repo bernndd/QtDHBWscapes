@@ -19,6 +19,17 @@ void QtDHBWscapes::InitMenu()
 	connect(ui.stoppButton, SIGNAL(clicked()), this, SLOT(MenuStoppPressed()));
 	connect(ui.beendenButton, SIGNAL(clicked()), this, SLOT(exitGame()));
 	connect(ui.hilfeButton, SIGNAL(clicked()), this, SLOT(MenuHelpPressed()));
+	connect(ui.schwierigkeit, SIGNAL(valueChanged(int)), this, SLOT(editTimeValues(int)));
+}
+
+void QtDHBWscapes::editTimeValues(int value)
+{
+	switch (value + 1)
+	{
+		case 2: ui.zeit->setText(QString::number(10) + "s"); break;
+		case 3: ui.zeit->setText(QString::number(5) + "s"); break;
+		default: ui.zeit->setText(QString::number(20) + "s"); break;
+	}
 }
 
 //Der Startbutton wurde gedrückt
@@ -29,6 +40,7 @@ void QtDHBWscapes::MenuStartPressed()
 	//Read Player Name, convert it  and make the Textedit and the label invisible
 	QString QName = ui.lineEdit->text();
 	std::string name = QName.toLocal8Bit().constData();
+	
 	int level = ui.schwierigkeit->value() + 1;
 	game = new Spielfeld("Name", Schwierigkeit(level));
 
