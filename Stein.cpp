@@ -21,10 +21,11 @@ void Stein::Move(Spielfeld* spielfeld)
 	int toX = spielfeld->toX;
 	int toY = spielfeld->toY;
 
-	if ((((fromX - toX) >= -1 && (fromX - toX) <= 1) && (fromY == toY)) || //Tauschen X Koordinate überprüfen
-		((((fromY - toY) >= -1 && (fromY - toY) <= 1)) && (fromX == toX))) //Tauschen Y Koordinate überprüfen
+	if ((((fromX - toX) >= -1 && (fromX - toX) <= 1) && (fromY == toY)) || //checks if token is in range x coordinate
+		((((fromY - toY) >= -1 && (fromY - toY) <= 1)) && (fromX == toX))) //and here for the y coordinate
 	{
-		//Steine probeweise vertauschen und überprüfen ob dann ein Strike vorliegt
+		
+		//swap tokens and test if there´s a strike
 		Stein temp = spielfeld->belegung[fromX][fromY];
 		spielfeld->belegung[fromX][fromY] = spielfeld->belegung[toX][toY];
 		spielfeld->belegung[toX][toY] = temp;
@@ -33,7 +34,7 @@ void Stein::Move(Spielfeld* spielfeld)
 		row = spielfeld->checkRowStrike(false);
 		col = spielfeld->checkColStrike(false);
 
-		//Zurücktauschen falls kein Strike vorliegt
+		//swap back if ther´s no strike
 		if (col == 0 && row == 0)
 		{
 			spielfeld->belegung[toX][toY] = spielfeld->belegung[fromX][fromY];
@@ -46,7 +47,7 @@ void Stein::Move(Spielfeld* spielfeld)
 
 			if (row == 5 || col == 5)
 			{
-				//Entferne Strike und positioniere Discokugel
+				//delete tokens and place disco ball
 				spielfeld->checkRowStrike(true);
 				spielfeld->checkColStrike(true);
 				spielfeld->belegung[toX][toY] = Stein(Farbe::disco);
@@ -54,7 +55,7 @@ void Stein::Move(Spielfeld* spielfeld)
 
 			else if (row == 4 || col == 4)
 			{
-				//Entferne Strike und positioniere Rakete
+				//delete tokens and place rocket
 				spielfeld->checkRowStrike(true);
 				spielfeld->checkColStrike(true);
 				if (row == 4)
@@ -65,16 +66,15 @@ void Stein::Move(Spielfeld* spielfeld)
 
 			else if (row == 3 && col == 3)
 			{
-				//Entferne Strike und positioniere Bombe
+				//delete tokens and place bomb
 
-				//Zwischenspeicherung der Strikefarbe und entfernen des Zeilenstrikes
+				//caches the strike color and deletes the row strike
 				int temp = spielfeld->belegung[toX][toY];
 				spielfeld->checkRowStrike(true);
 
-				//Füge an Schnittstelle gleichen Stein wieder ein damit Spaltenstrike auch entfernt wird
+				//adds a token of the same color where they cross, so that the column strike gets deleted as well
 				spielfeld->belegung[toX][toY] = temp;
 				spielfeld->checkColStrike(true);
-				//spielfeld.belegung[toX][toY] = Bombe::Bombe(toX, toY);
 				spielfeld->belegung[toX][toY] = Stein(Farbe::bombe);
 			}
 
@@ -88,13 +88,9 @@ void Stein::Move(Spielfeld* spielfeld)
 			spielfeld->fromY = -1;
 			spielfeld->toX = -1;
 			spielfeld->toY = -1;
-			Move(spielfeld); //rekursiver Aufruf, da sich ein neuer Strike ergeben haben könnte.
+			Move(spielfeld); //recursive call, because there could be a new strike
 		}
 
-	}
-	else
-	{
-		//TODO Exception werfen
 	}
 }
 
@@ -104,7 +100,7 @@ void Stein::activateVerticalRocket(class Spielfeld* game, int y)
 
 	game->timeLeft += (9 / game->level);
 	game->punkte += 20;
-	//initialisiert direkt die Reihe neu
+	//initializes the new row
 	for (int i = 0; i < Spielfeld::fieldSize; i++)
 	{
 		
@@ -121,7 +117,7 @@ void Stein::activateHorizontalRocket(class Spielfeld* game, int x)
 {
 	game->timeLeft += (9 / game->level);
 	game->punkte += 20;
-	//Entfernt Reihe und lässt übergeordnete nachfallen
+	//deletes row and makes the token above fall down
 	for (int i = 0; i < Spielfeld::fieldSize; i++)
 	{
 		game->belegung[x][i] = Stein(0);
@@ -136,7 +132,7 @@ void Stein::activateHorizontalRocket(class Spielfeld* game, int x)
 
 void Stein::activateDisco(Spielfeld* game, int x, int y)
 {
-	//Entfernt random eine Farbe komplett vom Spielfeld
+	//chooses a random color and deletes every token of that color in the game
 	int color = rand() % 5 + 1;
 	game->punkte += 50;
 	game->timeLeft += (12/ game->level);
@@ -152,7 +148,7 @@ void Stein::activateDisco(Spielfeld* game, int x, int y)
 		}
 	}
 
-	//Discokugel entfernen
+	//delete disco ball
 	game->belegung[x][y] = Stein(0);
 
 	game->fillFieldAfterStrike();
@@ -165,12 +161,12 @@ void Stein::activateDisco(Spielfeld* game, int x, int y)
 
 void Stein::activateBomb(Spielfeld* game, int x, int y)
 {
-	//Entfernt Stein am Ursprung
+	//deletes token from origin
 	game->belegung[x][y] = Stein(0);
 	game->punkte += 10;
 	game->timeLeft += (9 / game->level);
 
-	//Entfernt alle Steine links vom Ursprung
+	//deletes all tokens left from the origin
 	if (x > 0)
 	{
 		game->belegung[x - 1][y] = Stein(0);
@@ -182,7 +178,7 @@ void Stein::activateBomb(Spielfeld* game, int x, int y)
 			game->belegung[x - 1][y + 1] = Stein(0);
 	}
 
-	//Entfernt alle Steine rechts vom Ursprung
+	//deletes all tokens right from the origin
 	if (x < Spielfeld::fieldSize - 1)
 	{
 		game->belegung[x + 1][y] = Stein(0);
@@ -194,11 +190,11 @@ void Stein::activateBomb(Spielfeld* game, int x, int y)
 			game->belegung[x + 1][y + 1] = Stein(0);
 	}
 
-	//Entfernt Stein mittig über Ursprung
+	//deletes all tokens in the middle above the origin
 	if (y > 0)
 		game->belegung[x][y - 1] = Stein(0);
 
-	//Entfernt Stein mittig unter Ursprung
+	//deletes all tokens in the middle under the origin
 	if (y < Spielfeld::fieldSize - 1)
 		game->belegung[x][y + 1] = Stein(0);
 

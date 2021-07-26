@@ -5,7 +5,7 @@
 Spielfeld::Spielfeld(string playername, Schwierigkeit level)
 {
 	srand(time(0));
-	//initialisierung der Belegung zu Beginn NEU
+	//new initialization of the grid
 	for (int i = 0; i < fieldSize; i++)
 	{
 		for (int j = 0; j < fieldSize; j++)
@@ -32,7 +32,7 @@ Spielfeld::Spielfeld(string playername, Schwierigkeit level)
 
 
 /// <summary>
-/// Entfernt alle Strikes, die nach erstellen des randomisierten Spielfeldes entstanden sind
+/// deletes all strikes, which formed after randomly creating the field
 /// </summary>
 void Spielfeld::initFieldCheck()
 {
@@ -48,24 +48,23 @@ void Spielfeld::initFieldCheck()
 
 
 /// <summary>
-/// Überprüft ob in einer Zeile ein Strike vorliegt
+/// checks if theres a strike in the row
 /// </summary>
-/// <param name="update">true => Spielfeld wird aktualisiert</param>
+/// <param name="update">true => grid is getting updated</param>
 /// <returns>Strikelänge</returns>
 int Spielfeld::checkRowStrike(bool update)
 {
-	//WORKS!
 	int count = 0;
 
-	//Fängt an in der untersten Reihe zu Prüfen (Steine fallen nach unten)
+	//starts checking at the bottom row (tokens fall down)
 	for (int i = fieldSize - 1; i >= 0; i--)
 	{
 		count = 1;
 		for (int j = 1; j < fieldSize; j++)
 		{
-			if (belegung[i][j] == belegung[i][j - 1]) //nebeneinanderliegende Steine identisch
+			if (belegung[i][j] == belegung[i][j - 1]) //neighbor tokens are similar
 				count++;
-			else //nebeneinanderliegende Steine verschieden
+			else //neighbor tokens are different
 			{
 				if (count > 2)
 				{
@@ -79,7 +78,7 @@ int Spielfeld::checkRowStrike(bool update)
 				count = 1;
 			}
 
-			if (count == 5) //max. 5 Steine in einer Reihe möglich
+			if (count == 5) //max. 5 tokens possible in row 
 			{
 				if (update)
 				{
@@ -90,7 +89,7 @@ int Spielfeld::checkRowStrike(bool update)
 			}
 		}
 
-		if (count > 2) //Zeile zu Ende aber mind. 3 Identische
+		if (count > 2) //end of row, but at least 3 matching
 		{
 			if (update)
 			{
@@ -105,24 +104,23 @@ int Spielfeld::checkRowStrike(bool update)
 }
 
 /// <summary>
-/// Überprüft ob in einer Spalte ein Strike vorliegt
+/// checks if there a strike in a column
 /// </summary>
-/// <param name="update">true => Spielfeld wird aktualisiert</param>
+/// <param name="update">true => grid ist getting updated </param>
 /// <returns>Strikelänge</returns>
 int Spielfeld::checkColStrike(bool update)
 {
-	//WORKS!
 	int count = 0;
 
-	for (int i = 0; i < fieldSize; i++) //Spalte
+	for (int i = 0; i < fieldSize; i++) //column
 	{
 		count = 1;
-		for (int j = fieldSize - 1; j > 0; j--) //Zeile
+		for (int j = fieldSize - 1; j > 0; j--) //row
 		{
-			if (belegung[j][i] == belegung[j - 1][i]) //übereinanderliegende Steine identisch
+			if (belegung[j][i] == belegung[j - 1][i]) //tokens on top of each other are similar
 				count++;
 
-			else //übereinanderliegende Steine verschieden
+			else //tokens on top of each other are different
 			{
 				if (count > 2)
 				{
@@ -136,7 +134,7 @@ int Spielfeld::checkColStrike(bool update)
 				count = 1;
 			}
 
-			if (count == 5) //max. 5 Steine in einer Reihe möglich
+			if (count == 5) //max. 5 tokens possible in a row
 			{
 				if (update)
 				{
@@ -146,7 +144,7 @@ int Spielfeld::checkColStrike(bool update)
 				return count;
 			}
 		}
-		if (count > 2) //Spalte zu Ende aber mind. 3 Identische
+		if (count > 2) //end of column, but at least 3 matching
 		{
 			if (update)
 			{
@@ -172,7 +170,7 @@ int Spielfeld::timeLimit()
 }
 
 /// <summary>
-/// Entfernt die vorliegenden Strikes
+/// deletes all strikes
 /// </summary>
 /// <param name="x">= Zeile</param>
 /// <param name="y">= Spalte</param>
@@ -184,7 +182,7 @@ void Spielfeld::updateField(int x, int y, int anz, StrikeType type)
 	{
 		int col = belegung[x][y];
 
-		//Elemente der Zeile werden aktualisiert
+		//update elements of row
 		for (int i = 0; i < anz; i++)
 		{
 			belegung[x][y - i] = Stein(0);
@@ -194,7 +192,7 @@ void Spielfeld::updateField(int x, int y, int anz, StrikeType type)
 
 	else if (type == vertikal)
 	{
-		//Elemente der Spalte y werden aktualisiert
+		//update elements of column
 		for (int i = 0; i < anz; i++)
 		{
 			belegung[x + i][y] = Stein(0);
@@ -207,23 +205,22 @@ void Spielfeld::updateField(int x, int y, int anz, StrikeType type)
 
 
 /// <summary>
-/// Lässt die Steine nachrutschen und füllt von oben auf
+/// lets the tokens fall down and fills the grid at the top
 /// </summary>
 void Spielfeld::fillFieldAfterStrike()
 {
-	//Neuen Stein nachschieben
-	//srand(time(0));
-	for (int i = 0; i < fieldSize; i++) //Spalte 0 = links
+	//adds new token
+	for (int i = 0; i < fieldSize; i++) //column 0 = left
 	{
-		for (int j = fieldSize - 1; j >= 0; j--) //Zeile 0 = oben
+		for (int j = fieldSize - 1; j >= 0; j--) //row 0 = top
 		{
-			if (j == 0 && belegung[j][i] == kein) //In der obersten Zeile werden neue Steine erzeugt falls Platz ist
+			if (j == 0 && belegung[j][i] == kein) //if theres space at the top, fill it up
 			{
 				belegung[j][i] = Stein(rand() % 5 + 1);
 				j = fieldSize - 1;
-			}
+			} 
 
-			else if (belegung[j][i] == kein) //ansonsten wird der Position der übergeordnete zugeordnet und dieser Platz frei gemacht
+			else if (belegung[j][i] == kein) //otherwise the position will go to the token above and the token at the position will be deleted
 			{
 				belegung[j][i] = belegung[j - 1][i];
 				belegung[j - 1][i] = Stein(0);
@@ -272,7 +269,6 @@ void Spielfeld::readHighscoreFile()
 	catch (exception)
 	{
 		successRead = false;
-		//TODO MessageBox mit Fehler ausgeben
 	}
 
 }
@@ -291,7 +287,6 @@ void Spielfeld::writeHighscoreFile()
 	}
 	catch (exception ex)
 	{
-		//TODO MessageBox mit Fehler ausgeben
 		throw("Fehler beim Speichern des neuen Punkterekords\nHave you tried turning it off and on again?");
 	}
 }
