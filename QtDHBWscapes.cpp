@@ -186,9 +186,9 @@ QPushButton* QtDHBWscapes::initButton(int color, int x, int y)
 	return temp;
 }
 
+//ein Button wurde gedrückt
 void QtDHBWscapes::btnAction(int position)
 {
-
 
 	int x = position / Spielfeld::fieldSize;
 	int y = position % Spielfeld::fieldSize;
@@ -247,6 +247,8 @@ void QtDHBWscapes::btnAction(int position)
 
 }
 
+
+//Umrahmt den Spielstein x,y
 void QtDHBWscapes::BorderButton(int x, int y)
 {
 	int color = game->belegung[x][y];
@@ -321,7 +323,6 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the tim
 			{
 				string temp = to_string(i+1) + ". " + game->highscoreList[i].Name  + " mit " + to_string(game->highscoreList[i].Punkte) + " erreichten Punkten!\n";
 				output.append(temp);
-				//TODO geht noch nicht
 			}
 	
 			endBox->setText(QString::fromStdString(output));
