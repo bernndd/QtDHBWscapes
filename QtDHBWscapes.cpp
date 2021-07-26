@@ -278,7 +278,7 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the tim
 	if (game->secondsSinceLastMove == 5)
 	{
 		/*
-		*
+		* DAS HIER RAUSMACHEN?
 		* Problem ist, dass er nur checkt ob ein Strike vorliegt und nicht dass er guckt ob eine MÖGLICH WÄRE
 		if (game->checkColStrike(false) == 0 && game->checkRowStrike(false) == 0) //TODO Testen
 		{
@@ -290,10 +290,12 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the tim
 		}
 		#*/
 	}
+
+
 	ui.progressBar->setValue(int((float(game->timeLeft) / game->timeLimit()) * 100));
 	ui.zeit->setText(QString::number(game->timeLeft) + "s");
-
 	game->timeLeft--;
+
 	if (game->timeLeft == -1)
 	{
 		for (int i = 0; i < 12; i++)
@@ -307,7 +309,7 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the tim
 		killTimer(game->timerId);
 		ui.stoppButton->setDisabled(true);
 		endBox = new QMessageBox(this);
-//Neuer Highscore erreicht
+		//Neuer Highscore erreicht
 		if (game->punkte > game->highscoreList[9])
 		{
 			
@@ -333,14 +335,9 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the tim
 			endBox->setWindowTitle("Leider kein neuer Highscore!");
 			endBox->setIconPixmap(QPixmap("TimesUp.png").scaled(400,400));
 		}
-		//endBox->setText("TIME´S UP");
+		
 		endBox->exec();
 	}
-
-	//TODO Anzeige in Menüleiste aktualisieren
-
-
-
 }
 
 
