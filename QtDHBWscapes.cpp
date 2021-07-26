@@ -1,10 +1,7 @@
 #include "QtDHBWscapes.h"
 #include <QPixmap>
 
-//#include <time.h>
 
-
-float dur = 20;// Spielzeit 
 bool paused = 0;
 QtDHBWscapes::QtDHBWscapes(QWidget* parent)
 	: QMainWindow(parent)
@@ -27,10 +24,10 @@ void QtDHBWscapes::MenuStartPressed()
 {
 	ui.graphicsView->setVisible(false);
 
-	//TODO namen einlesen
-	game = new Spielfeld("Name");
 
-	game->level = Schwierigkeit(ui.schwierigkeit->value() + 1);
+	int level = ui.schwierigkeit->value() + 1;
+	game = new Spielfeld("Name", Schwierigkeit(level));
+
 	initComponents();
 	initField();
 	ui.centralWidget->setLayout(field);
@@ -260,7 +257,7 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the tim
 		}
 		#*/
 	}
-	ui.progressBar->setValue(int((float(game->timeLeft) / dur) * 100));
+	ui.progressBar->setValue(int((float(game->timeLeft) / game->timeLimit()) * 100));
 	ui.zeit->setText(QString::number(game->timeLeft) + "s");
 
 	game->timeLeft--;
@@ -286,15 +283,13 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the tim
 
 			endBox->setWindowTitle("Glückwunsch!");
 
-			string output = "Neuer Highscore!\n\n";
+			QString output = "Neuer Highscore!\n\n";
 			for (int i = 0; i < 10; i++)
 			{
-				string temp = to_string(i) + ". " + game->highscoreList[i].Name  + " mit " + to_string(game->highscoreList[i].Punkte) + " erreichten Punkten!\n";
-				output.append(temp);
-				//TODO geht noch nicht
+				QString platz = QString::fromStdString(to_string(i) + ". " + game->highscoreList[i].Name + " mit " + to_string(game->highscoreList[i].Punkte) + " erreichten Punkten!\n");
+				output.append(platz);
 			}
-	
-			//endBox->setText(output);
+			endBox->setText(output);
 		}
 
 		else
