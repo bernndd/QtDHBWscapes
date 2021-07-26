@@ -1,10 +1,7 @@
 #include "QtDHBWscapes.h"
 #include <QPixmap>
 
-//#include <time.h>
 
-
-float dur = 20;// Spielzeit 
 bool paused = 0;
 QtDHBWscapes::QtDHBWscapes(QWidget* parent)
 	: QMainWindow(parent)
@@ -32,11 +29,13 @@ void QtDHBWscapes::MenuStartPressed()
 	//Read Player Name, convert it  and make the Textedit and the label invisible
 	QString QName = ui.lineEdit->text();
 	std::string name = QName.toLocal8Bit().constData();
-	game = new Spielfeld(name);
+	int level = ui.schwierigkeit->value() + 1;
+	game = new Spielfeld("Name", Schwierigkeit(level));
+
 	ui.lineEdit->setVisible(false);
 	ui.label_2->setVisible(false);
 
-	game->level = Schwierigkeit(ui.schwierigkeit->value() + 1);
+
 	initComponents();
 	initField();
 	ui.centralWidget->setLayout(field);
@@ -279,7 +278,7 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the tim
 		}
 		#*/
 	}
-	ui.progressBar->setValue(int((float(game->timeLeft) / dur) * 100));
+	ui.progressBar->setValue(int((float(game->timeLeft) / game->timeLimit()) * 100));
 	ui.zeit->setText(QString::number(game->timeLeft) + "s");
 
 	game->timeLeft--;

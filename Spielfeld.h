@@ -43,9 +43,10 @@ public:
 	int toY;
 
 
-	Spielfeld(string playername);
+	Spielfeld(string playername, Schwierigkeit level);
 	static const int fieldSize = 12;
 
+	int timeLimit();
 	void updateField(int x, int y, int anz, StrikeType type);
 	void calcPointsAndTime(int farbe, int anz);
 	void fillFieldAfterStrike();

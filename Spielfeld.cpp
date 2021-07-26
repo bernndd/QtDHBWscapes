@@ -2,7 +2,7 @@
 
 
 
-Spielfeld::Spielfeld(string playername)
+Spielfeld::Spielfeld(string playername, Schwierigkeit level)
 {
 	srand(time(0));
 	//initialisierung der Belegung zu Beginn NEU
@@ -15,6 +15,9 @@ Spielfeld::Spielfeld(string playername)
 	}
 
 	initFieldCheck();
+
+	this->level = level;
+	timeLeft = timeLimit();
 
 	fromX = -1;
 	fromY = -1;
@@ -157,7 +160,16 @@ int Spielfeld::checkColStrike(bool update)
 	return 0;
 }
 
-
+int Spielfeld::timeLimit()
+{
+	switch (level)
+	{
+	case Schwierigkeit::medium: return 10; break;
+	case Schwierigkeit::hard: return 5; break;
+		default: return 20; break;
+		break;
+	}
+}
 
 /// <summary>
 /// Entfernt die vorliegenden Strikes
@@ -224,10 +236,14 @@ void Spielfeld::fillFieldAfterStrike()
 
 void Spielfeld::calcPointsAndTime(int farbe, int anz)
 {
-	punkte += anz;
-	timeLeft += anz / level;
-	if (timeLeft > 20)
-		timeLeft = 20;
+	switch (level)
+	{
+	case easy: timeLeft += 3; punkte += anz; break;
+	case medium: timeLeft += 2; punkte += anz * 2; break;
+	default: timeLeft++; punkte += anz * 3; break;
+	}
+	if (timeLeft > timeLimit())
+		timeLeft = timeLimit();
 }
 
 
