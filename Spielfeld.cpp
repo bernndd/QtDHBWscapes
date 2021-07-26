@@ -2,9 +2,8 @@
 
 
 
-Spielfeld::Spielfeld(bool val)
+Spielfeld::Spielfeld(string playername)
 {
-	//belegung.resize(fieldSize, vector<Stein>(fieldSize));
 	srand(time(0));
 	//initialisierung der Belegung zu Beginn NEU
 	for (int i = 0; i < fieldSize; i++)
@@ -24,6 +23,8 @@ Spielfeld::Spielfeld(bool val)
 	timeLeft = 20;
 	secondsSinceLastMove = 0;
 	punkte = 0;
+	playerName = playername;
+	readHighscoreFile();
 }
 
 
@@ -227,4 +228,54 @@ void Spielfeld::calcPointsAndTime(int farbe, int anz)
 	timeLeft += anz / level;
 	if (timeLeft > 20)
 		timeLeft = 20;
+}
+
+
+void Spielfeld::readHighscoreFile()
+{
+	try
+	{
+
+	ifstream input_file(FILE);
+
+	string zeile, player, points;
+
+
+	while (input_file >> zeile)
+	{
+		player = zeile.substr(0, zeile.find("-"));
+		points = zeile.substr(zeile.find("-") + 1, zeile.length());
+		highscoreList.push_back(Player(player, stoi(points)));
+
+	}
+	input_file.close();
+	successRead = true;
+	sort(highscoreList.begin(), highscoreList.end(), greater<int>());
+	}
+
+	catch (exception)
+	{
+		successRead = false;
+		//TODO MessageBox mit Fehler ausgeben
+	}
+
+}
+
+void Spielfeld::writeHighscoreFile()
+{
+	try
+	{
+		sort(highscoreList.begin(), highscoreList.end(), greater<int>());
+		ofstream output_file(FILE);
+
+		for (int i = 0; i < 10; i++)
+			output_file << highscoreList[i].Name << "-" << highscoreList[i].Punkte << endl;
+
+		output_file.close();
+	}
+	catch (exception ex)
+	{
+		//TODO MessageBox mit Fehler ausgeben
+		throw("Fehler beim Speichern des neuen Punkterekords\nHave you tried turning it off and on again?");
+	}
 }

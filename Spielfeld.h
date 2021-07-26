@@ -1,5 +1,6 @@
 #pragma once
 #include "Stein.h"
+#include "Player.h"
 #include <vector>
 #include <stdlib.h>
 #include <time.h>
@@ -8,6 +9,8 @@
 #include <QTimer>
 
 using namespace std;
+
+#define FILE "HighscoreList.txt"
 
 enum Schwierigkeit
 {
@@ -31,6 +34,8 @@ public:
 	int secondsSinceLastMove;
 	int timeLeft;
 	Schwierigkeit level;
+	string playerName;
+	vector<Player> highscoreList;
 
 	int fromX;
 	int fromY;
@@ -38,7 +43,7 @@ public:
 	int toY;
 
 
-	Spielfeld(bool val);
+	Spielfeld(string playername);
 	static const int fieldSize = 12;
 
 	void updateField(int x, int y, int anz, StrikeType type);
@@ -47,8 +52,11 @@ public:
 
 	int checkRowStrike(bool update);
 	int checkColStrike(bool update);
+	void writeHighscoreFile();
 
 private:
+	bool successRead;
 	void initFieldCheck();
+	void readHighscoreFile();
 };
 

@@ -84,6 +84,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Spielfeld.cpp" />
     <ClCompile Include="Stein.cpp" />
     <QtRcc Include="QtDHBWscapes.qrc" />
@@ -96,8 +97,12 @@
     <Image Include="C:\Users\bdr\Pictures\unknown.png" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Spielfeld.h" />
     <ClInclude Include="Stein.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="HighscoreList.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
