@@ -29,12 +29,12 @@ void QtDHBWscapes::MenuStartPressed()
 	//Read Player Name, convert it  and make the Textedit and the label invisible
 	QString QName = ui.lineEdit->text();
 	std::string name = QName.toLocal8Bit().constData();
-	game = new Spielfeld(name);
+	int level = ui.schwierigkeit->value() + 1;
+	game = new Spielfeld("Name", Schwierigkeit(level));
+
 	ui.lineEdit->setVisible(false);
 	ui.label_2->setVisible(false);
 
-	int level = ui.schwierigkeit->value() + 1;
-	game = new Spielfeld("Name", Schwierigkeit(level));
 
 	initComponents();
 	initField();
@@ -304,7 +304,7 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the tim
 
 			endBox->setWindowTitle("Glueckwunsch!");
 
-			QString output = "Neuer Highscore!\n\n";
+			string output = "Neuer Highscore!\n\n";
 			for (int i = 0; i < 10; i++)
 			{
 				string temp = to_string(i+1) + ". " + game->highscoreList[i].Name  + " mit " + to_string(game->highscoreList[i].Punkte) + " erreichten Punkten!\n";
