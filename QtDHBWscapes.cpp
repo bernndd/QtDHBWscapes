@@ -10,6 +10,7 @@ QtDHBWscapes::QtDHBWscapes(QWidget* parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
+
 	//Connection Menubar
 	InitMenu();
 }
@@ -25,7 +26,10 @@ void QtDHBWscapes::InitMenu()
 void QtDHBWscapes::MenuStartPressed()
 {
 	ui.graphicsView->setVisible(false);
-	game = new Spielfeld(true);
+
+	//TODO namen einlesen
+	game = new Spielfeld("Name");
+
 	game->level = Schwierigkeit(ui.schwierigkeit->value() + 1);
 	initComponents();
 	initField();
@@ -54,6 +58,7 @@ void QtDHBWscapes::MenuStoppPressed()
 		{
 			for (int j = 0; j < 12; j++)
 			{
+				//TODO Wenn Startbutton noch nicht gedrückt wurde und man dann Pause drückt -> Absturz -> evtl. Pause Button anfangs disablen?
 				btnArray[i][j]->setDisabled(true);
 			}
 		}
@@ -65,7 +70,6 @@ void QtDHBWscapes::MenuStoppPressed()
 }
 void QtDHBWscapes::MenuHelpPressed()
 {
-
 
 }
 
@@ -272,8 +276,33 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the tim
 		ui.zeit->setText("YOU LOST");
 		killTimer(game->timerId);
 		endBox = new QMessageBox(this);
+
+		if (game->punkte > game->highscoreList[9])
+		{
+			//Neuer Highscore erreicht
+
+			game->highscoreList.push_back(Player(game->playerName, game->punkte));
+			game->writeHighscoreFile();
+
+			endBox->setWindowTitle("Glückwunsch!");
+
+			string output = "Neuer Highscore!\n\n";
+			for (int i = 0; i < 10; i++)
+			{
+				string temp = to_string(i) + ". " + game->highscoreList[i].Name  + " mit " + to_string(game->highscoreList[i].Punkte) + " erreichten Punkten!\n";
+				output.append(temp);
+				//TODO geht noch nicht
+			}
+	
+			//endBox->setText(output);
+		}
+
+		else
+		{
+			endBox->setWindowTitle("Leider kein neuer Highscore!");
+			endBox->setIconPixmap(QPixmap("TimesUp.png"));
+		}
 		//endBox->setText("TIME´S UP");
-		endBox->setIconPixmap(QPixmap("TimesUp.png"));
 		endBox->exec();
 	}
 
