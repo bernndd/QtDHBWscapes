@@ -73,7 +73,7 @@ void QtDHBWscapes::MenuStoppPressed()
 				btnArray[i][j]->setDisabled(true);
 			}
 		}
-		ui.stoppButton->setText("Resume");
+		ui.stoppButton->setText("Weiter");
 		paused = true;
 		killTimer(game->timerId);
 	}
@@ -292,13 +292,14 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the tim
 				btnArray[i][j]->setDisabled(true);
 			}
 		}
-		ui.zeit->setText("YOU LOST");
+		ui.zeit->setText("VERLOREN");
 		killTimer(game->timerId);
+		ui.stoppButton->setDisabled(true);
 		endBox = new QMessageBox(this);
-
+//Neuer Highscore erreicht
 		if (game->punkte > game->highscoreList[9])
 		{
-			//Neuer Highscore erreicht
+			
 
 			game->highscoreList.push_back(Player(game->playerName, game->punkte));
 			game->writeHighscoreFile();
