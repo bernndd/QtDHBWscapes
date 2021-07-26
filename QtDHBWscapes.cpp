@@ -46,6 +46,7 @@ void QtDHBWscapes::MenuStartPressed()
 
 	ui.lineEdit->setVisible(false);
 	ui.label_2->setVisible(false);
+	ui.stoppButton->setDisabled(false);
 
 
 	initComponents();
@@ -80,7 +81,6 @@ void QtDHBWscapes::MenuStoppPressed()
 		{
 			for (int j = 0; j < 12; j++)
 			{
-				//TODO Wenn Startbutton noch nicht gedrückt wurde und man dann Pause drückt -> Absturz -> evtl. Pause Button anfangs disablen?
 				btnArray[i][j]->setDisabled(true);
 			}
 		}
