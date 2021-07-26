@@ -91,10 +91,6 @@ void Stein::Move(Spielfeld* spielfeld)
 		}
 
 	}
-	else
-	{
-		//TODO Exception werfen
-	}
 }
 
 
