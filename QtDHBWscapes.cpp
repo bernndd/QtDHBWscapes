@@ -29,17 +29,21 @@ void QtDHBWscapes::MenuStartPressed()
 {
 	ui.graphicsView->setVisible(false);
 
+	//Read Player Name, convert it  and make the Textedit and the label invisible
 	QString QName = ui.lineEdit->text();
 	std::string name = QName.toLocal8Bit().constData();
-	//TODO namen einlesen
-	game = new Spielfeld("Name");
+	game = new Spielfeld(name);
+	ui.lineEdit->setVisible(false);
+	ui.label_2->setVisible(false);
 
 	game->level = Schwierigkeit(ui.schwierigkeit->value() + 1);
 	initComponents();
 	initField();
 	ui.centralWidget->setLayout(field);
 	ui.startButton->setDisabled(true);
-	game->timerId = startTimer(1000);
+	game->timerId = startTimer(1000);  
+	
+ 
 }
 
 
