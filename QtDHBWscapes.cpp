@@ -12,6 +12,7 @@ QtDHBWscapes::QtDHBWscapes(QWidget* parent)
 	InitMenu();
 }
 
+//Initialisieren der Button connections
 void QtDHBWscapes::InitMenu()
 {
 	connect(ui.startButton, SIGNAL(clicked()), this, SLOT(MenuStartPressed()));
@@ -20,10 +21,17 @@ void QtDHBWscapes::InitMenu()
 	connect(ui.hilfeButton, SIGNAL(clicked()), this, SLOT(MenuHelpPressed()));
 }
 
+//Der Startbutton wurde gedrückt
 void QtDHBWscapes::MenuStartPressed()
 {
 	ui.graphicsView->setVisible(false);
 
+	//Read Player Name, convert it  and make the Textedit and the label invisible
+	QString QName = ui.lineEdit->text();
+	std::string name = QName.toLocal8Bit().constData();
+	game = new Spielfeld(name);
+	ui.lineEdit->setVisible(false);
+	ui.label_2->setVisible(false);
 
 	int level = ui.schwierigkeit->value() + 1;
 	game = new Spielfeld("Name", Schwierigkeit(level));
@@ -32,8 +40,13 @@ void QtDHBWscapes::MenuStartPressed()
 	initField();
 	ui.centralWidget->setLayout(field);
 	ui.startButton->setDisabled(true);
-	game->timerId = startTimer(1000);
+	game->timerId = startTimer(1000);  
+	
+ 
 }
+
+
+//Button Pause wurde gedrückt
 void QtDHBWscapes::MenuStoppPressed()
 {
 	if (paused)
@@ -65,9 +78,17 @@ void QtDHBWscapes::MenuStoppPressed()
 	}
 
 }
+
+
+//Hilfe Button wurde gedrückt
 void QtDHBWscapes::MenuHelpPressed()
 {
+	endBox = new QMessageBox(this);
+	endBox->setWindowTitle("Hilfe");
+	endBox->setText("Fragen an die drei werden gegen ein Bier beantwortet :D\n");
+	endBox->setIconPixmap(QPixmap("dhbwscapes_title.png").scaled(600, 400));
 
+	endBox->exec();
 }
 
 void QtDHBWscapes::exitGame()
@@ -88,9 +109,9 @@ void QtDHBWscapes::initComponents()
 
 }
 
+//Initialisiert das gesamte Spielfeld
 void QtDHBWscapes::initField()
 {
-
 	for (int i = 0; i < Spielfeld::fieldSize; i++)
 	{
 		for (int j = 0; j < Spielfeld::fieldSize; j++)
@@ -100,14 +121,12 @@ void QtDHBWscapes::initField()
 			field->addWidget(btnArray[i][j], i, j);
 		}
 	}
-
 	ui.centralWidget->setLayout(field);
-
 }
 
+//Updated das gesamte Spielfeld
 void QtDHBWscapes::updateField()
 {
-
 	for (int i = 0; i < Spielfeld::fieldSize; i++)
 	{
 		for (int j = 0; j < Spielfeld::fieldSize; j++)
@@ -118,7 +137,7 @@ void QtDHBWscapes::updateField()
 
 }
 
-
+//Setzt die Farben auf die Buttons
 void QtDHBWscapes::setButtonLayout(int x, int y)
 {
 	int color = game->belegung[x][y];
@@ -139,6 +158,8 @@ void QtDHBWscapes::setButtonLayout(int x, int y)
 	}
 }
 
+
+//Initialisiert die Spielbuttons auf einer Map 
 QPushButton* QtDHBWscapes::initButton(int color, int x, int y)
 {
 	QPushButton* temp = new QPushButton();
@@ -281,21 +302,23 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the tim
 			game->highscoreList.push_back(Player(game->playerName, game->punkte));
 			game->writeHighscoreFile();
 
-			endBox->setWindowTitle("Glückwunsch!");
+			endBox->setWindowTitle("Glueckwunsch!");
 
 			QString output = "Neuer Highscore!\n\n";
 			for (int i = 0; i < 10; i++)
 			{
-				QString platz = QString::fromStdString(to_string(i) + ". " + game->highscoreList[i].Name + " mit " + to_string(game->highscoreList[i].Punkte) + " erreichten Punkten!\n");
-				output.append(platz);
+				string temp = to_string(i+1) + ". " + game->highscoreList[i].Name  + " mit " + to_string(game->highscoreList[i].Punkte) + " erreichten Punkten!\n";
+				output.append(temp);
+				//TODO geht noch nicht
 			}
-			endBox->setText(output);
+	
+			endBox->setText(QString::fromStdString(output));
 		}
 
 		else
 		{
 			endBox->setWindowTitle("Leider kein neuer Highscore!");
-			endBox->setIconPixmap(QPixmap("TimesUp.png"));
+			endBox->setIconPixmap(QPixmap("TimesUp.png").scaled(400,400));
 		}
 		//endBox->setText("TIME´S UP");
 		endBox->exec();
@@ -309,6 +332,7 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the tim
 
 
 
+//Zeigt die aktuellen Punkte an, bzw. aktualisiert diese
 void QtDHBWscapes::UpdatePoints()
 {
 	if (ui.lcdNumber->checkOverflow(game->punkte))
@@ -320,10 +344,6 @@ void QtDHBWscapes::UpdatePoints()
 	}
 	else
 	{
-
 		ui.lcdNumber->display(game->punkte);
 	}
-
-
-
 }
