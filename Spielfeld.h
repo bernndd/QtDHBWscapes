@@ -10,6 +10,8 @@
 
 using namespace std;
 
+class Stein;
+
 #define FILE "HighscoreList.txt"
 
 enum Schwierigkeit
@@ -27,7 +29,8 @@ enum StrikeType {
 class Spielfeld
 {
 public:
-	int belegung[12][12];
+	Stein* belegung[12][12];
+	//vector<vector<Stein*>> belegung;
 	int punkte;
 	int secondsLeft;
 	int timerId;

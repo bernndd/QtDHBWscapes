@@ -20,15 +20,42 @@ class Stein
 public:
 	Stein();
 	Stein(int color);
-	operator int();
+	/*operator int();*/
 
-	void activateBomb(class Spielfeld* spielfeld, int x, int y);
-	void activateDisco(class Spielfeld* spielfeld, int x, int y);
-	void activateVerticalRocket(class Spielfeld* game, int y);
-	void activateHorizontalRocket(class Spielfeld* game, int x);
+	int getColor() { return farbe; };
+
+	virtual void activate(class Spielfeld* spielfeld, int x, int y) {}
 	virtual void Move(class Spielfeld* spielfeld);
 
 
-private:
+protected:
 	Farbe farbe;
+};
+
+class VerticalRocket : public Stein 
+{
+public:
+	VerticalRocket();
+	void activate(class Spielfeld* spielfeld, int x, int y) override;
+};
+
+class HorizontalRocket : public Stein
+{
+public:
+	HorizontalRocket();
+	void activate(class Spielfeld* spielfeld, int x, int y) override;
+};
+
+class Bomb : public Stein
+{
+public:
+	Bomb();
+	void activate(class Spielfeld* spielfeld, int x, int y) override;
+};
+
+class Disco : public Stein
+{
+public:
+	Disco();
+	void activate(class Spielfeld* spielfeld, int x, int y) override;
 };

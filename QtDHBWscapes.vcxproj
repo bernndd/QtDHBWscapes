@@ -84,9 +84,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bomb.cpp" />
+    <ClCompile Include="Disco.cpp" />
+    <ClCompile Include="HorizontalRocket.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Spielfeld.cpp" />
     <ClCompile Include="Stein.cpp" />
+    <ClCompile Include="VerticalRocket.cpp" />
     <QtRcc Include="QtDHBWscapes.qrc" />
     <QtUic Include="QtDHBWscapes.ui" />
     <QtMoc Include="QtDHBWscapes.h" />

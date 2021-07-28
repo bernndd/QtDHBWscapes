@@ -1,0 +1,35 @@
+#include "Stein.h"
+
+Disco::Disco()
+{
+	this->farbe = Farbe::disco;
+}
+
+void Disco::activate(Spielfeld* game, int x, int y)
+{
+	//chooses a random color and deletes every token of that color in the game
+	int color = rand() % 5 + 1;
+	game->punkte += 50;
+	game->timeLeft += (12 / game->level);
+
+	for (int i = 0; i < Spielfeld::fieldSize; i++)
+	{
+		for (int j = 0; j < Spielfeld::fieldSize; j++)
+		{
+			if (game->belegung[i][j]->getColor() == color)
+			{
+				game->belegung[i][j] = &Stein(0);
+			}
+		}
+	}
+
+	//delete disco ball
+	game->belegung[x][y] = &Stein(0);
+
+	game->fillFieldAfterStrike();
+	game->fromX = -1;
+	game->fromY = -1;
+	game->toX = -1;
+	game->toY = -1;
+	Move(game);
+}

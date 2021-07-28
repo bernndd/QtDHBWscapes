@@ -10,7 +10,10 @@ Spielfeld::Spielfeld(string playername, Schwierigkeit level)
 	{
 		for (int j = 0; j < fieldSize; j++)
 		{
-			belegung[i][j] = Stein(rand() % 5 + 1);
+			int zahl = rand() % 5;
+			zahl++;
+			Stein *temp = new Stein(zahl);
+			belegung[i][j] = temp;
 		}
 	}
 
@@ -60,7 +63,7 @@ int Spielfeld::checkRowStrike(bool update)
 		count = 1;
 		for (int j = 1; j < fieldSize; j++)
 		{
-			if (belegung[i][j] == belegung[i][j - 1]) //neighbor tokens are similar
+			if (belegung[i][j]->getColor() == belegung[i][j - 1]->getColor()) //neighbor tokens are similar
 				count++;
 			else //neighbor tokens are different
 			{
@@ -68,7 +71,7 @@ int Spielfeld::checkRowStrike(bool update)
 				{
 					if (update)
 					{
-						calcPointsAndTime(belegung[i][j], count);
+						calcPointsAndTime(belegung[i][j]->getColor(), count);
 						updateField(i, j - 1, count, horizontal);
 					}
 					return count;
@@ -80,7 +83,7 @@ int Spielfeld::checkRowStrike(bool update)
 			{
 				if (update)
 				{
-					calcPointsAndTime(belegung[i][j], count);
+					calcPointsAndTime(belegung[i][j]->getColor(), count);
 					updateField(i, j - 1, count, horizontal);
 				}
 				return count;
@@ -91,7 +94,7 @@ int Spielfeld::checkRowStrike(bool update)
 		{
 			if (update)
 			{
-				calcPointsAndTime(belegung[i][fieldSize - 1], count);
+				calcPointsAndTime(belegung[i][fieldSize - 1]->getColor(), count);
 				updateField(i, fieldSize - 1, count, horizontal);
 			}
 			return count;
@@ -115,7 +118,7 @@ int Spielfeld::checkColStrike(bool update)
 		count = 1;
 		for (int j = fieldSize - 1; j > 0; j--) //row
 		{
-			if (belegung[j][i] == belegung[j - 1][i]) //tokens on top of each other are similar
+			if (belegung[j][i]->getColor() == belegung[j - 1][i]->getColor()) //tokens on top of each other are similar
 				count++;
 
 			else //tokens on top of each other are different
@@ -124,7 +127,7 @@ int Spielfeld::checkColStrike(bool update)
 				{
 					if (update)
 					{
-						calcPointsAndTime(belegung[j][i], count);
+						calcPointsAndTime(belegung[j][i]->getColor(), count);
 						updateField(j, i, count, vertikal);
 					}
 					return count;
@@ -136,7 +139,7 @@ int Spielfeld::checkColStrike(bool update)
 			{
 				if (update)
 				{
-					calcPointsAndTime(belegung[j][i], count);
+					calcPointsAndTime(belegung[j][i]->getColor(), count);
 					updateField(j, i, count, vertikal);
 				}
 				return count;
@@ -146,7 +149,7 @@ int Spielfeld::checkColStrike(bool update)
 		{
 			if (update)
 			{
-				calcPointsAndTime(belegung[0][i], count);
+				calcPointsAndTime(belegung[0][i]->getColor(), count);
 				updateField(count - 1, i, count, vertikal);
 			}
 			return count;
@@ -178,12 +181,13 @@ void Spielfeld::updateField(int x, int y, int anz, StrikeType type)
 {
 	if (type == horizontal)
 	{
-		int col = belegung[x][y];
+		int col = belegung[x][y]->getColor();
 
 		//update elements of row
 		for (int i = 0; i < anz; i++)
 		{
-			belegung[x][y - i] = Stein(0);
+			Stein *temp = new Stein(0);
+			belegung[x][y - i] = temp;
 		}
 
 	}
@@ -193,7 +197,8 @@ void Spielfeld::updateField(int x, int y, int anz, StrikeType type)
 		//update elements of column
 		for (int i = 0; i < anz; i++)
 		{
-			belegung[x + i][y] = Stein(0);
+			Stein *temp = new Stein(0);
+			belegung[x + i][y] = temp;
 		}
 	}
 
@@ -212,16 +217,18 @@ void Spielfeld::fillFieldAfterStrike()
 	{
 		for (int j = fieldSize - 1; j >= 0; j--) //row 0 = top
 		{
-			if (j == 0 && belegung[j][i] == kein) //if theres space at the top, fill it up
+			if (j == 0 && belegung[j][i]->getColor() == kein) //if theres space at the top, fill it up
 			{
-				belegung[j][i] = Stein(rand() % 5 + 1);
+				Stein* temp = new Stein(rand() % 5 + 1);
+				belegung[j][i] = temp;
 				j = fieldSize - 1;
 			} 
 
-			else if (belegung[j][i] == kein) //otherwise the position will go to the token above and the token at the position will be deleted
+			else if (belegung[j][i]->getColor() == kein) //otherwise the position will go to the token above and the token at the position will be deleted
 			{
 				belegung[j][i] = belegung[j - 1][i];
-				belegung[j - 1][i] = Stein(0);
+				Stein* temp = new Stein(0);
+				belegung[j - 1][i] = temp;
 			}
 		}
 

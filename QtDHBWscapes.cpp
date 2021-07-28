@@ -123,7 +123,7 @@ void QtDHBWscapes::initField()
 	{
 		for (int j = 0; j < Spielfeld::fieldSize; j++)
 		{
-			btnArray[i][j] = initButton(game->belegung[i][j], i, j);
+			btnArray[i][j] = initButton(game->belegung[i][j]->getColor(), i, j);
 			setButtonLayout(i, j);
 			field->addWidget(btnArray[i][j], i, j);
 		}
@@ -147,7 +147,7 @@ void QtDHBWscapes::updateField()
 //sets token colors
 void QtDHBWscapes::setButtonLayout(int x, int y)
 {
-	int color = game->belegung[x][y];
+	int color = game->belegung[x][y]->getColor();
 
 	switch (color)
 	{
@@ -191,28 +191,10 @@ void QtDHBWscapes::btnAction(int position)
 		game->fromY = y;
 		BorderButton(x, y);
 
-		if (game->belegung[x][y] > Farbe::rot)
+		if (game->belegung[x][y]->getColor() > Farbe::rot)
 		{
-			switch (Farbe(game->belegung[x][y]))
-			{
-			case Farbe::disco:
-			{
-				Stein(game->belegung[x][y]).activateDisco(game, x, y);
-			}break;
-			case Farbe::bombe:
-			{
-				Stein(game->belegung[x][y]).activateBomb(game, x, y);
-			}break;
-			case Farbe::raketeHorizontal:
-			{
-				Stein(game->belegung[x][y]).activateHorizontalRocket(game, x);
-			}break;
-			case Farbe::raketeVertikal:
-			{
-				Stein(game->belegung[x][y]).activateVerticalRocket(game, y);
-			}break;
-			default:break;
-			}
+			game->belegung[x][y]->activate(game, x, y);
+
 			game->fromX = -1;
 			game->fromY = -1;
 
@@ -223,7 +205,7 @@ void QtDHBWscapes::btnAction(int position)
 	{
 		game->toX = x;
 		game->toY = y;
-		Stein(game->belegung[game->fromX][game->fromY]).Move(game);
+		game->belegung[game->fromX][game->fromY]->Move(game);
 
 		game->fromX = -1;
 		game->fromY = -1;
@@ -238,7 +220,7 @@ void QtDHBWscapes::btnAction(int position)
 
 void QtDHBWscapes::BorderButton(int x, int y)
 {
-	int color = game->belegung[x][y];
+	int color = game->belegung[x][y]->getColor();
 	switch (color)
 	{
 	case 1:  btnArray[x][y]->setStyleSheet(gruen_border); break;
