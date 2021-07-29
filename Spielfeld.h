@@ -29,14 +29,10 @@ enum StrikeType {
 class Spielfeld
 {
 public:
+	static const int fieldSize = 12;
+
 	Stein* belegung[12][12];
-	//vector<vector<Stein*>> belegung;
-	int punkte;
-	int secondsLeft;
-	int timerId;
-	int timeLeft;
-	Schwierigkeit level;
-	string playerName;
+
 	vector<Player> highscoreList;
 
 	int fromX;
@@ -46,18 +42,26 @@ public:
 
 
 	Spielfeld(string playername, Schwierigkeit level);
-	static const int fieldSize = 12;
 
-	int timeLimit();
+	Schwierigkeit getLevel();
+	string getPlayerName();
+	int getTimeLimit();
+	int getTimeLeft();
+	int getPoints();
+
+	void addTimeAndPoints(int extraTime, int extraPoints);
 	void updateField(int x, int y, int anz, StrikeType type);
 	void calcPointsAndTime(int farbe, int anz);
 	void fillFieldAfterStrike();
-
 	int checkRowStrike(bool update);
 	int checkColStrike(bool update);
 	void writeHighscoreFile();
 
 private:
+	int punkte;
+	int timeLeft;
+	Schwierigkeit level;
+	string playerName;
 	bool successRead;
 	void initFieldCheck();
 	void readHighscoreFile();

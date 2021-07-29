@@ -9,8 +9,8 @@ void Bomb::activate(Spielfeld* game, int x, int y)
 {
 	//deletes token from origin
 	game->belegung[x][y] = &Stein(0);
-	game->punkte += 10;
-	game->timeLeft += (9 / game->level);
+	game->addTimeAndPoints(9 / (int)game->getLevel(), 10);
+
 
 	//deletes all tokens left from the origin
 	if (x > 0)

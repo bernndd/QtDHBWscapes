@@ -7,8 +7,8 @@ VerticalRocket::VerticalRocket()
 
 void VerticalRocket::activate(Spielfeld* game, int x, int y)
 {
-	game->timeLeft += (9 / game->level);
-	game->punkte += 20;
+	game->addTimeAndPoints(9 / (int)game->getLevel(), 20);
+
 	//initializes the new row
 	for (int i = 0; i < Spielfeld::fieldSize; i++)
 	{

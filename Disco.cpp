@@ -9,8 +9,9 @@ void Disco::activate(Spielfeld* game, int x, int y)
 {
 	//chooses a random color and deletes every token of that color in the game
 	int color = rand() % 5 + 1;
-	game->punkte += 50;
-	game->timeLeft += (12 / game->level);
+
+	game->addTimeAndPoints(12 / (int)game->getLevel(), 50);
+
 
 	for (int i = 0; i < Spielfeld::fieldSize; i++)
 	{

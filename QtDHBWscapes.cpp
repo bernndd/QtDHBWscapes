@@ -2,11 +2,12 @@
 #include <QPixmap>
 
 
-bool paused = 0;
+
 QtDHBWscapes::QtDHBWscapes(QWidget* parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
+	paused = false;
 
 	//Connection Menubar
 	InitMenu();
@@ -51,7 +52,7 @@ void QtDHBWscapes::MenuStartPressed()
 	initField();
 	ui.centralWidget->setLayout(field);
 	ui.startButton->setDisabled(true);
-	game->timerId = startTimer(1000);
+	timerId = startTimer(1000);
 }
 
 
@@ -69,7 +70,7 @@ void QtDHBWscapes::MenuStoppPressed()
 		}
 		ui.stoppButton->setText("Pause");
 		paused = false;
-		game->timerId = startTimer(1000);
+		timerId = startTimer(1000);
 	}
 	else // resume
 	{
@@ -82,7 +83,7 @@ void QtDHBWscapes::MenuStoppPressed()
 		}
 		ui.stoppButton->setText("Weiter");
 		paused = true;
-		killTimer(game->timerId);
+		killTimer(timerId);
 	}
 
 }
@@ -244,11 +245,11 @@ void QtDHBWscapes::BorderButton(int x, int y)
 void QtDHBWscapes::timerEvent(QTimerEvent* event)
 {
 	//updates Progress bar
-	ui.progressBar->setValue(int((float(game->timeLeft) / game->timeLimit()) * 100));
-	ui.zeit->setText(QString::number(game->timeLeft) + "s");
-	game->timeLeft--;
+	ui.progressBar->setValue(int((float(game->getTimeLeft()) / game->getTimeLimit()) * 100));
+	ui.zeit->setText(QString::number(game->getTimeLeft()) + "s");
+	game->addTimeAndPoints(-1, -1);
 
-	if (game->timeLeft < 0)
+	if (game->getTimeLeft() < 0)
 		showGameResult();
 }
 
@@ -259,16 +260,16 @@ void QtDHBWscapes::showGameResult()
 	{
 		ui.zeit->setText("VERLOREN");
 
-		string output = "Sie haben " + to_string(game->punkte) + " Punkte erreicht!\n\n";
+		string output = "Sie haben " + to_string(game->getPoints()) + " Punkte erreicht!\n\n";
 
 		string highscore;
 
 		
 
-		if (game->punkte > game->highscoreList[9])
+		if (game->getPoints() > game->highscoreList[9])
 		{
 			//new highscore
-			game->highscoreList.push_back(Player(game->playerName, game->punkte));
+			game->highscoreList.push_back(Player(game->getPlayerName(), game->getPoints()));
 			game->writeHighscoreFile();
 			for (int i = 0; i < 10; i++)
 				highscore.append(to_string(i + 1) + ". " + game->highscoreList[i].Name + " mit " + to_string(game->highscoreList[i].Punkte) + " erreichten Punkten!\n");
@@ -299,7 +300,7 @@ void QtDHBWscapes::showGameResult()
 	reply = QMessageBox::question(endBox, "Neustart?", "Moechten Sie noch eine Runde spielen?", QMessageBox::Yes | QMessageBox::No);
 	if (reply == QMessageBox::Yes)
 	{
-		game = new Spielfeld(game->playerName, game->level);
+		game = new Spielfeld(game->getPlayerName(), game->getLevel());
 		updateField();
 	}
 	else
@@ -313,15 +314,15 @@ void QtDHBWscapes::showGameResult()
 //shows current points, and updates them
 void QtDHBWscapes::UpdatePoints()
 {
-	if (ui.lcdNumber->checkOverflow(game->punkte))
+	if (ui.lcdNumber->checkOverflow(game->getPoints()))
 	{
 		int digit = ui.lcdNumber->digitCount();
 		ui.lcdNumber->setDigitCount(digit + 2);
-		ui.lcdNumber->display(game->punkte);
+		ui.lcdNumber->display(game->getPoints());
 		ui.lcdNumber->setSegmentStyle(QLCDNumber::Filled);
 	}
 	else
 	{
-		ui.lcdNumber->display(game->punkte);
+		ui.lcdNumber->display(game->getPoints());
 	}
 }

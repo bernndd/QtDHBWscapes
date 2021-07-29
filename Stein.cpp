@@ -8,11 +8,10 @@ Stein::Stein(int color)
 	this->farbe = (Farbe)color;
 }
 
-
-//Stein::operator int()
-//{
-//	return this->farbe;
-//}
+int Stein::getColor()
+{
+	return this->farbe;
+}
 
 void Stein::Move(Spielfeld* spielfeld)
 {
@@ -65,8 +64,8 @@ void Stein::Move(Spielfeld* spielfeld)
 				}
 				else
 				{
-					HorizontalRocket temp = HorizontalRocket();
-					spielfeld->belegung[toX][toY] = &temp;
+					HorizontalRocket* temp = new HorizontalRocket();
+					spielfeld->belegung[toX][toY] = temp;
 				}
 			}
 

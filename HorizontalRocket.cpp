@@ -7,8 +7,7 @@ HorizontalRocket::HorizontalRocket()
 
 void HorizontalRocket::activate(Spielfeld* game, int x, int y)
 {
-	game->timeLeft += (9 / game->level);
-	game->punkte += 20;
+	game->addTimeAndPoints(9 / (int)game->getLevel(), 20);
 	//deletes row and makes the token above fall down
 	for (int i = 0; i < Spielfeld::fieldSize; i++)
 	{

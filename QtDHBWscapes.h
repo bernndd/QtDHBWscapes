@@ -41,6 +41,8 @@ public:
     
 
 private: 
+    bool paused;
+    int timerId;
     Ui::QtDHBWscapesClass ui;
     Spielfeld* game;
     QPushButton* btnArray[12][12];
@@ -56,11 +58,9 @@ private:
     void initComponents();
 
 
-    void cleanGrid();
     void InitMenu();
     void BorderButton(int x, int y);
     void UpdatePoints();
-    //int timerId;
     
 
 private slots:

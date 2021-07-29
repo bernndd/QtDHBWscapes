@@ -20,7 +20,7 @@ Spielfeld::Spielfeld(string playername, Schwierigkeit level)
 	initFieldCheck();
 
 	this->level = level;
-	timeLeft = timeLimit();
+	timeLeft = getTimeLimit();
 
 	fromX = -1;
 	fromY = -1;
@@ -31,6 +31,16 @@ Spielfeld::Spielfeld(string playername, Schwierigkeit level)
 	readHighscoreFile();
 }
 
+
+void Spielfeld::addTimeAndPoints(int extraTime, int extraPoints)
+{
+	timeLeft += extraTime;
+	punkte += extraPoints;
+}
+
+int Spielfeld::getTimeLeft() {
+	return this->timeLeft;
+}
 
 /// <summary>
 /// deletes all strikes, which formed after randomly creating the field
@@ -159,7 +169,13 @@ int Spielfeld::checkColStrike(bool update)
 	return 0;
 }
 
-int Spielfeld::timeLimit()
+string Spielfeld::getPlayerName() { return playerName; }
+
+Schwierigkeit Spielfeld::getLevel() { return level; }
+
+int Spielfeld::getPoints() { return punkte; }
+
+int Spielfeld::getTimeLimit()
 {
 	switch (level)
 	{
@@ -244,8 +260,8 @@ void Spielfeld::calcPointsAndTime(int farbe, int anz)
 	case medium: timeLeft += 2; punkte += anz * 2; break;
 	default: timeLeft++; punkte += anz * 3; break;
 	}
-	if (timeLeft > timeLimit())
-		timeLeft = timeLimit();
+	if (timeLeft > getTimeLimit())
+		timeLeft = getTimeLimit();
 }
 
 

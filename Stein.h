@@ -20,9 +20,7 @@ class Stein
 public:
 	Stein();
 	Stein(int color);
-	/*operator int();*/
-
-	int getColor() { return farbe; };
+	int getColor();
 
 	virtual void activate(class Spielfeld* spielfeld, int x, int y) {}
 	virtual void Move(class Spielfeld* spielfeld);
