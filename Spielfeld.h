@@ -29,12 +29,14 @@ enum StrikeType {
 class Spielfeld
 {
 public:
-	static const int fieldSize = 12;
-
-	//Variablen mit benötigten Lese- und Schreibzugriff von Außen
 	Stein* belegung[12][12];
+	//vector<vector<Stein*>> belegung;
 	int punkte;
+	int secondsLeft;
+	int timerId;
 	int timeLeft;
+	Schwierigkeit level;
+	string playerName;
 	vector<Player> highscoreList;
 
 	int fromX;
@@ -42,30 +44,21 @@ public:
 	int toX;
 	int toY;
 
+
 	Spielfeld(string playername, Schwierigkeit level);
+	static const int fieldSize = 12;
 
-	//Get-Methoden
-	string getPlayerName();
-	Schwierigkeit getLevel();
-	int getTimeLimit();
-
-	//Logik-Methoden
-	int checkRowStrike(bool update);
-	int checkColStrike(bool update);
+	int timeLimit();
 	void updateField(int x, int y, int anz, StrikeType type);
+	void calcPointsAndTime(int farbe, int anz);
 	void fillFieldAfterStrike();
 
-	void calcPointsAndTime(int farbe, int anz);
-	void resetSavedCoordinates();
+	int checkRowStrike(bool update);
+	int checkColStrike(bool update);
 	void writeHighscoreFile();
 
 private:
-	//Variablen mit max. Lesezugriff von Außen
-	Schwierigkeit level;
-	string playerName;
 	bool successRead;
-
-	//weitere Methoden
 	void initFieldCheck();
 	void readHighscoreFile();
 };

@@ -2,12 +2,12 @@
 #include <QPixmap>
 
 
-
+bool paused = 0;
 QtDHBWscapes::QtDHBWscapes(QWidget* parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
-	paused = 0;
+
 	//Connection Menubar
 	InitMenu();
 }
@@ -51,7 +51,7 @@ void QtDHBWscapes::MenuStartPressed()
 	initField();
 	ui.centralWidget->setLayout(field);
 	ui.startButton->setDisabled(true);
-	timerId = startTimer(1000);
+	game->timerId = startTimer(1000);
 }
 
 
@@ -69,7 +69,7 @@ void QtDHBWscapes::MenuStoppPressed()
 		}
 		ui.stoppButton->setText("Pause");
 		paused = false;
-		timerId = startTimer(1000);
+		game->timerId = startTimer(1000);
 	}
 	else // resume
 	{
@@ -82,7 +82,7 @@ void QtDHBWscapes::MenuStoppPressed()
 		}
 		ui.stoppButton->setText("Weiter");
 		paused = true;
-		killTimer(timerId);
+		killTimer(game->timerId);
 	}
 
 }
@@ -195,6 +195,8 @@ void QtDHBWscapes::btnAction(int position)
 		{
 			game->belegung[x][y]->activate(game, x, y);
 
+			game->fromX = -1;
+			game->fromY = -1;
 
 			updateField();
 		}
@@ -205,7 +207,10 @@ void QtDHBWscapes::btnAction(int position)
 		game->toY = y;
 		game->belegung[game->fromX][game->fromY]->Move(game);
 
-		game->resetSavedCoordinates();
+		game->fromX = -1;
+		game->fromY = -1;
+		game->toX = -1;
+		game->toY = -1;
 		updateField();
 	}
 
@@ -239,7 +244,7 @@ void QtDHBWscapes::BorderButton(int x, int y)
 void QtDHBWscapes::timerEvent(QTimerEvent* event)
 {
 	//updates Progress bar
-	ui.progressBar->setValue(int((float(game->timeLeft) / game->getTimeLimit()) * 100));
+	ui.progressBar->setValue(int((float(game->timeLeft) / game->timeLimit()) * 100));
 	ui.zeit->setText(QString::number(game->timeLeft) + "s");
 	game->timeLeft--;
 
@@ -263,7 +268,7 @@ void QtDHBWscapes::showGameResult()
 		if (game->punkte > game->highscoreList[9])
 		{
 			//new highscore
-			game->highscoreList.push_back(Player(game->getPlayerName(), game->punkte));
+			game->highscoreList.push_back(Player(game->playerName, game->punkte));
 			game->writeHighscoreFile();
 			for (int i = 0; i < 10; i++)
 				highscore.append(to_string(i + 1) + ". " + game->highscoreList[i].Name + " mit " + to_string(game->highscoreList[i].Punkte) + " erreichten Punkten!\n");
@@ -294,7 +299,7 @@ void QtDHBWscapes::showGameResult()
 	reply = QMessageBox::question(endBox, "Neustart?", "Moechten Sie noch eine Runde spielen?", QMessageBox::Yes | QMessageBox::No);
 	if (reply == QMessageBox::Yes)
 	{
-		game = new Spielfeld(game->getPlayerName(), (Schwierigkeit)(ui.schwierigkeit->value() + 1));
+		game = new Spielfeld(game->playerName, game->level);
 		updateField();
 	}
 	else

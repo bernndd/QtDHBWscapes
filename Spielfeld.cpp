@@ -10,7 +10,9 @@ Spielfeld::Spielfeld(string playername, Schwierigkeit level)
 	{
 		for (int j = 0; j < fieldSize; j++)
 		{
-			Stein *temp = new Stein(rand() % 5+1);
+			int zahl = rand() % 5;
+			zahl++;
+			Stein *temp = new Stein(zahl);
 			belegung[i][j] = temp;
 		}
 	}
@@ -18,21 +20,15 @@ Spielfeld::Spielfeld(string playername, Schwierigkeit level)
 	initFieldCheck();
 
 	this->level = level;
-	timeLeft = getTimeLimit();
+	timeLeft = timeLimit();
 
-	resetSavedCoordinates();
+	fromX = -1;
+	fromY = -1;
+	toX = -1;
+	toY = -1;
 	punkte = 0;
 	playerName = playername;
 	readHighscoreFile();
-}
-
-
-void Spielfeld::resetSavedCoordinates()
-{
-	this->fromX = -1;
-	this->fromY = -1;
-	this->toX = -1;
-	this->toY = -1;
 }
 
 
@@ -48,12 +44,9 @@ void Spielfeld::initFieldCheck()
 		a = checkColStrike(true);
 		b = checkRowStrike(true);
 	}
+
 }
 
-string Spielfeld::getPlayerName()
-{
-	return this->playerName;
-}
 
 /// <summary>
 /// checks if theres a strike in the row
@@ -166,7 +159,7 @@ int Spielfeld::checkColStrike(bool update)
 	return 0;
 }
 
-int Spielfeld::getTimeLimit()
+int Spielfeld::timeLimit()
 {
 	switch (level)
 	{
@@ -175,11 +168,6 @@ int Spielfeld::getTimeLimit()
 	default: return 20; break;
 		break;
 	}
-}
-
-Schwierigkeit Spielfeld::getLevel()
-{
-	return this->level;
 }
 
 /// <summary>
@@ -256,8 +244,8 @@ void Spielfeld::calcPointsAndTime(int farbe, int anz)
 	case medium: timeLeft += 2; punkte += anz * 2; break;
 	default: timeLeft++; punkte += anz * 3; break;
 	}
-	if (timeLeft > getTimeLimit())
-		timeLeft = getTimeLimit();
+	if (timeLeft > timeLimit())
+		timeLeft = timeLimit();
 }
 
 
