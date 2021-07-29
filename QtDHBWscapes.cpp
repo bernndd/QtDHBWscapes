@@ -94,8 +94,8 @@ void QtDHBWscapes::MenuHelpPressed()
 {
 	endBox = new QMessageBox(this);
 	endBox->setWindowTitle("Hilfe");
-	endBox->setText("Fragen an die drei werden gegen ein Bier beantwortet :D\n");
-	endBox->setIconPixmap(QPixmap("dhbwscapes_title.png").scaled(600, 400));
+	endBox->setText("Match 3 Spiel, verbinde mindestens 3 Steine bevor die Zeitablaeuft!\nMit jedem gelungenen Zug erhoehen sich deine Punkte!\nSpezialsteine:\n\n Rakete: Entfernt die gesamte Reihe/ Spalte.  gibt es entweder vertikal oder Horizontal je nachdem in welche Richtung der entscheidene Stein bewegt wird.\n\nBombe: Entfernt alle umliegenden Steine, indem sie explodiert.\n\nDiscokugel: Entfernt alle Steine einer Random Farbe aus dem Spielfeld\n\n\nVIEL SPASS BEIM SPIELEN!!!");
+	//endBox->setIconPixmap(QPixmap("dhbwscapes_title.png").scaled(600, 400));
 
 	endBox->exec();
 }
@@ -251,6 +251,7 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)
 void QtDHBWscapes::showGameResult()
 {
 	endBox = new QMessageBox(this);
+	// tries if the Highcore list data is accessible 
 	try
 	{
 		ui.zeit->setText("VERLOREN");
@@ -258,15 +259,14 @@ void QtDHBWscapes::showGameResult()
 		string output = "Sie haben " + to_string(game->getPoints()) + " Punkte erreicht!\n\n";
 
 
-		if (game->getPoints() > game->highscoreList[9])
+		if (game->getPoints() > game->highscoreList[9])//new highscore
 		{
-			//new highscore
 			game->highscoreList.push_back(Player(game->getPlayerName(), game->getPoints()));
 			game->writeHighscoreFile();
 			output = "Neuer Highscore!\n\n" + output + game->buildHighscoreList();;
 		}
 
-		else
+		else  // regular Game ending
 		{
 			output.append("Fuer einen Highscore benoetigen Sie mindestens " + to_string(game->highscoreList[9].Points) + " Punkte!\n\n" + game->buildHighscoreList());
 		}

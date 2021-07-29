@@ -56,8 +56,6 @@ private:
     void updateField();
     void setButtonLayout(int x, int y);
     void initComponents();
-
-
     void InitMenu();
     void BorderButton(int x, int y);
     void UpdatePoints();

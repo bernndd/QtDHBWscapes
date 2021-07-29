@@ -36,7 +36,7 @@ public:
 
 	Game(string playername, Level level);
 
-	//Propertys
+	//Properties
 	Level getLevel() { return level; }
 	string getPlayerName() { return playerName; }
 	int getFromX() { return fromX; }
