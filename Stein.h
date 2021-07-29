@@ -8,10 +8,10 @@ enum Farbe {
 	pink = 3,
 	blau = 4,
 	rot = 5,
-	disco = 6, //one color gets deleted
-	raketeHorizontal = 7,// one row gets deleted
-	raketeVertikal = 8,// one column gets deleted
-	bombe = 9,//explodes, and deletes nearby tokens
+	disco = 6, //eine farbe wird entfernt
+	raketeHorizontal = 7,// eine Zeile wird entfernt
+	raketeVertikal = 8,// eine Spalte wird entfernt
+	bombe = 9,//entfernt unmittelbar umliegenden Steine
 
 };
 
@@ -20,6 +20,7 @@ class Stein
 public:
 	Stein();
 	Stein(int color);
+	/*operator int();*/
 
 	int getColor() { return farbe; };
 

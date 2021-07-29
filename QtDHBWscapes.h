@@ -8,7 +8,7 @@
 #include <QSignalMapper>
 #include <QMessageBox>
 
-// define tokens
+// Spielsteine definieren
 #define rot_h "border-image:url(rot_rm.png);"
 #define blau_h "border-image:url(blau_rm.png);"
 #define hellblau_h "border-image:url(hellblau_rm.png);"
@@ -20,7 +20,7 @@
 #define horizontal_h "border-image:url(horizontal_rm.png);"
 #define vertikal_h "border-image:url(vertikal_rm.png);"
 
-//tokens with border
+//Spielsteine mit Border
 #define rot_border "border-image:url(rot_border.png);"
 #define blau_border "border-image:url(blau_border.png);"
 #define hellblau_border "border-image:url(hellblau_border.png);"
@@ -60,12 +60,9 @@ private:
     void InitMenu();
     void BorderButton(int x, int y);
     void UpdatePoints();
-<<<<<<< HEAD
 
     bool paused;
     int timerId;
-=======
->>>>>>> 8316ab60b817132bd41aa68591c5437b830cd7b6
     
 
 private slots:
