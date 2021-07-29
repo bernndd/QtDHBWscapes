@@ -1,19 +1,19 @@
 #include "Stein.h"
 
 
-Stein::Stein() {}
+Token::Token() {}
 
-Stein::Stein(int color)
+Token::Token(int color)
 {
-	this->farbe = (Farbe)color;
+	this->color = (Color)color;
 }
 
-int Stein::getColor()
+int Token::getColor()
 {
-	return this->farbe;
+	return this->color;
 }
 
-void Stein::Move(Spielfeld* spielfeld)
+void Token::Move(Game* spielfeld)
 {
 	int fromX = spielfeld->getFromX();
 	int fromY = spielfeld->getFromY();
@@ -25,9 +25,9 @@ void Stein::Move(Spielfeld* spielfeld)
 	{
 		
 		//swap tokens and test if there´s a strike
-		Stein* temp = spielfeld->belegung[fromX][fromY];
-		spielfeld->belegung[fromX][fromY] = spielfeld->belegung[toX][toY];
-		spielfeld->belegung[toX][toY] = temp;
+		Token* temp = spielfeld->occypency[fromX][fromY];
+		spielfeld->occypency[fromX][fromY] = spielfeld->occypency[toX][toY];
+		spielfeld->occypency[toX][toY] = temp;
 
 		int col = 0, row = 0;
 		row = spielfeld->checkRowStrike(false);
@@ -36,8 +36,8 @@ void Stein::Move(Spielfeld* spielfeld)
 		//swap back if ther´s no strike
 		if (col == 0 && row == 0)
 		{
-			spielfeld->belegung[toX][toY] = spielfeld->belegung[fromX][fromY];
-			spielfeld->belegung[fromX][fromY] = temp;
+			spielfeld->occypency[toX][toY] = spielfeld->occypency[fromX][fromY];
+			spielfeld->occypency[fromX][fromY] = temp;
 		}
 
 		else
@@ -49,7 +49,7 @@ void Stein::Move(Spielfeld* spielfeld)
 				spielfeld->checkRowStrike(true);
 				spielfeld->checkColStrike(true);
 				Disco* temp = new Disco();
-				spielfeld->belegung[toX][toY] = temp;
+				spielfeld->occypency[toX][toY] = temp;
 			}
 
 			else if (row == 4 || col == 4)
@@ -60,12 +60,12 @@ void Stein::Move(Spielfeld* spielfeld)
 				if (row == 4)
 				{
 					VerticalRocket* temp = new VerticalRocket();
-					spielfeld->belegung[toX][toY] = temp;
+					spielfeld->occypency[toX][toY] = temp;
 				}
 				else
 				{
 					HorizontalRocket* temp = new HorizontalRocket();
-					spielfeld->belegung[toX][toY] = temp;
+					spielfeld->occypency[toX][toY] = temp;
 				}
 			}
 
@@ -74,14 +74,14 @@ void Stein::Move(Spielfeld* spielfeld)
 				//delete tokens and place bomb
 
 				//caches the strike color and deletes the row strike
-				Stein* temp = spielfeld->belegung[toX][toY];
+				Token* temp = spielfeld->occypency[toX][toY];
 				spielfeld->checkRowStrike(true);
 
 				//adds a token of the same color where they cross, so that the column strike gets deleted as well
-				spielfeld->belegung[toX][toY] = temp;
+				spielfeld->occypency[toX][toY] = temp;
 				spielfeld->checkColStrike(true);
 				Bomb* temp2 = new Bomb();
-				spielfeld->belegung[toX][toY] = temp2;
+				spielfeld->occypency[toX][toY] = temp2;
 			}
 
 			else if (row == 3)

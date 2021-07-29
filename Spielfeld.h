@@ -10,11 +10,11 @@
 
 using namespace std;
 
-class Stein;
+class Token;
 
 #define FILE "HighscoreList.txt"
 
-enum Schwierigkeit
+enum Level
 {
 	easy = 1,
 	medium = 2,
@@ -26,25 +26,25 @@ enum StrikeType {
 	vertikal = 1,
 };
 
-class Spielfeld
+class Game
 {
 public:
 	static const int fieldSize = 12;
 
-	Stein* belegung[12][12];
+	Token* occypency[12][12];
 	vector<Player> highscoreList;
 
-	Spielfeld(string playername, Schwierigkeit level);
+	Game(string playername, Level level);
 
 	//Propertys
-	Schwierigkeit getLevel() { return level; }
+	Level getLevel() { return level; }
 	string getPlayerName() { return playerName; }
 	int getFromX() { return fromX; }
 	int getFromY() { return fromY; };
 	int getToX() { return toX; }
 	int getToY() { return toY; }
 	int getTimeLeft() {return timeLeft;}
-	int getPoints() { return punkte; }
+	int getPoints() { return points; }
 	int getTimeLimit();
 
 	//Methoden
@@ -55,18 +55,19 @@ public:
 	void updateField(int x, int y, int anz, StrikeType type);
 	void calcPointsAndTime(int farbe, int anz);
 	void fillFieldAfterStrike();
+	void writeHighscoreFile();
 	int checkRowStrike(bool update);
 	int checkColStrike(bool update);
-	void writeHighscoreFile();
+	string buildHighscoreList();
 
 private:
 	int fromX;
 	int fromY;
 	int toX;
 	int toY;
-	int punkte;
+	int points;
 	int timeLeft;
-	Schwierigkeit level;
+	Level level;
 	string playerName;
 	bool successRead;
 

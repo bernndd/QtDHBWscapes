@@ -2,16 +2,16 @@
 
 HorizontalRocket::HorizontalRocket()
 {
-	this->farbe = Farbe::raketeHorizontal;
+	this->color = Color::rocketHorizontal;
 }
 
-void HorizontalRocket::activate(Spielfeld* game, int x, int y)
+void HorizontalRocket::activate(Game* game, int x, int y)
 {
 	game->addTimeAndPoints(9 / (int)game->getLevel(), 20);
 	//deletes row and makes the token above fall down
-	for (int i = 0; i < Spielfeld::fieldSize; i++)
+	for (int i = 0; i < Game::fieldSize; i++)
 	{
-		game->belegung[x][i] = &Stein(0);
+		game->occypency[x][i] = &Token(0);
 	}
 	game->fillFieldAfterStrike();
 	game->resetSavedCoordinates(true);

@@ -2,18 +2,18 @@
 
 VerticalRocket::VerticalRocket()
 {
-	this->farbe = Farbe::raketeVertikal;
+	this->color = Color::rocketVertical;
 }
 
-void VerticalRocket::activate(Spielfeld* game, int x, int y)
+void VerticalRocket::activate(Game* game, int x, int y)
 {
 	game->addTimeAndPoints(9 / (int)game->getLevel(), 20);
 
 	//initializes the new row
-	for (int i = 0; i < Spielfeld::fieldSize; i++)
+	for (int i = 0; i < Game::fieldSize; i++)
 	{
 
-		game->belegung[i][y] = &Stein(rand() % 5 + 1);
+		game->occypency[i][y] = &Token(rand() % 5 + 1);
 	}
 	game->resetSavedCoordinates(true);
 	Move(game);

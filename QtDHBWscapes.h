@@ -44,7 +44,7 @@ private:
     bool paused;
     int timerId;
     Ui::QtDHBWscapesClass ui;
-    Spielfeld* game;
+    Game* game;
     QPushButton* btnArray[12][12];
     QGridLayout* field;
     QMessageBox* endBox;

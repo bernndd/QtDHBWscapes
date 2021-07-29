@@ -1,59 +1,59 @@
 #pragma once
 #include "Spielfeld.h"
 
-enum Farbe {
+enum Color {
 	kein = 0,
-	gruen = 1,
-	gelb = 2,
+	green = 1,
+	yellow = 2,
 	pink = 3,
-	blau = 4,
-	rot = 5,
+	blue = 4,
+	red = 5,
 	disco = 6, //eine farbe wird entfernt
-	raketeHorizontal = 7,// eine Zeile wird entfernt
-	raketeVertikal = 8,// eine Spalte wird entfernt
-	bombe = 9,//entfernt unmittelbar umliegenden Steine
+	rocketHorizontal = 7,// eine Zeile wird entfernt
+	rocketVertical = 8,// eine Spalte wird entfernt
+	bomb = 9,//entfernt unmittelbar umliegenden Steine
 
 };
 
-class Stein
+class Token
 {
 public:
-	Stein();
-	Stein(int color);
+	Token();
+	Token(int color);
 	int getColor();
 
-	virtual void activate(class Spielfeld* spielfeld, int x, int y) {}
-	virtual void Move(class Spielfeld* spielfeld);
+	virtual void activate(class Game* spielfeld, int x, int y) {}
+	virtual void Move(class Game* spielfeld);
 
 
 protected:
-	Farbe farbe;
+	Color color;
 };
 
-class VerticalRocket : public Stein 
+class VerticalRocket : public Token 
 {
 public:
 	VerticalRocket();
-	void activate(class Spielfeld* spielfeld, int x, int y) override;
+	void activate(class Game* spielfeld, int x, int y) override;
 };
 
-class HorizontalRocket : public Stein
+class HorizontalRocket : public Token
 {
 public:
 	HorizontalRocket();
-	void activate(class Spielfeld* spielfeld, int x, int y) override;
+	void activate(class Game* spielfeld, int x, int y) override;
 };
 
-class Bomb : public Stein
+class Bomb : public Token
 {
 public:
 	Bomb();
-	void activate(class Spielfeld* spielfeld, int x, int y) override;
+	void activate(class Game* spielfeld, int x, int y) override;
 };
 
-class Disco : public Stein
+class Disco : public Token
 {
 public:
 	Disco();
-	void activate(class Spielfeld* spielfeld, int x, int y) override;
+	void activate(class Game* spielfeld, int x, int y) override;
 };

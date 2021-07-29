@@ -2,7 +2,7 @@
 
 
 
-Spielfeld::Spielfeld(string playername, Schwierigkeit level)
+Game::Game(string playername, Level level)
 {
 	srand(time(0));
 	//new initialization of the grid
@@ -12,8 +12,8 @@ Spielfeld::Spielfeld(string playername, Schwierigkeit level)
 		{
 			int zahl = rand() % 5;
 			zahl++;
-			Stein *temp = new Stein(zahl);
-			belegung[i][j] = temp;
+			Token *temp = new Token(zahl);
+			occypency[i][j] = temp;
 		}
 	}
 
@@ -23,12 +23,12 @@ Spielfeld::Spielfeld(string playername, Schwierigkeit level)
 	timeLeft = getTimeLimit();
 
 	resetSavedCoordinates(true);
-	punkte = 0;
+	points = 0;
 	playerName = playername;
 	readHighscoreFile();
 }
 
-void Spielfeld::resetSavedCoordinates(bool resetAllCoordinates) {
+void Game::resetSavedCoordinates(bool resetAllCoordinates) {
 	fromX = -1;
 	fromY = -1;
 	if (resetAllCoordinates)
@@ -38,29 +38,29 @@ void Spielfeld::resetSavedCoordinates(bool resetAllCoordinates) {
 	}
 }
 
-void Spielfeld::setDestination(int toX, int toY)
+void Game::setDestination(int toX, int toY)
 {
 	this->toX = toX;
 	this->toY = toY;
 }
 
-void Spielfeld::setRoot(int fromX, int fromY)
+void Game::setRoot(int fromX, int fromY)
 {
 	this->fromX = fromX;
 	this->fromY = fromY;
 }
 
-void Spielfeld::addTimeAndPoints(int extraTime, int extraPoints)
+void Game::addTimeAndPoints(int extraTime, int extraPoints)
 {
 	timeLeft += extraTime;
-	punkte += extraPoints;
+	points += extraPoints;
 }
 
 
 /// <summary>
 /// deletes all strikes, which formed after randomly creating the field
 /// </summary>
-void Spielfeld::initFieldCheck()
+void Game::initFieldCheck()
 {
 	int a = 1, b = 1;
 
@@ -78,7 +78,7 @@ void Spielfeld::initFieldCheck()
 /// </summary>
 /// <param name="update">true => grid is getting updated</param>
 /// <returns>Strikelänge</returns>
-int Spielfeld::checkRowStrike(bool update)
+int Game::checkRowStrike(bool update)
 {
 	int count = 0;
 
@@ -88,7 +88,7 @@ int Spielfeld::checkRowStrike(bool update)
 		count = 1;
 		for (int j = 1; j < fieldSize; j++)
 		{
-			if (belegung[i][j]->getColor() == belegung[i][j - 1]->getColor()) //neighbor tokens are similar
+			if (occypency[i][j]->getColor() == occypency[i][j - 1]->getColor()) //neighbor tokens are similar
 				count++;
 			else //neighbor tokens are different
 			{
@@ -96,7 +96,7 @@ int Spielfeld::checkRowStrike(bool update)
 				{
 					if (update)
 					{
-						calcPointsAndTime(belegung[i][j]->getColor(), count);
+						calcPointsAndTime(occypency[i][j]->getColor(), count);
 						updateField(i, j - 1, count, horizontal);
 					}
 					return count;
@@ -108,7 +108,7 @@ int Spielfeld::checkRowStrike(bool update)
 			{
 				if (update)
 				{
-					calcPointsAndTime(belegung[i][j]->getColor(), count);
+					calcPointsAndTime(occypency[i][j]->getColor(), count);
 					updateField(i, j - 1, count, horizontal);
 				}
 				return count;
@@ -119,7 +119,7 @@ int Spielfeld::checkRowStrike(bool update)
 		{
 			if (update)
 			{
-				calcPointsAndTime(belegung[i][fieldSize - 1]->getColor(), count);
+				calcPointsAndTime(occypency[i][fieldSize - 1]->getColor(), count);
 				updateField(i, fieldSize - 1, count, horizontal);
 			}
 			return count;
@@ -134,7 +134,7 @@ int Spielfeld::checkRowStrike(bool update)
 /// </summary>
 /// <param name="update">true => grid ist getting updated </param>
 /// <returns>Strikelänge</returns>
-int Spielfeld::checkColStrike(bool update)
+int Game::checkColStrike(bool update)
 {
 	int count = 0;
 
@@ -143,7 +143,7 @@ int Spielfeld::checkColStrike(bool update)
 		count = 1;
 		for (int j = fieldSize - 1; j > 0; j--) //row
 		{
-			if (belegung[j][i]->getColor() == belegung[j - 1][i]->getColor()) //tokens on top of each other are similar
+			if (occypency[j][i]->getColor() == occypency[j - 1][i]->getColor()) //tokens on top of each other are similar
 				count++;
 
 			else //tokens on top of each other are different
@@ -152,7 +152,7 @@ int Spielfeld::checkColStrike(bool update)
 				{
 					if (update)
 					{
-						calcPointsAndTime(belegung[j][i]->getColor(), count);
+						calcPointsAndTime(occypency[j][i]->getColor(), count);
 						updateField(j, i, count, vertikal);
 					}
 					return count;
@@ -164,7 +164,7 @@ int Spielfeld::checkColStrike(bool update)
 			{
 				if (update)
 				{
-					calcPointsAndTime(belegung[j][i]->getColor(), count);
+					calcPointsAndTime(occypency[j][i]->getColor(), count);
 					updateField(j, i, count, vertikal);
 				}
 				return count;
@@ -174,7 +174,7 @@ int Spielfeld::checkColStrike(bool update)
 		{
 			if (update)
 			{
-				calcPointsAndTime(belegung[0][i]->getColor(), count);
+				calcPointsAndTime(occypency[0][i]->getColor(), count);
 				updateField(count - 1, i, count, vertikal);
 			}
 			return count;
@@ -185,12 +185,12 @@ int Spielfeld::checkColStrike(bool update)
 }
 
 
-int Spielfeld::getTimeLimit()
+int Game::getTimeLimit()
 {
 	switch (level)
 	{
-	case Schwierigkeit::medium: return 10; break;
-	case Schwierigkeit::hard: return 5; break;
+	case Level::medium: return 10; break;
+	case Level::hard: return 5; break;
 	default: return 20; break;
 		break;
 	}
@@ -203,17 +203,17 @@ int Spielfeld::getTimeLimit()
 /// <param name="y">= Spalte</param>
 /// <param name="anz">= Strikelänge</param>
 /// <param name="type">= horizontal/vertikal</param>
-void Spielfeld::updateField(int x, int y, int anz, StrikeType type)
+void Game::updateField(int x, int y, int anz, StrikeType type)
 {
 	if (type == horizontal)
 	{
-		int col = belegung[x][y]->getColor();
+		int col = occypency[x][y]->getColor();
 
 		//update elements of row
 		for (int i = 0; i < anz; i++)
 		{
-			Stein *temp = new Stein(0);
-			belegung[x][y - i] = temp;
+			Token *temp = new Token(0);
+			occypency[x][y - i] = temp;
 		}
 
 	}
@@ -223,8 +223,8 @@ void Spielfeld::updateField(int x, int y, int anz, StrikeType type)
 		//update elements of column
 		for (int i = 0; i < anz; i++)
 		{
-			Stein *temp = new Stein(0);
-			belegung[x + i][y] = temp;
+			Token *temp = new Token(0);
+			occypency[x + i][y] = temp;
 		}
 	}
 
@@ -236,25 +236,25 @@ void Spielfeld::updateField(int x, int y, int anz, StrikeType type)
 /// <summary>
 /// lets the tokens fall down and fills the grid at the top
 /// </summary>
-void Spielfeld::fillFieldAfterStrike()
+void Game::fillFieldAfterStrike()
 {
 	//adds new token
 	for (int i = 0; i < fieldSize; i++) //column 0 = left
 	{
 		for (int j = fieldSize - 1; j >= 0; j--) //row 0 = top
 		{
-			if (j == 0 && belegung[j][i]->getColor() == kein) //if theres space at the top, fill it up
+			if (j == 0 && occypency[j][i]->getColor() == kein) //if theres space at the top, fill it up
 			{
-				Stein* temp = new Stein(rand() % 5 + 1);
-				belegung[j][i] = temp;
+				Token* temp = new Token(rand() % 5 + 1);
+				occypency[j][i] = temp;
 				j = fieldSize - 1;
 			} 
 
-			else if (belegung[j][i]->getColor() == kein) //otherwise the position will go to the token above and the token at the position will be deleted
+			else if (occypency[j][i]->getColor() == kein) //otherwise the position will go to the token above and the token at the position will be deleted
 			{
-				belegung[j][i] = belegung[j - 1][i];
-				Stein* temp = new Stein(0);
-				belegung[j - 1][i] = temp;
+				occypency[j][i] = occypency[j - 1][i];
+				Token* temp = new Token(0);
+				occypency[j - 1][i] = temp;
 			}
 		}
 
@@ -262,20 +262,29 @@ void Spielfeld::fillFieldAfterStrike()
 }
 
 
-void Spielfeld::calcPointsAndTime(int farbe, int anz)
+void Game::calcPointsAndTime(int farbe, int anz)
 {
 	switch (level)
 	{
-	case easy: timeLeft += 3; punkte += anz; break;
-	case medium: timeLeft += 2; punkte += anz * 2; break;
-	default: timeLeft++; punkte += anz * 3; break;
+	case easy: timeLeft += 3; points += anz; break;
+	case medium: timeLeft += 2; points += anz * 2; break;
+	default: timeLeft++; points += anz * 3; break;
 	}
 	if (timeLeft > getTimeLimit())
 		timeLeft = getTimeLimit();
 }
 
 
-void Spielfeld::readHighscoreFile()
+string Game::buildHighscoreList()
+{
+	string highscore = "";
+	for (int i = 0; i < 10; i++)
+		highscore.append(to_string(i + 1) + ". " + highscoreList[i].Name + " mit " + to_string(highscoreList[i].Points) + " erreichten Punkten!\n");
+
+	return highscore;
+}
+
+void Game::readHighscoreFile()
 {
 	try
 	{
@@ -301,14 +310,14 @@ void Spielfeld::readHighscoreFile()
 
 }
 
-void Spielfeld::writeHighscoreFile()
+void Game::writeHighscoreFile()
 {
 
 	sort(highscoreList.begin(), highscoreList.end(), greater<int>());
 	ofstream output_file(FILE);
 
 	for (int i = 0; i < 10; i++)
-		output_file << highscoreList[i].Name << "-" << highscoreList[i].Punkte << endl;
+		output_file << highscoreList[i].Name << "-" << highscoreList[i].Points << endl;
 
 	output_file.close();
 
