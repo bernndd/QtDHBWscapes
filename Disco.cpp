@@ -10,7 +10,7 @@ void Disco::activate(Spielfeld* game, int x, int y)
 	//chooses a random color and deletes every token of that color in the game
 	int color = rand() % 5 + 1;
 	game->punkte += 50;
-	game->timeLeft += (12 / game->level);
+	game->timeLeft += (12 / game->getLevel());
 
 	for (int i = 0; i < Spielfeld::fieldSize; i++)
 	{
@@ -27,9 +27,6 @@ void Disco::activate(Spielfeld* game, int x, int y)
 	game->belegung[x][y] = &Stein(0);
 
 	game->fillFieldAfterStrike();
-	game->fromX = -1;
-	game->fromY = -1;
-	game->toX = -1;
-	game->toY = -1;
+	game->resetSavedCoordinates();
 	Move(game);
 }

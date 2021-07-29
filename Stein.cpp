@@ -9,11 +9,6 @@ Stein::Stein(int color)
 }
 
 
-//Stein::operator int()
-//{
-//	return this->farbe;
-//}
-
 void Stein::Move(Spielfeld* spielfeld)
 {
 	int fromX = spielfeld->fromX;
@@ -91,10 +86,7 @@ void Stein::Move(Spielfeld* spielfeld)
 				spielfeld->checkColStrike(true);
 
 
-			spielfeld->fromX = -1;
-			spielfeld->fromY = -1;
-			spielfeld->toX = -1;
-			spielfeld->toY = -1;
+			spielfeld->resetSavedCoordinates();
 			Move(spielfeld); //recursive call, because there could be a new strike
 		}
 

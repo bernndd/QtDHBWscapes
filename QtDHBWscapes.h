@@ -60,7 +60,9 @@ private:
     void InitMenu();
     void BorderButton(int x, int y);
     void UpdatePoints();
-    //int timerId;
+
+    bool paused;
+    int timerId;
     
 
 private slots:
