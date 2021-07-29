@@ -15,10 +15,10 @@ int Stein::getColor()
 
 void Stein::Move(Spielfeld* spielfeld)
 {
-	int fromX = spielfeld->fromX;
-	int fromY = spielfeld->fromY;
-	int toX = spielfeld->toX;
-	int toY = spielfeld->toY;
+	int fromX = spielfeld->getFromX();
+	int fromY = spielfeld->getFromY();
+	int toX = spielfeld->getToX();
+	int toY = spielfeld->getToY();
 
 	if ((((fromX - toX) >= -1 && (fromX - toX) <= 1) && (fromY == toY)) || //checks if token is in range x coordinate
 		((((fromY - toY) >= -1 && (fromY - toY) <= 1)) && (fromX == toX))) //and here for the y coordinate
@@ -90,10 +90,7 @@ void Stein::Move(Spielfeld* spielfeld)
 				spielfeld->checkColStrike(true);
 
 
-			spielfeld->fromX = -1;
-			spielfeld->fromY = -1;
-			spielfeld->toX = -1;
-			spielfeld->toY = -1;
+			spielfeld->resetSavedCoordinates(true);
 			Move(spielfeld); //recursive call, because there could be a new strike
 		}
 

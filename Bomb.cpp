@@ -46,9 +46,6 @@ void Bomb::activate(Spielfeld* game, int x, int y)
 
 
 	game->fillFieldAfterStrike();
-	game->fromX = -1;
-	game->fromY = -1;
-	game->toX = -1;
-	game->toY = -1;
+	game->resetSavedCoordinates(true);
 	Move(game);
 }

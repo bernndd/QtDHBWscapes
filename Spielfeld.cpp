@@ -22,15 +22,33 @@ Spielfeld::Spielfeld(string playername, Schwierigkeit level)
 	this->level = level;
 	timeLeft = getTimeLimit();
 
-	fromX = -1;
-	fromY = -1;
-	toX = -1;
-	toY = -1;
+	resetSavedCoordinates(true);
 	punkte = 0;
 	playerName = playername;
 	readHighscoreFile();
 }
 
+void Spielfeld::resetSavedCoordinates(bool resetAllCoordinates) {
+	fromX = -1;
+	fromY = -1;
+	if (resetAllCoordinates)
+	{
+		toX = -1;
+		toY = -1;
+	}
+}
+
+void Spielfeld::setDestination(int toX, int toY)
+{
+	this->toX = toX;
+	this->toY = toY;
+}
+
+void Spielfeld::setRoot(int fromX, int fromY)
+{
+	this->fromX = fromX;
+	this->fromY = fromY;
+}
 
 void Spielfeld::addTimeAndPoints(int extraTime, int extraPoints)
 {
@@ -38,9 +56,6 @@ void Spielfeld::addTimeAndPoints(int extraTime, int extraPoints)
 	punkte += extraPoints;
 }
 
-int Spielfeld::getTimeLeft() {
-	return this->timeLeft;
-}
 
 /// <summary>
 /// deletes all strikes, which formed after randomly creating the field
@@ -169,11 +184,6 @@ int Spielfeld::checkColStrike(bool update)
 	return 0;
 }
 
-string Spielfeld::getPlayerName() { return playerName; }
-
-Schwierigkeit Spielfeld::getLevel() { return level; }
-
-int Spielfeld::getPoints() { return punkte; }
 
 int Spielfeld::getTimeLimit()
 {

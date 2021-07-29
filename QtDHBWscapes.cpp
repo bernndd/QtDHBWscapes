@@ -186,32 +186,26 @@ void QtDHBWscapes::btnAction(int position)
 	int x = position / Spielfeld::fieldSize;
 	int y = position % Spielfeld::fieldSize;
 
-	if (game->fromX == -1)
+	if (game->getFromX() == -1)
 	{
-		game->fromX = x;
-		game->fromY = y;
+		game->setRoot(x, y);
 		BorderButton(x, y);
 
 		if (game->belegung[x][y]->getColor() > Farbe::rot)
 		{
 			game->belegung[x][y]->activate(game, x, y);
 
-			game->fromX = -1;
-			game->fromY = -1;
+			game->resetSavedCoordinates(false);
 
 			updateField();
 		}
 	}
 	else
 	{
-		game->toX = x;
-		game->toY = y;
-		game->belegung[game->fromX][game->fromY]->Move(game);
+		game->setDestination(x, y);
+		game->belegung[game->getFromX()][game->getFromY()]->Move(game);
 
-		game->fromX = -1;
-		game->fromY = -1;
-		game->toX = -1;
-		game->toY = -1;
+		game->resetSavedCoordinates(true);
 		updateField();
 	}
 
@@ -247,6 +241,7 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)
 	//updates Progress bar
 	ui.progressBar->setValue(int((float(game->getTimeLeft()) / game->getTimeLimit()) * 100));
 	ui.zeit->setText(QString::number(game->getTimeLeft()) + "s");
+	ui.lcdNumber->display(game->getPoints());
 	game->addTimeAndPoints(-1, -1);
 
 	if (game->getTimeLeft() < 0)

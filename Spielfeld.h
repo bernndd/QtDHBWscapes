@@ -32,23 +32,25 @@ public:
 	static const int fieldSize = 12;
 
 	Stein* belegung[12][12];
-
 	vector<Player> highscoreList;
-
-	int fromX;
-	int fromY;
-	int toX;
-	int toY;
-
 
 	Spielfeld(string playername, Schwierigkeit level);
 
-	Schwierigkeit getLevel();
-	string getPlayerName();
+	//Propertys
+	Schwierigkeit getLevel() { return level; }
+	string getPlayerName() { return playerName; }
+	int getFromX() { return fromX; }
+	int getFromY() { return fromY; };
+	int getToX() { return toX; }
+	int getToY() { return toY; }
+	int getTimeLeft() {return timeLeft;}
+	int getPoints() { return punkte; }
 	int getTimeLimit();
-	int getTimeLeft();
-	int getPoints();
 
+	//Methoden
+	void setDestination(int toX, int toY);
+	void setRoot(int fromX, int fromY);
+	void resetSavedCoordinates(bool resetAllCoordinates);
 	void addTimeAndPoints(int extraTime, int extraPoints);
 	void updateField(int x, int y, int anz, StrikeType type);
 	void calcPointsAndTime(int farbe, int anz);
@@ -58,11 +60,16 @@ public:
 	void writeHighscoreFile();
 
 private:
+	int fromX;
+	int fromY;
+	int toX;
+	int toY;
 	int punkte;
 	int timeLeft;
 	Schwierigkeit level;
 	string playerName;
 	bool successRead;
+
 	void initFieldCheck();
 	void readHighscoreFile();
 };
