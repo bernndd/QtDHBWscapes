@@ -5,6 +5,12 @@ VerticalRocket::VerticalRocket()
 	this->color = Color::rocketVertical;
 }
 
+/// <summary>
+/// Activate Rocket and delete a column
+/// </summary>
+/// <param name="game"></param>
+/// <param name="x"></param>
+/// <param name="y"></param>
 void VerticalRocket::activate(Game* game, int x, int y)
 {
 	game->addTimeAndPoints(9 / (int)game->getLevel(), 20);
