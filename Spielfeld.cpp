@@ -280,7 +280,11 @@ void Game::fillFieldAfterStrike()
 	}
 }
 
-
+/// <summary>
+/// Calculate Time and Points
+/// </summary>
+/// <param name="farbe"> </param>
+/// <param name="anz"> number of strike (3,4,5)</param>
 void Game::calcPointsAndTime(int farbe, int anz)
 {
 	switch (level)
@@ -293,7 +297,10 @@ void Game::calcPointsAndTime(int farbe, int anz)
 		timeLeft = getTimeLimit();
 }
 
-
+/// <summary>
+/// Build Highscore list
+/// </summary>
+/// <returns> String with all Highscores </returns>
 string Game::buildHighscoreList()
 {
 	string highscore = "";
@@ -303,6 +310,9 @@ string Game::buildHighscoreList()
 	return highscore;
 }
 
+/// <summary>
+/// Read Data from Highscore Frame
+/// </summary>
 void Game::readHighscoreFile()
 {
 	try
@@ -329,6 +339,9 @@ void Game::readHighscoreFile()
 
 }
 
+/// <summary>
+/// Write Data to Highscore file
+/// </summary>
 void Game::writeHighscoreFile()
 {
 

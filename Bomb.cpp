@@ -5,6 +5,12 @@ Bomb::Bomb()
 	this->color = Color::bomb;
 }
 
+/// <summary>
+/// Activate Bomb and remove other blocks
+/// </summary>
+/// <param name="game"></param>
+/// <param name="x"> Coordinate </param>
+/// <param name="y"> Coordinate </param>
 void Bomb::activate(Game* game, int x, int y)
 {
 	//deletes token from origin

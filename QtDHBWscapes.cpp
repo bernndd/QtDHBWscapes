@@ -39,7 +39,9 @@ void QtDHBWscapes::editTimeValues(int value)
 	}
 }
 
-//Startbutton pressed
+/// <summary>
+/// StartButton pressed
+/// </summary>
 void QtDHBWscapes::MenuStartPressed()
 {
 	ui.graphicsView->setVisible(false);
@@ -62,7 +64,9 @@ void QtDHBWscapes::MenuStartPressed()
 }
 
 
-//Pausebutton pressed
+/// <summary>
+/// Pause Button pressed
+/// </summary>
 void QtDHBWscapes::MenuStoppPressed()
 {
 	if (paused) // already paused -> enable the field , change button text, and resume the timer 
@@ -95,7 +99,9 @@ void QtDHBWscapes::MenuStoppPressed()
 }
 
 
-//Helpbutton pressed
+/// <summary>
+/// Helpbutton pressed
+/// </summary>
 void QtDHBWscapes::MenuHelpPressed()
 {
 	endBox = new QMessageBox(this);
@@ -105,12 +111,17 @@ void QtDHBWscapes::MenuHelpPressed()
 	endBox->exec();
 }
 
-//exitbutton Pressed
+/// <summary>
+/// exitbutton Pressed
+/// </summary>
 void QtDHBWscapes::exitGame()
 {
 	exit(0);
 }
 
+/// <summary>
+/// Init Components
+/// </summary>
 void QtDHBWscapes::initComponents()
 {
 	//grid
@@ -123,7 +134,9 @@ void QtDHBWscapes::initComponents()
 
 }
 
-//init whole grid
+/// <summary>
+/// Field get initialised
+/// </summary>
 void QtDHBWscapes::initField()
 {
 	for (int i = 0; i < Game::fieldSize; i++)
@@ -138,7 +151,9 @@ void QtDHBWscapes::initField()
 	ui.centralWidget->setLayout(field);
 }
 
-//updates whole grid
+/// <summary>
+/// updates whole grid
+/// </summary>
 void QtDHBWscapes::updateField()
 {
 	for (int i = 0; i < Game::fieldSize; i++)
@@ -151,7 +166,12 @@ void QtDHBWscapes::updateField()
 
 }
 
-//sets token colors
+
+/// <summary>
+/// sets token colors
+/// </summary>
+/// <param name="x"> Coordinate </param>
+/// <param name="y"> Coordinate </param>
 void QtDHBWscapes::setButtonLayout(int x, int y)
 {
 	int color = game->occypency[x][y]->getColor();
@@ -172,7 +192,13 @@ void QtDHBWscapes::setButtonLayout(int x, int y)
 }
 
 
-//inits tokenbuttons to a map 
+/// <summary>
+/// inits tokenbuttons to a map 
+/// </summary>
+/// <param name="color"> Color number</param>
+/// <param name="x"> Coordinate </param>
+/// <param name="y"> Coordinate </param>
+/// <returns></returns>
 QPushButton* QtDHBWscapes::initButton(int color, int x, int y)
 {
 	QPushButton* temp = new QPushButton();
@@ -187,7 +213,10 @@ QPushButton* QtDHBWscapes::initButton(int color, int x, int y)
 	return temp;
 }
 
-//ein Button wurde gedrückt
+/// <summary>
+/// Button pressed from Gamefield
+/// </summary>
+/// <param name="position"> Position number </param>
 void QtDHBWscapes::btnAction(int position)
 {
 	//calc position
@@ -221,7 +250,11 @@ void QtDHBWscapes::btnAction(int position)
 
 }
 
-// init png pictures of tokens with boarder (when clicked)
+/// <summary>
+/// init png pictures of tokens with boarder (when clicked)
+/// </summary>
+/// <param name="x"> Coordinate </param>
+/// <param name="y"> Coordinate </param>
 void QtDHBWscapes::BorderButton(int x, int y)
 {
 	int color = game->occypency[x][y]->getColor();
@@ -258,6 +291,9 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)
 		showGameResult();
 }
 
+/// <summary>
+/// Show Result of Game if game over
+/// </summary>
 void QtDHBWscapes::showGameResult()
 {
 	endBox = new QMessageBox(this);
@@ -306,7 +342,9 @@ void QtDHBWscapes::showGameResult()
 
 
 
-//shows current points, and updates them
+/// <summary>
+/// shows current points, and updates them
+/// </summary>
 void QtDHBWscapes::UpdatePoints()
 {
 	if (ui.lcdNumber->checkOverflow(game->getPoints()))

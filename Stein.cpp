@@ -8,11 +8,20 @@ Token::Token(int color)
 	this->color = (Color)color;
 }
 
+
+/// <summary>
+/// Return color number
+/// </summary>
+/// <returns></returns>
 int Token::getColor()
 {
 	return this->color;
 }
 
+/// <summary>
+/// Move Stone to new position
+/// </summary>
+/// <param name="spielfeld"></param>
 void Token::Move(Game* spielfeld)
 {
 	int fromX = spielfeld->getFromX();
