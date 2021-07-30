@@ -1,5 +1,5 @@
 #pragma once
-
+#include <QPixmap>
 #include <QtWidgets/QMainWindow>
 #include "ui_QtDHBWscapes.h"
 #include "Spielfeld.h"
@@ -8,7 +8,7 @@
 #include <QSignalMapper>
 #include <QMessageBox>
 
-// Spielsteine definieren
+// defines token
 #define rot_h "border-image:url(rot_rm.png);"
 #define blau_h "border-image:url(blau_rm.png);"
 #define hellblau_h "border-image:url(hellblau_rm.png);"
@@ -20,7 +20,7 @@
 #define horizontal_h "border-image:url(horizontal_rm.png);"
 #define vertikal_h "border-image:url(vertikal_rm.png);"
 
-//Spielsteine mit Border
+// defines token with border
 #define rot_border "border-image:url(rot_border.png);"
 #define blau_border "border-image:url(blau_border.png);"
 #define hellblau_border "border-image:url(hellblau_border.png);"

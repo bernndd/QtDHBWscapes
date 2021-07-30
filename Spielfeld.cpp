@@ -153,7 +153,7 @@ int Game::checkColStrike(bool update)
 					if (update)
 					{
 						calcPointsAndTime(occypency[j][i]->getColor(), count);
-						updateField(j, i, count, vertikal);
+						updateField(j, i, count, vertical);
 					}
 					return count;
 				}
@@ -165,7 +165,7 @@ int Game::checkColStrike(bool update)
 				if (update)
 				{
 					calcPointsAndTime(occypency[j][i]->getColor(), count);
-					updateField(j, i, count, vertikal);
+					updateField(j, i, count, vertical);
 				}
 				return count;
 			}
@@ -175,7 +175,7 @@ int Game::checkColStrike(bool update)
 			if (update)
 			{
 				calcPointsAndTime(occypency[0][i]->getColor(), count);
-				updateField(count - 1, i, count, vertikal);
+				updateField(count - 1, i, count, vertical);
 			}
 			return count;
 		}
@@ -218,7 +218,7 @@ void Game::updateField(int x, int y, int anz, StrikeType type)
 
 	}
 
-	else if (type == vertikal)
+	else if (type == vertical)
 	{
 		//update elements of column
 		for (int i = 0; i < anz; i++)

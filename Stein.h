@@ -2,16 +2,21 @@
 #include "Spielfeld.h"
 
 enum Color {
-	kein = 0,
+	// deleted token
+	kein = 0, 
+
+	//standard token
 	green = 1,
 	yellow = 2,
 	pink = 3,
 	blue = 4,
 	red = 5,
-	disco = 6, //eine farbe wird entfernt
-	rocketHorizontal = 7,// eine Zeile wird entfernt
-	rocketVertical = 8,// eine Spalte wird entfernt
-	bomb = 9,//entfernt unmittelbar umliegenden Steine
+
+	//special token
+	disco = 6, //removes a random color
+	rocketHorizontal = 7,// removes a row
+	rocketVertical = 8,// removes a color
+	bomb = 9, //removes the token around the bomb
 
 };
 
