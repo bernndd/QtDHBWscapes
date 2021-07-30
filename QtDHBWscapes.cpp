@@ -59,7 +59,7 @@ void QtDHBWscapes::MenuStartPressed()
 //Pausebutton pressed
 void QtDHBWscapes::MenuStoppPressed()
 {
-	if (paused) // already paused
+	if (paused) // already paused -> enable the field , change button text, and resume the timer 
 	{
 		for (int i = 0; i < 12; i++)
 		{
@@ -72,7 +72,7 @@ void QtDHBWscapes::MenuStoppPressed()
 		paused = false;
 		timerId = startTimer(1000);
 	}
-	else // resume
+	else // resume -> disable the field, change buttontext and pause the timer
 	{
 		for (int i = 0; i < 12; i++)
 		{
@@ -95,11 +95,11 @@ void QtDHBWscapes::MenuHelpPressed()
 	endBox = new QMessageBox(this);
 	endBox->setWindowTitle("Hilfe");
 	endBox->setText("Match 3 Spiel, verbinde mindestens 3 Steine bevor die Zeitablaeuft!\nMit jedem gelungenen Zug erhoehen sich deine Punkte!\nSpezialsteine:\n\n Rakete: Entfernt die gesamte Reihe/ Spalte.  gibt es entweder vertikal oder Horizontal je nachdem in welche Richtung der entscheidene Stein bewegt wird.\n\nBombe: Entfernt alle umliegenden Steine, indem sie explodiert.\n\nDiscokugel: Entfernt alle Steine einer Random Farbe aus dem Spielfeld\n\n\nVIEL SPASS BEIM SPIELEN!!!");
-	//endBox->setIconPixmap(QPixmap("dhbwscapes_title.png").scaled(600, 400));
 
 	endBox->exec();
 }
 
+//exitbutton Pressed
 void QtDHBWscapes::exitGame()
 {
 	exit(0);
@@ -144,7 +144,7 @@ void QtDHBWscapes::updateField()
 	}
 
 }
-
+///
 //sets token colors
 void QtDHBWscapes::setButtonLayout(int x, int y)
 {
@@ -183,15 +183,16 @@ QPushButton* QtDHBWscapes::initButton(int color, int x, int y)
 
 void QtDHBWscapes::btnAction(int position)
 {
+	//calc position
 	int x = position / Game::fieldSize;
 	int y = position % Game::fieldSize;
 
-	if (game->getFromX() == -1)
+	if (game->getFromX() == -1) // first tokens clicked  -> save position
 	{
 		game->setRoot(x, y);
 		BorderButton(x, y);
 
-		if (game->occypency[x][y]->getColor() > Color::red)
+		if (game->occypency[x][y]->getColor() > Color::red) //checks if its a normal tokens, not a special
 		{
 			game->occypency[x][y]->activate(game, x, y);
 
@@ -200,7 +201,7 @@ void QtDHBWscapes::btnAction(int position)
 			updateField();
 		}
 	}
-	else
+	else  // second tokens clicked
 	{
 		game->setDestination(x, y);
 		game->occypency[game->getFromX()][game->getFromY()]->Move(game);
@@ -213,6 +214,7 @@ void QtDHBWscapes::btnAction(int position)
 
 }
 
+// init png pictures of tokens with boarder (when clicked)
 void QtDHBWscapes::BorderButton(int x, int y)
 {
 	int color = game->occypency[x][y]->getColor();
@@ -241,6 +243,7 @@ void QtDHBWscapes::timerEvent(QTimerEvent* event)
 	//updates Progress bar
 	ui.progressBar->setValue(int((float(game->getTimeLeft()) / game->getTimeLimit()) * 100));
 	ui.zeit->setText(QString::number(game->getTimeLeft()) + "s");
+	//updates Points
 	ui.lcdNumber->display(game->getPoints());
 	game->addTimeAndPoints(-1, -1);
 
