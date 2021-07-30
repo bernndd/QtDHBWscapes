@@ -23,7 +23,7 @@ enum Level
 
 enum StrikeType {
 	horizontal = 0,
-	vertikal = 1,
+	vertical = 1,
 };
 
 class Game

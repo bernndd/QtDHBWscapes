@@ -1,5 +1,4 @@
 #include "QtDHBWscapes.h"
-#include <QPixmap>
 
 
 
@@ -13,7 +12,9 @@ QtDHBWscapes::QtDHBWscapes(QWidget* parent)
 	InitMenu();
 }
 
-//init Button connections
+/// <summary>
+/// register events to the menu buttons
+/// </summary>
 void QtDHBWscapes::InitMenu()
 {
 	connect(ui.startButton, SIGNAL(clicked()), this, SLOT(MenuStartPressed()));
@@ -23,8 +24,13 @@ void QtDHBWscapes::InitMenu()
 	connect(ui.schwierigkeit, SIGNAL(valueChanged(int)), this, SLOT(editTimeValues(int)));
 }
 
+/// <summary>
+///	edit time display
+/// </summary>
+/// <param name="value"></param>
 void QtDHBWscapes::editTimeValues(int value)
 {
+	//ui.zeit->setText(QString::number(game->getTimeLimit()) + "s");
 	switch (value + 1)
 	{
 	case 2: ui.zeit->setText(QString::number(10) + "s"); break;
