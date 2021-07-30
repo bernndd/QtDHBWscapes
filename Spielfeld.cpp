@@ -27,7 +27,10 @@ Game::Game(string playername, Level level)
 	playerName = playername;
 	readHighscoreFile();
 }
-
+/// <summary>
+/// resets all saved coordinates of a token to -1
+/// </summary>
+/// <param name="resetAllCoordinates"></param>
 void Game::resetSavedCoordinates(bool resetAllCoordinates) {
 	fromX = -1;
 	fromY = -1;
@@ -38,18 +41,31 @@ void Game::resetSavedCoordinates(bool resetAllCoordinates) {
 	}
 }
 
+/// <summary>
+/// basic set Method for X and Y Coordinates, destination setting
+/// </summary>
+/// <param name="toX"></param>
+/// <param name="toY"></param>
 void Game::setDestination(int toX, int toY)
 {
 	this->toX = toX;
 	this->toY = toY;
 }
-
+/// <summary>
+/// basic set Method for X and Y Coordinates to set the origin of a strike
+/// </summary>
+/// <param name="toX"></param>
+/// <param name="toY"></param>
 void Game::setRoot(int fromX, int fromY)
 {
 	this->fromX = fromX;
 	this->fromY = fromY;
 }
-
+/// <summary>
+/// updates the time and the points
+/// </summary>
+/// <param name="extraTime"></param>
+/// <param name="extraPoints"></param>
 void Game::addTimeAndPoints(int extraTime, int extraPoints)
 {
 	timeLeft += extraTime;
@@ -184,7 +200,10 @@ int Game::checkColStrike(bool update)
 	return 0;
 }
 
-
+/// <summary>
+/// inits the different time values for the different diffuiculty levels
+/// </summary>
+/// <returns></returns>
 int Game::getTimeLimit()
 {
 	switch (level)

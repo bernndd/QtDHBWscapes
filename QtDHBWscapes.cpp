@@ -150,7 +150,7 @@ void QtDHBWscapes::updateField()
 	}
 
 }
-///
+
 //sets token colors
 void QtDHBWscapes::setButtonLayout(int x, int y)
 {

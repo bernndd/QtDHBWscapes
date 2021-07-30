@@ -4,7 +4,12 @@ Disco::Disco()
 {
 	this->color = Color::disco;
 }
-
+/// <summary>
+/// activates the Discoball with choosing a random color, deleting it and deleting the discoball
+/// </summary>
+/// <param name="game"></param>
+/// <param name="x">coordinate</param>
+/// <param name="y">coorsinate</param>
 void Disco::activate(Game* game, int x, int y)
 {
 	//chooses a random color and deletes every token of that color in the game
