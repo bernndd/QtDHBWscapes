@@ -187,6 +187,7 @@ QPushButton* QtDHBWscapes::initButton(int color, int x, int y)
 	return temp;
 }
 
+//ein Button wurde gedrückt
 void QtDHBWscapes::btnAction(int position)
 {
 	int x = position / Game::fieldSize;
@@ -219,6 +220,8 @@ void QtDHBWscapes::btnAction(int position)
 
 }
 
+
+//Umrahmt den Spielstein x,y
 void QtDHBWscapes::BorderButton(int x, int y)
 {
 	int color = game->occypency[x][y]->getColor();
