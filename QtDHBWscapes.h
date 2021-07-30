@@ -41,25 +41,24 @@ public:
     
 
 private: 
+    bool paused;
+    int timerId;
     Ui::QtDHBWscapesClass ui;
-    Spielfeld* game;
+    Game* game;
     QPushButton* btnArray[12][12];
     QGridLayout* field;
     QMessageBox* endBox;
 
     QPushButton* initButton(int color, int x, int y);
     void timerEvent(QTimerEvent* event);
+    void showGameResult();
     void initField();
     void updateField();
     void setButtonLayout(int x, int y);
     void initComponents();
-
-
-    void cleanGrid();
     void InitMenu();
     void BorderButton(int x, int y);
     void UpdatePoints();
-    //int timerId;
     
 
 private slots:

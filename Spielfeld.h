@@ -10,9 +10,11 @@
 
 using namespace std;
 
+class Token;
+
 #define FILE "HighscoreList.txt"
 
-enum Schwierigkeit
+enum Level
 {
 	easy = 1,
 	medium = 2,
@@ -24,39 +26,51 @@ enum StrikeType {
 	vertikal = 1,
 };
 
-class Spielfeld
+class Game
 {
 public:
-	int belegung[12][12];
-	int punkte;
-	int secondsLeft;
-	int timerId;
-	int secondsSinceLastMove;
-	int timeLeft;
-	Schwierigkeit level;
-	string playerName;
+	static const int fieldSize = 12;
+
+	Token* occypency[12][12];
 	vector<Player> highscoreList;
 
+	Game(string playername, Level level);
+
+	//Properties
+	Level getLevel() { return level; }
+	string getPlayerName() { return playerName; }
+	int getFromX() { return fromX; }
+	int getFromY() { return fromY; };
+	int getToX() { return toX; }
+	int getToY() { return toY; }
+	int getTimeLeft() {return timeLeft;}
+	int getPoints() { return points; }
+	int getTimeLimit();
+
+	//Methoden
+	void setDestination(int toX, int toY);
+	void setRoot(int fromX, int fromY);
+	void resetSavedCoordinates(bool resetAllCoordinates);
+	void addTimeAndPoints(int extraTime, int extraPoints);
+	void updateField(int x, int y, int anz, StrikeType type);
+	void calcPointsAndTime(int farbe, int anz);
+	void fillFieldAfterStrike();
+	void writeHighscoreFile();
+	int checkRowStrike(bool update);
+	int checkColStrike(bool update);
+	string buildHighscoreList();
+
+private:
 	int fromX;
 	int fromY;
 	int toX;
 	int toY;
-
-
-	Spielfeld(string playername, Schwierigkeit level);
-	static const int fieldSize = 12;
-
-	int timeLimit();
-	void updateField(int x, int y, int anz, StrikeType type);
-	void calcPointsAndTime(int farbe, int anz);
-	void fillFieldAfterStrike();
-
-	int checkRowStrike(bool update);
-	int checkColStrike(bool update);
-	void writeHighscoreFile();
-
-private:
+	int points;
+	int timeLeft;
+	Level level;
+	string playerName;
 	bool successRead;
+
 	void initFieldCheck();
 	void readHighscoreFile();
 };

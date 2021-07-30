@@ -2,17 +2,18 @@
 #include <QPixmap>
 
 
-bool paused = 0;
+
 QtDHBWscapes::QtDHBWscapes(QWidget* parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
+	paused = false;
 
 	//Connection Menubar
 	InitMenu();
 }
 
-//Initialisieren der Button connections
+//init Button connections
 void QtDHBWscapes::InitMenu()
 {
 	connect(ui.startButton, SIGNAL(clicked()), this, SLOT(MenuStartPressed()));
@@ -32,7 +33,7 @@ void QtDHBWscapes::editTimeValues(int value)
 	}
 }
 
-//Der Startbutton wurde gedrückt
+//Startbutton pressed
 void QtDHBWscapes::MenuStartPressed()
 {
 	ui.graphicsView->setVisible(false);
@@ -40,29 +41,25 @@ void QtDHBWscapes::MenuStartPressed()
 	//Read Player Name, convert it  and make the Textedit and the label invisible
 	QString QName = ui.lineEdit->text();
 	std::string name = QName.toLocal8Bit().constData();
-
+	//init difficulty
 	int level = ui.schwierigkeit->value() + 1;
-	game = new Spielfeld("Name", Schwierigkeit(level));
+	game = new Game(name, Level(level));
 
 	ui.lineEdit->setVisible(false);
 	ui.label_2->setVisible(false);
 	ui.stoppButton->setDisabled(false);
-
-
 	initComponents();
 	initField();
 	ui.centralWidget->setLayout(field);
 	ui.startButton->setDisabled(true);
-	game->timerId = startTimer(1000);
-
-
+	timerId = startTimer(1000);
 }
 
 
-//Button Pause wurde gedrückt
+//Pausebutton pressed
 void QtDHBWscapes::MenuStoppPressed()
 {
-	if (paused)
+	if (paused) // already paused
 	{
 		for (int i = 0; i < 12; i++)
 		{
@@ -73,9 +70,9 @@ void QtDHBWscapes::MenuStoppPressed()
 		}
 		ui.stoppButton->setText("Pause");
 		paused = false;
-		game->timerId = startTimer(1000);
+		timerId = startTimer(1000);
 	}
-	else
+	else // resume
 	{
 		for (int i = 0; i < 12; i++)
 		{
@@ -86,19 +83,19 @@ void QtDHBWscapes::MenuStoppPressed()
 		}
 		ui.stoppButton->setText("Weiter");
 		paused = true;
-		killTimer(game->timerId);
+		killTimer(timerId);
 	}
 
 }
 
 
-//Hilfe Button wurde gedrückt
+//Helpbutton pressed
 void QtDHBWscapes::MenuHelpPressed()
 {
 	endBox = new QMessageBox(this);
 	endBox->setWindowTitle("Hilfe");
-	endBox->setText("Fragen an die drei werden gegen ein Bier beantwortet :D\n");
-	endBox->setIconPixmap(QPixmap("dhbwscapes_title.png").scaled(600, 400));
+	endBox->setText("Match 3 Spiel, verbinde mindestens 3 Steine bevor die Zeitablaeuft!\nMit jedem gelungenen Zug erhoehen sich deine Punkte!\nSpezialsteine:\n\n Rakete: Entfernt die gesamte Reihe/ Spalte.  gibt es entweder vertikal oder Horizontal je nachdem in welche Richtung der entscheidene Stein bewegt wird.\n\nBombe: Entfernt alle umliegenden Steine, indem sie explodiert.\n\nDiscokugel: Entfernt alle Steine einer Random Farbe aus dem Spielfeld\n\n\nVIEL SPASS BEIM SPIELEN!!!");
+	//endBox->setIconPixmap(QPixmap("dhbwscapes_title.png").scaled(600, 400));
 
 	endBox->exec();
 }
@@ -110,8 +107,7 @@ void QtDHBWscapes::exitGame()
 
 void QtDHBWscapes::initComponents()
 {
-	//test
-	//Spielfläche
+	//grid
 	field = new QGridLayout;
 	QMargins margin(20, 100, 20, 20);
 	field->setContentsMargins(margin);
@@ -121,14 +117,14 @@ void QtDHBWscapes::initComponents()
 
 }
 
-//Initialisiert das gesamte Spielfeld
+//init whole grid
 void QtDHBWscapes::initField()
 {
-	for (int i = 0; i < Spielfeld::fieldSize; i++)
+	for (int i = 0; i < Game::fieldSize; i++)
 	{
-		for (int j = 0; j < Spielfeld::fieldSize; j++)
+		for (int j = 0; j < Game::fieldSize; j++)
 		{
-			btnArray[i][j] = initButton(game->belegung[i][j], i, j);
+			btnArray[i][j] = initButton(game->occypency[i][j]->getColor(), i, j);
 			setButtonLayout(i, j);
 			field->addWidget(btnArray[i][j], i, j);
 		}
@@ -136,12 +132,12 @@ void QtDHBWscapes::initField()
 	ui.centralWidget->setLayout(field);
 }
 
-//Updated das gesamte Spielfeld
+//updates whole grid
 void QtDHBWscapes::updateField()
 {
-	for (int i = 0; i < Spielfeld::fieldSize; i++)
+	for (int i = 0; i < Game::fieldSize; i++)
 	{
-		for (int j = 0; j < Spielfeld::fieldSize; j++)
+		for (int j = 0; j < Game::fieldSize; j++)
 		{
 			setButtonLayout(i, j);
 		}
@@ -149,10 +145,10 @@ void QtDHBWscapes::updateField()
 
 }
 
-//Setzt die Farben auf die Buttons
+//sets token colors
 void QtDHBWscapes::setButtonLayout(int x, int y)
 {
-	int color = game->belegung[x][y];
+	int color = game->occypency[x][y]->getColor();
 
 	switch (color)
 	{
@@ -165,18 +161,17 @@ void QtDHBWscapes::setButtonLayout(int x, int y)
 	case 7: btnArray[x][y]->setStyleSheet(horizontal_h); break;
 	case 8: btnArray[x][y]->setStyleSheet(vertikal_h); break;
 	case 9: btnArray[x][y]->setStyleSheet(bombe_h); break;
-		//case 3: temp->setIcon(QIcon(QPixmap(hellblau_h))); break;
 	default: break;
 	}
 }
 
 
-//Initialisiert die Spielbuttons auf einer Map 
+//inits tokenbuttons to a map 
 QPushButton* QtDHBWscapes::initButton(int color, int x, int y)
 {
 	QPushButton* temp = new QPushButton();
 	temp->setFixedSize(QSize(35, 35));
-	int position = x * Spielfeld::fieldSize + y;
+	int position = x * Game::fieldSize + y;
 
 	QSignalMapper* signalMapper = new QSignalMapper(this);
 	connect(temp, SIGNAL(clicked()), signalMapper, SLOT(map()));
@@ -189,60 +184,32 @@ QPushButton* QtDHBWscapes::initButton(int color, int x, int y)
 //ein Button wurde gedrückt
 void QtDHBWscapes::btnAction(int position)
 {
+	int x = position / Game::fieldSize;
+	int y = position % Game::fieldSize;
 
-	int x = position / Spielfeld::fieldSize;
-	int y = position % Spielfeld::fieldSize;
-
-	if (game->fromX == -1)
+	if (game->getFromX() == -1)
 	{
-		game->fromX = x;
-		game->fromY = y;
+		game->setRoot(x, y);
 		BorderButton(x, y);
 
-
-		if (game->belegung[x][y] > Farbe::rot)
+		if (game->occypency[x][y]->getColor() > Color::red)
 		{
-			switch (Farbe(game->belegung[x][y]))
-			{
-			case Farbe::disco:
-			{
-				Stein(game->belegung[x][y]).activateDisco(game, x, y);
-			}break;
-			case Farbe::bombe:
-			{
-				Stein(game->belegung[x][y]).activateBomb(game, x, y);
-			}break;
-			case Farbe::raketeHorizontal:
-			{
-				Stein(game->belegung[x][y]).activateHorizontalRocket(game, x);
-			}break;
-			case Farbe::raketeVertikal:
-			{
-				Stein(game->belegung[x][y]).activateVerticalRocket(game, y);
-			}break;
-			default:break;
-			}
-			game->fromX = -1;
-			game->fromY = -1;
+			game->occypency[x][y]->activate(game, x, y);
+
+			game->resetSavedCoordinates(false);
 
 			updateField();
 		}
 	}
 	else
 	{
+		game->setDestination(x, y);
+		game->occypency[game->getFromX()][game->getFromY()]->Move(game);
 
-		game->toX = x;
-		game->toY = y;
-		Stein(game->belegung[game->fromX][game->fromY]).Move(game);
-
-		game->fromX = -1;
-		game->fromY = -1;
-		game->toX = -1;
-		game->toY = -1;
+		game->resetSavedCoordinates(true);
 		updateField();
 	}
 
-	//Punkte aktualisieren
 	UpdatePoints();
 
 }
@@ -251,8 +218,7 @@ void QtDHBWscapes::btnAction(int position)
 //Umrahmt den Spielstein x,y
 void QtDHBWscapes::BorderButton(int x, int y)
 {
-	int color = game->belegung[x][y];
-
+	int color = game->occypency[x][y]->getColor();
 	switch (color)
 	{
 	case 1:  btnArray[x][y]->setStyleSheet(gruen_border); break;
@@ -264,102 +230,87 @@ void QtDHBWscapes::BorderButton(int x, int y)
 	case 7: btnArray[x][y]->setStyleSheet(horizontal_border); break;
 	case 8: btnArray[x][y]->setStyleSheet(vertikal_border); break;
 	case 9: btnArray[x][y]->setStyleSheet(bombe_border); break;
-		//case 3: temp->setIcon(QIcon(QPixmap(hellblau_h))); break;
 	default: break;
 	}
 }
 
-//QtDHBWscapes::~QtDHBWscapes()
-//{
-//killTimer(game->timerId);
-//}
 
-void QtDHBWscapes::timerEvent(QTimerEvent* event)//Is executed everytime the timer triggers
+/// <summary>
+/// executed everytime the timer triggers
+/// </summary>
+/// <param name="event"></param>
+void QtDHBWscapes::timerEvent(QTimerEvent* event)
 {
-	game->secondsSinceLastMove++;
-	if (game->secondsSinceLastMove == 5)
+	//updates Progress bar
+	ui.progressBar->setValue(int((float(game->getTimeLeft()) / game->getTimeLimit()) * 100));
+	ui.zeit->setText(QString::number(game->getTimeLeft()) + "s");
+	ui.lcdNumber->display(game->getPoints());
+	game->addTimeAndPoints(-1, -1);
+
+	if (game->getTimeLeft() < 0)
+		showGameResult();
+}
+
+void QtDHBWscapes::showGameResult()
+{
+	endBox = new QMessageBox(this);
+	// tries if the Highcore list data is accessible 
+	try
 	{
-		/*
-		* DAS HIER RAUSMACHEN?
-		* Problem ist, dass er nur checkt ob ein Strike vorliegt und nicht dass er guckt ob eine MÖGLICH WÄRE
-		if (game->checkColStrike(false) == 0 && game->checkRowStrike(false) == 0) //TODO Testen
+		ui.zeit->setText("VERLOREN");
+
+		string output = "Sie haben " + to_string(game->getPoints()) + " Punkte erreicht!\n\n";
+
+
+		if (game->getPoints() > game->highscoreList[9])//new highscore
 		{
-			//Fenster Spielende
-			endBox = new QMessageBox(this);
-			endBox->setText("Keine Spielzüge mehr möglich!");
-			//endBox->setIconPixmap(QPixmap("TimesUp.png"));
-			endBox->exec();
-		}
-		#*/
-	}
-
-
-	ui.progressBar->setValue(int((float(game->timeLeft) / game->timeLimit()) * 100));
-	ui.zeit->setText(QString::number(game->timeLeft) + "s");
-	game->timeLeft--;
-
-	if (game->timeLeft == -1)
-	{
-		ui.zeit->setText("YOU LOST");
-
-		endBox = new QMessageBox(this);
-		string output = "Sie haben " + to_string(game->punkte) + " Punkte erreicht!\n\n";
-
-		string highscore;
-		for (int i = 0; i < 10; i++)
-		{
-			string temp = to_string(i + 1) + ". " + game->highscoreList[i].Name + " mit " + to_string(game->highscoreList[i].Punkte) + " erreichten Punkten!\n";
-			highscore.append(temp);
-		}
-
-		if (game->punkte > game->highscoreList[9])
-		{
-			//Neuer Highscore erreicht
-			game->highscoreList.push_back(Player(game->playerName, game->punkte));
+			game->highscoreList.push_back(Player(game->getPlayerName(), game->getPoints()));
 			game->writeHighscoreFile();
-
-			output = "Neuer Highscore!\n\n" + output;
-			for (int i = 0; i < 10; i++)
-			{
-				output.append(to_string(i + 1) + ". " + game->highscoreList[i].Name + " mit " + to_string(game->highscoreList[i].Punkte) + " erreichten Punkten!\n");
-			}
-
+			output = "Neuer Highscore!\n\n" + output + game->buildHighscoreList();;
 		}
 
-		else
+		else  // regular Game ending
 		{
-			output.append("Fuer einen Highscore benoetigen Sie mindestens " + to_string(game->highscoreList[9].Punkte) + " Punkte!");
-			endBox->setIconPixmap(QPixmap("TimesUp.png").scaled(400, 400));
+			output.append("Fuer einen Highscore benoetigen Sie mindestens " + to_string(game->highscoreList[9].Points) + " Punkte!\n\n" + game->buildHighscoreList());
 		}
 		endBox->setText(QString::fromStdString(output));
-
-		endBox->exec();
-		QMessageBox::StandardButton reply;
-		reply = QMessageBox::question(endBox, "Neustart?", "Moechten Sie noch eine Runde spielen?", QMessageBox::Yes | QMessageBox::No);
-		if (reply == QMessageBox::Yes)
-		{
-			game = new Spielfeld(game->playerName, game->level);
-			updateField();
-		}
-		else
-			exit(0);
 	}
+
+	catch (exception)
+	{
+		endBox->setText("Fehler beim Zugriff auf Highscore-Liste.\nHave you tried turn it off and on again?");
+	}
+
+	endBox->exec();
+
+	//Play a new game??
+	QMessageBox::StandardButton reply;
+	reply = QMessageBox::question(endBox, "Neustart?", "Moechten Sie noch eine Runde spielen?", QMessageBox::Yes | QMessageBox::No);
+	if (reply == QMessageBox::Yes)
+	{
+		game = new Game(game->getPlayerName(), game->getLevel());
+		updateField();
+	}
+	else
+		exit(0);
 }
 
 
 
-//Zeigt die aktuellen Punkte an, bzw. aktualisiert diese
+
+
+//shows current points, and updates them
 void QtDHBWscapes::UpdatePoints()
 {
-	if (ui.lcdNumber->checkOverflow(game->punkte))
+	if (ui.lcdNumber->checkOverflow(game->getPoints()))
 	{
 		int digit = ui.lcdNumber->digitCount();
 		ui.lcdNumber->setDigitCount(digit + 2);
-		ui.lcdNumber->display(game->punkte);
+		ui.lcdNumber->display(game->getPoints());
 		ui.lcdNumber->setSegmentStyle(QLCDNumber::Filled);
 	}
 	else
 	{
-		ui.lcdNumber->display(game->punkte);
+		ui.lcdNumber->display(game->getPoints());
 	}
 }

@@ -9,9 +9,10 @@ using namespace std;
 class Player
 {
 public:
-	string Name;
-	int Punkte;
-	Player(string name, int punkte);
+	Player(string name, int points);
 	operator int();
+	string Name;
+	int Points;
+
 };
 

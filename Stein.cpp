@@ -1,81 +1,87 @@
 #include "Stein.h"
 
 
-Stein::Stein() {}
+Token::Token() {}
 
-Stein::Stein(int color)
+Token::Token(int color)
 {
-	this->farbe = (Farbe)color;
+	this->color = (Color)color;
 }
 
-
-Stein::operator int()
+int Token::getColor()
 {
-	return this->farbe;
+	return this->color;
 }
 
-void Stein::Move(Spielfeld* spielfeld)
+void Token::Move(Game* spielfeld)
 {
-	int fromX = spielfeld->fromX;
-	int fromY = spielfeld->fromY;
-	int toX = spielfeld->toX;
-	int toY = spielfeld->toY;
+	int fromX = spielfeld->getFromX();
+	int fromY = spielfeld->getFromY();
+	int toX = spielfeld->getToX();
+	int toY = spielfeld->getToY();
 
-	if ((((fromX - toX) >= -1 && (fromX - toX) <= 1) && (fromY == toY)) || //Tauschen X Koordinate überprüfen
-		((((fromY - toY) >= -1 && (fromY - toY) <= 1)) && (fromX == toX))) //Tauschen Y Koordinate überprüfen
+	if ((((fromX - toX) >= -1 && (fromX - toX) <= 1) && (fromY == toY)) || //checks if token is in range x coordinate
+		((((fromY - toY) >= -1 && (fromY - toY) <= 1)) && (fromX == toX))) //and here for the y coordinate
 	{
-		//Steine probeweise vertauschen und überprüfen ob dann ein Strike vorliegt
-		Stein temp = spielfeld->belegung[fromX][fromY];
-		spielfeld->belegung[fromX][fromY] = spielfeld->belegung[toX][toY];
-		spielfeld->belegung[toX][toY] = temp;
+		
+		//swap tokens and test if there´s a strike
+		Token* temp = spielfeld->occypency[fromX][fromY];
+		spielfeld->occypency[fromX][fromY] = spielfeld->occypency[toX][toY];
+		spielfeld->occypency[toX][toY] = temp;
 
 		int col = 0, row = 0;
 		row = spielfeld->checkRowStrike(false);
 		col = spielfeld->checkColStrike(false);
 
-		//Zurücktauschen falls kein Strike vorliegt
+		//swap back if ther´s no strike
 		if (col == 0 && row == 0)
 		{
-			spielfeld->belegung[toX][toY] = spielfeld->belegung[fromX][fromY];
-			spielfeld->belegung[fromX][fromY] = temp;
+			spielfeld->occypency[toX][toY] = spielfeld->occypency[fromX][fromY];
+			spielfeld->occypency[fromX][fromY] = temp;
 		}
 
 		else
 		{
-			spielfeld->secondsSinceLastMove = 0;
 
 			if (row == 5 || col == 5)
 			{
-				//Entferne Strike und positioniere Discokugel
+				//delete tokens and place disco ball
 				spielfeld->checkRowStrike(true);
 				spielfeld->checkColStrike(true);
-				spielfeld->belegung[toX][toY] = Stein(Farbe::disco);
+				Disco* temp = new Disco();
+				spielfeld->occypency[toX][toY] = temp;
 			}
 
 			else if (row == 4 || col == 4)
 			{
-				//Entferne Strike und positioniere Rakete
+				//delete tokens and place rocket
 				spielfeld->checkRowStrike(true);
 				spielfeld->checkColStrike(true);
 				if (row == 4)
-					spielfeld->belegung[toX][toY] = Stein(Farbe::raketeVertikal);
+				{
+					VerticalRocket* temp = new VerticalRocket();
+					spielfeld->occypency[toX][toY] = temp;
+				}
 				else
-					spielfeld->belegung[toX][toY] = Stein(Farbe::raketeHorizontal);
+				{
+					HorizontalRocket* temp = new HorizontalRocket();
+					spielfeld->occypency[toX][toY] = temp;
+				}
 			}
 
 			else if (row == 3 && col == 3)
 			{
-				//Entferne Strike und positioniere Bombe
+				//delete tokens and place bomb
 
-				//Zwischenspeicherung der Strikefarbe und entfernen des Zeilenstrikes
-				int temp = spielfeld->belegung[toX][toY];
+				//caches the strike color and deletes the row strike
+				Token* temp = spielfeld->occypency[toX][toY];
 				spielfeld->checkRowStrike(true);
 
-				//Füge an Schnittstelle gleichen Stein wieder ein damit Spaltenstrike auch entfernt wird
-				spielfeld->belegung[toX][toY] = temp;
+				//adds a token of the same color where they cross, so that the column strike gets deleted as well
+				spielfeld->occypency[toX][toY] = temp;
 				spielfeld->checkColStrike(true);
-				//spielfeld.belegung[toX][toY] = Bombe::Bombe(toX, toY);
-				spielfeld->belegung[toX][toY] = Stein(Farbe::bombe);
+				Bomb* temp2 = new Bomb();
+				spielfeld->occypency[toX][toY] = temp2;
 			}
 
 			else if (row == 3)
@@ -84,129 +90,11 @@ void Stein::Move(Spielfeld* spielfeld)
 				spielfeld->checkColStrike(true);
 
 
-			spielfeld->fromX = -1;
-			spielfeld->fromY = -1;
-			spielfeld->toX = -1;
-			spielfeld->toY = -1;
-			Move(spielfeld); //rekursiver Aufruf, da sich ein neuer Strike ergeben haben könnte.
+			spielfeld->resetSavedCoordinates(true);
+			Move(spielfeld); //recursive call, because there could be a new strike
 		}
 
 	}
-	else
-	{
-		//TODO Exception werfen
-	}
 }
 
 
-void Stein::activateVerticalRocket(class Spielfeld* game, int y)
-{
-
-	game->timeLeft += (9 / game->level);
-	game->punkte += 20;
-	//initialisiert direkt die Reihe neu
-	for (int i = 0; i < Spielfeld::fieldSize; i++)
-	{
-		
-		game->belegung[i][y] = Stein(rand() % 5 + 1);
-	}
-	game->fromX = -1;
-	game->fromY = -1;
-	game->toX = -1;
-	game->toY = -1;
-	Move(game);
-}
-
-void Stein::activateHorizontalRocket(class Spielfeld* game, int x)
-{
-	game->timeLeft += (9 / game->level);
-	game->punkte += 20;
-	//Entfernt Reihe und lässt übergeordnete nachfallen
-	for (int i = 0; i < Spielfeld::fieldSize; i++)
-	{
-		game->belegung[x][i] = Stein(0);
-	}
-	game->fillFieldAfterStrike();
-	game->fromX = -1;
-	game->fromY = -1;
-	game->toX = -1;
-	game->toY = -1;
-	Move(game);
-}
-
-void Stein::activateDisco(Spielfeld* game, int x, int y)
-{
-	//Entfernt random eine Farbe komplett vom Spielfeld
-	int color = rand() % 5 + 1;
-	game->punkte += 50;
-	game->timeLeft += (12/ game->level);
-
-	for (int i = 0; i < Spielfeld::fieldSize; i++)
-	{
-		for (int j = 0; j < Spielfeld::fieldSize; j++)
-		{
-			if (game->belegung[i][j] == color)
-			{
-				game->belegung[i][j] = Stein(0);
-			}
-		}
-	}
-
-	//Discokugel entfernen
-	game->belegung[x][y] = Stein(0);
-
-	game->fillFieldAfterStrike();
-	game->fromX = -1;
-	game->fromY = -1;
-	game->toX = -1;
-	game->toY = -1;
-	Move(game);
-}
-
-void Stein::activateBomb(Spielfeld* game, int x, int y)
-{
-	//Entfernt Stein am Ursprung
-	game->belegung[x][y] = Stein(0);
-	game->punkte += 10;
-	game->timeLeft += (9 / game->level);
-
-	//Entfernt alle Steine links vom Ursprung
-	if (x > 0)
-	{
-		game->belegung[x - 1][y] = Stein(0);
-
-		if (y > 0)
-			game->belegung[x - 1][y - 1] = Stein(0);
-
-		if (y < Spielfeld::fieldSize - 1)
-			game->belegung[x - 1][y + 1] = Stein(0);
-	}
-
-	//Entfernt alle Steine rechts vom Ursprung
-	if (x < Spielfeld::fieldSize - 1)
-	{
-		game->belegung[x + 1][y] = Stein(0);
-
-		if (y > 0)
-			game->belegung[x + 1][y - 1] = Stein(0);
-
-		if (y < Spielfeld::fieldSize - 1)
-			game->belegung[x + 1][y + 1] = Stein(0);
-	}
-
-	//Entfernt Stein mittig über Ursprung
-	if (y > 0)
-		game->belegung[x][y - 1] = Stein(0);
-
-	//Entfernt Stein mittig unter Ursprung
-	if (y < Spielfeld::fieldSize - 1)
-		game->belegung[x][y + 1] = Stein(0);
-
-
-	game->fillFieldAfterStrike();
-	game->fromX = -1;
-	game->fromY = -1;
-	game->toX = -1;
-	game->toY = -1;
-	Move(game);
-}

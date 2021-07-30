@@ -3,9 +3,9 @@
 Player::Player(string name, int punkte)
 {
 	Name = name;
-	Punkte = punkte;
+	Points = punkte;
 }
 
 Player::operator int() {
-	return Punkte;
+	return Points;
 }
